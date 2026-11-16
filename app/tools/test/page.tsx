@@ -5,7 +5,7 @@ import { AdSlot } from "@/components/ui";
 import SafetyTest from "./SafetyTest";
 
 export const metadata: Metadata = {
-  title: "안전 성향 테스트 · 나는 어떤 기사단원일까",
+  title: "안전 성향 테스트 · 나는 어떤 그린헬멧기사일까",
   description: "여섯 문항에 답하면 원칙파 감독관, 현장파 해결사, 데이터파 분석가, 소통파 교육자 중 나의 안전 성향 유형을 알려 줍니다. 1분이면 끝납니다.",
   alternates: { canonical: "/tools/test/" },
 };

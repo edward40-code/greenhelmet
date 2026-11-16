@@ -71,7 +71,7 @@ export default function Home() {
 
         <aside className="flex min-w-0 flex-[1_1_280px] flex-col gap-4">
           <SectionCard>
-            <h2 className="m-0 text-[18px] font-extrabold">{SITE.name}은</h2>
+            <h2 className="m-0 text-[18px] font-extrabold">{SITE.name}는</h2>
             <ul className="m-0 flex list-disc flex-col gap-1.5 pl-5 text-[15px] leading-relaxed">
               <li>EHS 자격증 수험생과 안전·보건·환경 실무자가 모이는 곳입니다.</li>
               <li>시험문제 원문이나 복원 문제는 싣지 않습니다. 출제 유형과 공부 방향만 다룹니다.</li>

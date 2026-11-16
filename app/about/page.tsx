@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "소개",
-  description: `${SITE.name}은 EHS(환경·안전·보건) 자격증 수험생과 실무자를 위한 커뮤니티입니다. 무엇을 하고 무엇을 하지 않는지 소개합니다.`,
+  description: `${SITE.name}는 EHS(환경·안전·보건) 자격증 수험생과 실무자를 위한 커뮤니티입니다. 무엇을 하고 무엇을 하지 않는지 소개합니다.`,
   alternates: { canonical: "/about/" },
 };
 
@@ -13,8 +13,10 @@ export default function Page() {
   return (
     <DocShell title={`${SITE.name} 소개`} active="about">
       <p>
-        {SITE.name}(약칭 {SITE.shortName})은 환경·안전·보건 분야 자격증을 준비하는 수험생과 현장 실무자가 정보를 나누는 곳입니다. 게임 커뮤니티처럼 종목별 ‘관’을 두고, 공략과 도구를 한곳에 모읍니다.
+        {SITE.name}는 환경·안전·보건 분야 자격증을 준비하는 수험생과 현장 실무자가 정보를 나누는 곳입니다. 게임 커뮤니티처럼 종목별 ‘관’을 두고, 공략과 도구를 한곳에 모읍니다.
       </p>
+
+      <p>‘{SITE.name}’는 사이트 이름이며 국가자격이 아닙니다.</p>
 
       <h2>지금 쓸 수 있는 것</h2>
       <ul>

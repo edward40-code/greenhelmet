@@ -2,7 +2,6 @@ import site from "@/content/site.json";
 
 export const SITE = site as {
   name: string;
-  shortName: string;
   description: string;
   operator: string | null;
   contactEmail: string | null;

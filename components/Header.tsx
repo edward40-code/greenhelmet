@@ -24,7 +24,7 @@ export default function Header({ active = null }: { active?: Active }) {
       <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-x-6 gap-y-1 px-4 py-2.5 sm:px-5">
         <Link href="/" className="flex min-h-[44px] items-center gap-2 text-[22px] font-extrabold tracking-[-0.5px] text-white hover:text-white hover:no-underline">
           <HelmetLogo />
-          그린헬멧기사단
+          그린헬멧기사
         </Link>
         <nav aria-label="주 메뉴" className="flex flex-wrap gap-x-5 text-[15px]">
           {NAV.map((n) =>

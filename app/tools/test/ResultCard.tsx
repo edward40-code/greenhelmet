@@ -10,7 +10,7 @@ export default function ResultCard({ result, onRestart }: { result: ResultType; 
 
   const share = async () => {
     const url = `${window.location.origin}${BASE_PATH}/tools/test/result/${result.slug}/`;
-    const text = `나는 그린헬멧기사단 '${result.name}' 유형`;
+    const text = `나는 '${result.name}' 유형의 그린헬멧기사`;
     try {
       if (navigator.share) {
         await navigator.share({ title: "안전 성향 테스트", text, url });
