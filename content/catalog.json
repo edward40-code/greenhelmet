@@ -1,0 +1,44 @@
+{
+  "halls": [
+    { "key": "cert", "name": "자격증관", "open": true },
+    { "key": "safety", "name": "산업안전관", "open": false },
+    { "key": "env", "name": "환경관", "open": false },
+    { "key": "chem", "name": "화학물질관", "open": false },
+    { "key": "fire", "name": "소방·위험물관", "open": false },
+    { "key": "const", "name": "건설안전관", "open": false }
+  ],
+  "certs": [
+    { "slug": "industrial-safety-engineer", "name": "산업안전기사", "sub": "필기 · 실기(필답·작업형)", "open": true },
+    { "slug": "construction-safety-engineer", "name": "건설안전기사", "sub": "필기 · 실기(필답·작업형)", "open": false },
+    { "slug": "industrial-hygiene-engineer", "name": "산업위생관리기사", "sub": "필기 · 실기(필답)", "open": false },
+    { "slug": "air-pollution-engineer", "name": "대기환경기사", "sub": "필기 · 실기", "open": false },
+    { "slug": "water-pollution-engineer", "name": "수질환경기사", "sub": "필기 · 실기", "open": false },
+    { "slug": "soil-environment-engineer", "name": "토양환경기사", "sub": "필기 · 실기", "open": false },
+    { "slug": "waste-treatment-engineer", "name": "폐기물처리기사", "sub": "필기 · 실기", "open": false },
+    { "slug": "hazardous-material-industrial-engineer", "name": "위험물산업기사", "sub": "필기 · 실기", "open": false },
+    { "slug": "fire-protection-engineer", "name": "소방설비기사", "sub": "기계 · 전기", "open": false },
+    { "slug": "occupational-safety-consultant", "name": "산업안전지도사", "sub": "1차 · 2차 · 면접", "open": false },
+    { "slug": "chemical-safety-professional-engineer", "name": "화공안전기술사", "sub": "필기 · 면접", "open": false },
+    { "slug": "environment-craftsman", "name": "환경기능사", "sub": "필기 · 실기", "open": false }
+  ],
+  "toolGroups": [
+    {
+      "name": "조회·진단",
+      "tools": [
+        { "href": "/tools/msds/", "name": "MSDS 분석기", "desc": "CAS 번호를 넣으면 주요 독성, 유해화학물질 해당 여부, 적용 법령이 나옵니다", "open": false },
+        { "href": "/law/", "name": "법령 DB", "desc": "환경·안전·보건 법령을 조문 단위로 찾고 개정 전후를 비교합니다", "open": false },
+        { "href": "/tools/diagnosis/", "name": "법령 적용 진단", "desc": "업종과 규모를 넣으면 우리 사업장에 걸리는 의무를 정리합니다", "open": false },
+        { "href": "/tools/test/", "name": "안전 성향 테스트", "desc": "문항에 답하면 나의 안전 성향 유형을 알려 줍니다", "open": true }
+      ]
+    },
+    {
+      "name": "작성·계산",
+      "tools": [
+        { "href": "/tools/tbm/", "name": "TBM 생성기", "desc": "작업 종류를 고르면 작업 전 안전회의 자료를 만들어 줍니다", "open": true },
+        { "href": "/tools/calc/", "name": "단위환산·안전계산", "desc": "농도 환산, 소음 노출량, 재해율을 계산합니다", "open": true },
+        { "href": "/tools/career/", "name": "경력 계산", "desc": "입사·퇴사일을 넣으면 총 경력을 연·월·일로 합산합니다", "open": true },
+        { "href": "/edu/", "name": "안전교육 자료실", "desc": "정기교육·특별교육에 바로 쓰는 자료를 내려받습니다", "open": false }
+      ]
+    }
+  ]
+}

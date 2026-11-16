@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# 내부 기획 문서는 공개 저장소에 올리지 않는다 (로컬 보관)
+CLAUDE.md
+1차오픈_범위.md
+그린헬멧기사단_제작지시서.md
+mockups/
+.claude/

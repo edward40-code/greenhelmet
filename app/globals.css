@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* 지시서 3장 디자인 토큰 */
+@theme {
+  --color-accent: #1b6b3a;
+  --color-accent-dark: #124a28;
+  --color-accent-soft: #e8f3ec;
+  --color-accent-ink: #2d4a36;
+  --color-ink: #16242b;
+  --color-muted: #4a5a63;
+  --color-line: #d5dce0;
+  --color-line-soft: #e6eaec;
+  --color-field: #c3ccd1;
+  --color-bg: #eef1f3;
+  --color-logo: #6fd08c;
+  --color-warn-bg: #fff6d6;
+  --color-warn-line: #c9a227;
+  --color-warn-ink: #4a3a00;
+  --color-danger: #8a1f11;
+  --font-sans: var(--font-noto), "Noto Sans KR", system-ui, sans-serif;
+}
+
+@layer base {
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-accent-dark);
+  text-decoration: underline;
+}
+
+.field {
+  min-height: 44px;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--color-field);
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--color-ink);
+  background: #fff;
+}
+.field:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+}
+
+.prose-doc h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 28px 0 10px;
+}
+.prose-doc p,
+.prose-doc li {
+  font-size: 16px;
+  line-height: 1.8;
+}
+.prose-doc ul,
+.prose-doc ol {
+  padding-left: 22px;
+  margin: 8px 0;
+}
+.prose-doc ul { list-style: disc; }
+.prose-doc ol { list-style: decimal; }
+.prose-doc p { margin: 8px 0; }
+
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .print-only-area { border: 0 !important; padding: 0 !important; }
+  @page { size: A4; margin: 14mm; }
+}
