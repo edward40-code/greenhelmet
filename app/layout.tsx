@@ -12,7 +12,7 @@ const noto = Noto_Sans_KR({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE.name} · EHS 자격증·실무 커뮤니티`, template: `%s · ${SITE.name}` },
+  title: { default: `${SITE.name} · 산업안전·보건·환경 소식과 자료실`, template: `%s · ${SITE.name}` },
   description: SITE.description,
   openGraph: { siteName: SITE.name, locale: "ko_KR", type: "website" },
   icons: { icon: `${BASE_PATH}/icon.svg` },

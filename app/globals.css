@@ -78,6 +78,12 @@ a:hover {
 .prose-doc ul { list-style: disc; }
 .prose-doc ol { list-style: decimal; }
 .prose-doc p { margin: 8px 0; }
+.prose-doc h3 { font-size: 17px; font-weight: 800; margin: 20px 0 6px; }
+.prose-doc a { text-decoration: underline; }
+.prose-doc strong { font-weight: 800; }
+.prose-doc table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 15px; display: block; overflow-x: auto; }
+.prose-doc th, .prose-doc td { border: 1px solid var(--color-line); padding: 8px 10px; text-align: left; vertical-align: top; }
+.prose-doc th { background: #f1f4f5; font-weight: 700; white-space: nowrap; }
 
 }
 

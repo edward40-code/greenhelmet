@@ -7,7 +7,7 @@ export default function CertHero({ cert, tab }: { cert: Cert; tab: string }) {
     <section className="bg-accent text-white">
       <div className="mx-auto flex max-w-[1240px] flex-col gap-3 px-4 pt-6 sm:px-5">
         <div className="text-[14px] text-[#dff0e4]">
-          <Link href="/" className="text-[#dff0e4] hover:text-white">자격증관</Link> › {cert.name}
+          <Link href="/" className="text-[#dff0e4] hover:text-white">자격증</Link> › {cert.name}
         </div>
         <div className="flex flex-col gap-1.5">
           <h1 className="m-0 text-[28px] font-extrabold tracking-[-0.5px] sm:text-[32px]">
