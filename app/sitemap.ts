@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/",
     "/news/",
+    "/accidents/",
     "/reports/",
     ...allReports().map((r) => `/reports/${r.slug}/`),
     "/library/",

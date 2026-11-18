@@ -10,10 +10,11 @@ export function HelmetLogo({ size = 30 }: { size?: number }) {
   );
 }
 
-export type Active = "news" | "reports" | "library" | "tools" | "cert" | "about" | null;
+export type Active = "news" | "accidents" | "reports" | "library" | "tools" | "cert" | "about" | null;
 
 const NAV: { key: Exclude<Active, null>; href: string; label: string }[] = [
   { key: "news", href: "/news/", label: "소식" },
+  { key: "accidents", href: "/accidents/", label: "사고속보" },
   { key: "reports", href: "/reports/", label: "이슈리포트" },
   { key: "library", href: "/library/", label: "자료실" },
   { key: "tools", href: "/tools/", label: "도구" },

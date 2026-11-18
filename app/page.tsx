@@ -5,6 +5,7 @@ import { ToolGrid } from "@/components/Catalog";
 import { AdSlot, SectionCard, Unverified } from "@/components/ui";
 import { FormatBadge } from "./library/LibraryList";
 import { allNews } from "@/lib/news";
+import { allAccidents } from "@/lib/accidents";
 import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
 import { fieldName, fmtDate } from "@/lib/fields";
@@ -16,6 +17,7 @@ function More({ href, children }: { href: string; children: React.ReactNode }) {
 
 export default function Home() {
   const news = allNews().slice(0, 8);
+  const accidents = allAccidents().slice(0, 6);
   const reports = allReports();
   const lead = reports[0];
   const files = allLibrary().filter((x) => x.type === "file").slice(0, 4);
@@ -41,6 +43,30 @@ export default function Home() {
               <span className="text-[21px] leading-snug font-extrabold tracking-[-0.3px] sm:text-[24px]">{lead.title}</span>
               <span className="text-[15px] leading-relaxed text-muted">{lead.summary}</span>
             </Link>
+          )}
+
+          {accidents.length > 0 && (
+            <SectionCard>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 className="m-0 text-[20px] font-extrabold tracking-[-0.3px]">
+                  <span className="mr-2 rounded bg-danger px-2 py-0.5 align-middle text-[13px] font-bold text-white">속보</span>
+                  사고속보
+                </h2>
+                <More href="/accidents/">전체 사고속보</More>
+              </div>
+              <ul className="m-0 list-none p-0">
+                {accidents.map((x) => (
+                  <li key={x.id} className="border-t border-line-soft first:border-t-0">
+                    <a href={x.url} target="_blank" rel="noopener" className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-3 text-ink hover:no-underline">
+                      <span className="w-[72px] shrink-0 text-[13px] font-bold text-danger">{fmtDate(x.date).slice(5)}</span>
+                      <span className="min-w-0 flex-[1_1_260px] text-[16px] leading-snug font-medium hover:underline">{x.title}</span>
+                      <span className="text-[13px] text-muted">{x.source}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="m-0 text-[12px] text-muted">언론 보도 제목을 그대로 싣고 원문으로 연결합니다.</p>
+            </SectionCard>
           )}
 
           <SectionCard>
