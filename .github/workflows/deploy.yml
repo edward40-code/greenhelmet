@@ -5,7 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: "0 22 * * *" # 매일 07:00 (한국시간) 소식 수집 후 재배포
+    # 정각은 GitHub 예약 실행이 몰려 몇 시간씩 밀린다. 한산한 23분에 하루 세 번 (한국시간 06:23, 12:23, 18:23)
+    - cron: "23 21 * * *"
+    - cron: "23 3 * * *"
+    - cron: "23 9 * * *"
 
 permissions:
   contents: write
