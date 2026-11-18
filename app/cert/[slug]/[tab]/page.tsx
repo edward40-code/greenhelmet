@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   if (!c || tab !== "types") return {};
   return {
     title: `${c.name} 출제 유형 정리 (필기 과목별·실기 필답형·작업형)`,
-    description: `${c.name} 필기 6과목과 실기 필답형·작업형에서 무엇을 어떤 형태로 묻는지, 유형별 공부 방향과 자주 틀리는 지점을 정리했습니다. 시험문제 원문은 싣지 않습니다.`,
+    description: `${c.name} 2027년 출제기준에 맞춘 필기 5과목과 실기 필답형·작업형에서 무엇을 어떤 형태로 묻는지, 유형별 공부 방향과 자주 틀리는 지점을 정리했습니다. 시험문제 원문은 싣지 않습니다.`,
     alternates: { canonical: `/cert/${c.slug}/types/` },
   };
 }
@@ -64,6 +64,7 @@ export default async function Page({ params }: P) {
               <strong>검수 전 초안입니다.</strong> {types.basis} 과목·단원 구분이 현행 출제기준과 맞는지, 운영자 검수를 거친 뒤 이 표시를 뗍니다.
             </Notice>
           )}
+          {types.reviewed && <p className="m-0 text-[14px] leading-relaxed text-muted">{types.basis}</p>}
           <p className="m-0 text-[15px] leading-relaxed text-muted">
             이 사이트는 기출 원문, 복원 문제, 자체 제작 문제를 싣지 않습니다. 무엇을 어떤 형태로 묻는지와 공부 방향만 다룹니다. 출제 빈도는 근거가 모이면(운영자 분석 또는 회원 후기 집계) 근거와 함께 표시합니다.
           </p>

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CertHero from "@/components/CertHero";
-import { AdSlot, SectionCard, Unverified } from "@/components/ui";
+import { AdSlot, Notice, SectionCard, Unverified } from "@/components/ui";
 import { certSlugs, getCert } from "@/lib/certs";
 
 export const dynamicParams = false;
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!c) return {};
   return {
     title: `${c.name} 시험 구조·과목·공부 순서`,
-    description: `${c.name} 필기·실기 시험 구조, 필기 6과목 구성, 과목별 출제 유형과 추천 공부 순서를 정리했습니다. ${c.summary}`,
+    description: `${c.name} 2027년 바뀐 필기 5과목(100문항) 구성과 실기 시험 구조, 합격기준, 합격률, 과목별 출제 유형과 추천 공부 순서를 정리했습니다. ${c.summary}`,
     alternates: { canonical: `/cert/${c.slug}/` },
   };
 }
@@ -34,6 +34,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="mx-auto flex max-w-[1240px] flex-wrap items-start gap-4 px-4 pt-5 pb-10 sm:px-5">
         <main className="flex min-w-0 flex-[999_1_600px] flex-col gap-4">
           <p className="m-0 text-[16px] leading-relaxed">{cert.summary}</p>
+          {cert.changeNotice && <Notice><strong>2027년 출제기준 변경</strong> · {cert.changeNotice}</Notice>}
 
           <section className="flex flex-wrap gap-4">
             {[
@@ -97,6 +98,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </main>
 
         <aside className="flex min-w-0 flex-[1_1_280px] flex-col gap-4">
+          {cert.passRates && (
+            <SectionCard>
+              <h2 className="m-0 text-[18px] font-extrabold">{cert.passRates.year}년 합격률</h2>
+              <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>필기</span><span><strong>{cert.passRates.written.rate}</strong> <span className="text-[13px] text-muted">({cert.passRates.written.applicants} 응시)</span></span></div>
+              <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>실기</span><span><strong>{cert.passRates.practical.rate}</strong> <span className="text-[13px] text-muted">({cert.passRates.practical.applicants} 응시)</span></span></div>
+              {cert.fees && <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>응시료</span><span>필기 {cert.fees.written} · 실기 {cert.fees.practical}</span></div>}
+              <p className="m-0 text-[13px] text-muted">출처: {cert.passRates.source}</p>
+            </SectionCard>
+          )}
           <SectionCard>
             <h2 className="m-0 text-[18px] font-extrabold">공부에 쓰는 도구</h2>
             <ul className="m-0 flex list-none flex-col p-0 text-[15px]">
