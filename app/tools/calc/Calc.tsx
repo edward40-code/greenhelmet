@@ -83,7 +83,7 @@ export default function Calc() {
     <div className="grid items-start gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(340px, 100%), 1fr))" }}>
       <section className="card flex flex-col gap-3.5 p-5">
         <div className="flex flex-col gap-1">
-          <h2 className="m-0 text-[20px] font-extrabold">가스·증기 농도 환산<Unverified /></h2>
+          <h2 className="m-0 text-[20px] font-extrabold">가스·증기 농도 환산</h2>
           <p className="m-0 text-[14px] leading-relaxed text-muted">공기 중 가스·증기 농도의 단위를 ppm과 mg/m³ 사이에서 바꿉니다.</p>
         </div>
         <div className="flex gap-2" role="group" aria-label="환산 방향">
@@ -106,6 +106,8 @@ export default function Calc() {
         </div>
         <p className="m-0 text-[14px] leading-relaxed text-muted">
           mg/m³ = ppm × 분자량 ÷ 24.45, ppm = mg/m³ × 24.45 ÷ 분자량. 처음 값은 톨루엔(분자량 92.14) 50ppm으로 넣은 계산 예시이며, 노출기준 값이 아닙니다.
+          <br />
+          근거: 「작업환경측정 및 정도관리 등에 관한 고시」 제20조제2항 계산식 1 (25℃, 1기압 기준 24.45). 가스·증기 노출기준은 ppm으로 표시합니다(「화학물질 및 물리적 인자의 노출기준」 제11조제1항).
         </p>
         <p className="m-0 rounded-md border border-warn-line bg-warn-bg px-3.5 py-2.5 text-[14px] leading-relaxed text-warn-ink">
           <strong>가스·증기에만 씁니다.</strong> 분진·흄·미스트 같은 입자상 물질은 mg/m³로만 측정하므로 ppm으로 바꾸지 않습니다.
