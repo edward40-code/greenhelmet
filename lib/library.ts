@@ -16,6 +16,7 @@ export type LibItem = {
   report?: string; // 관련 이슈리포트 slug
   basis?: string; // 법적 근거
   items?: string[]; // 점검 항목 미리보기 (법령 원문)
+  itemsTitle?: string; // items 제목. 없으면 '들어 있는 점검 항목'
 };
 
 export const allLibrary = () =>

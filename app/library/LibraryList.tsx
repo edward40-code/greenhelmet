@@ -27,7 +27,11 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
     items.forEach((x) => (c[x.field] = (c[x.field] ?? 0) + 1));
     return c;
   }, [items]);
-  const cats = useMemo(() => [...new Set(items.map((x) => x.category))], [items]);
+  const cats = useMemo(() => {
+    const order = ["법정 점검표", "서식·양식", "교육자료", "공공자료"];
+    const rank = (c: string) => (order.indexOf(c) < 0 ? order.length : order.indexOf(c));
+    return [...new Set(items.map((x) => x.category))].sort((a, b) => rank(a) - rank(b));
+  }, [items]);
   const kw = q.trim();
   const list = items.filter(
     (x) => (field === "all" || x.field === field) && (cat === "all" || x.category === cat) && (!kw || (x.title + x.desc + x.source).includes(kw))
@@ -46,7 +50,7 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
         <>
           <div className="flex flex-col gap-1.5">
             <label className="px-1 text-[12px] font-bold tracking-wide text-muted" htmlFor="libq">자료 찾기</label>
-            <input id="libq" type="search" className="field" placeholder="예: TBM, MSDS" value={q} onChange={(e) => setQ(e.target.value)} />
+            <input id="libq" type="search" className="field" placeholder="예: 폐기물, 밀폐공간" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
           <Group title="분야">
             <Opt on={field === "all"} onClick={() => setField("all")} label="전체" n={items.length} tone="accent" />
@@ -72,7 +76,7 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
             <span className="flex min-w-0 flex-1 flex-col gap-1.5">
               <span className="flex flex-wrap items-center gap-2 text-[13px]">
                 <FieldChip field={x.field} />
-                <span className={x.category === "법정 점검표" ? "rounded bg-[#fff4d6] px-1.5 py-px font-bold text-[#8a5a00]" : "text-muted"}>{x.category}</span>
+                <span className={x.category === "법정 점검표" ? "rounded bg-[#fff4d6] px-1.5 py-px font-bold text-[#8a5a00]" : x.category === "교육자료" ? "rounded bg-[#fdeee4] px-1.5 py-px font-bold text-[#9a3d12]" : "text-muted"}>{x.category}</span>
               </span>
               <span className="text-[16px] leading-snug font-bold">{x.title}</span>
               <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>

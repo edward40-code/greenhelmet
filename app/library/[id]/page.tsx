@@ -69,7 +69,7 @@ export default async function Page({ params }: P) {
           )}
           {x.items && x.items.length > 0 && (
             <section>
-              <h2 className="m-0 mb-1.5 text-[16px] font-extrabold">들어 있는 점검 항목 ({x.items.length}개)</h2>
+              <h2 className="m-0 mb-1.5 text-[16px] font-extrabold">{x.itemsTitle ?? `들어 있는 점검 항목 (${x.items.length}개)`}</h2>
               <ol className="m-0 pl-5 text-[15px] leading-[1.8]">{x.items.map((h) => <li key={h}>{h}</li>)}</ol>
             </section>
           )}
@@ -84,8 +84,12 @@ export default async function Page({ params }: P) {
           )}
           <p className="m-0 text-[14px] leading-relaxed text-muted">
             {x.type === "file"
-              ? x.basis
+              ? x.category === "교육자료"
+              ? "법령 내용을 쉬운 말로 풀어 쓴 교육 보조자료입니다. 사업장 실정에 맞게 고쳐 쓰고, 법정 교육의 시간과 내용은 현행 법령으로 확인하세요."
+              : x.basis && x.category === "법정 점검표"
               ? "법령·고시에 정한 항목을 원문대로 옮긴 서식입니다. 법정 항목은 지우지 말고, 사업장 항목은 추가 칸에 더해 쓰세요."
+              : x.basis
+              ? "법령 내용을 줄여 옮긴 서식입니다. 정확한 요건과 예외는 현행 법령 원문으로 확인하고, 사업장에 맞게 고쳐 쓰세요."
               : "그린헬멧기사가 만든 기본 서식입니다. 현장 위험성평가 결과와 사내 규정에 맞게 고쳐 쓰세요."
               : `자료의 저작권은 ${x.source}에 있습니다. 그린헬멧기사는 원본 위치만 안내합니다.`}
           </p>
