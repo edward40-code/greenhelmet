@@ -34,7 +34,7 @@ export default function Home() {
 
           {lead && (
             <Link href={`/reports/${lead.slug}/`} className="card flex flex-col gap-2 border-l-[6px] border-l-accent p-5 text-ink hover:no-underline sm:p-6">
-              <span className="flex flex-wrap items-center gap-2 text-[13px]">
+              <span className="flex flex-wrap items-center gap-2 text-[14px]">
                 <span className="rounded bg-accent px-2 py-0.5 font-bold text-white">이슈리포트</span>
                 <span className="font-bold text-accent">{fieldName(lead.field)}</span>
                 <span className="text-muted">{fmtDate(lead.date)}</span>
@@ -49,7 +49,7 @@ export default function Home() {
             <SectionCard>
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <h2 className="m-0 text-[20px] font-extrabold tracking-[-0.3px]">
-                  <span className="mr-2 rounded bg-danger px-2 py-0.5 align-middle text-[13px] font-bold text-white">속보</span>
+                  <span className="mr-2 rounded bg-danger px-2 py-0.5 align-middle text-[14px] font-bold text-white">속보</span>
                   사고속보
                 </h2>
                 <More href="/accidents/">전체 사고속보</More>
@@ -57,15 +57,14 @@ export default function Home() {
               <ul className="m-0 list-none p-0">
                 {accidents.map((x) => (
                   <li key={x.id} className="border-t border-line-soft first:border-t-0">
-                    <a href={x.url} target="_blank" rel="noopener" className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-3 text-ink hover:no-underline">
-                      <span className="w-[72px] shrink-0 text-[13px] font-bold text-danger">{fmtDate(x.date).slice(5)}</span>
-                      <span className="min-w-0 flex-[1_1_260px] text-[16px] leading-snug font-medium hover:underline">{x.title}</span>
-                      <span className="text-[13px] text-muted">{x.source}</span>
+                    <a href={x.url} target="_blank" rel="noopener" className="flex flex-col gap-1 py-3.5 text-ink hover:no-underline">
+                      <span className="text-[16px] leading-[1.5] font-semibold hover:underline">{x.title}</span>
+                      <span className="text-[14px] text-muted"><span className="font-bold text-danger">{fmtDate(x.date).slice(5)}</span> · {x.source}</span>
                     </a>
                   </li>
                 ))}
               </ul>
-              <p className="m-0 text-[12px] text-muted">언론 보도 제목을 그대로 싣고 원문으로 연결합니다.</p>
+              <p className="m-0 text-[13px] text-muted">언론 보도 제목을 그대로 싣고 원문으로 연결합니다.</p>
             </SectionCard>
           )}
 
@@ -77,10 +76,9 @@ export default function Home() {
             <ul className="m-0 list-none p-0">
               {news.map((x) => (
                 <li key={x.id} className="border-t border-line-soft first:border-t-0">
-                  <a href={x.url} target="_blank" rel="noopener" className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-3 text-ink hover:no-underline">
-                    <span className="w-[72px] shrink-0 text-[13px] font-bold text-accent">{fieldName(x.field)}</span>
-                    <span className="min-w-0 flex-[1_1_260px] text-[16px] leading-snug font-medium hover:underline">{x.title}</span>
-                    <span className="text-[13px] text-muted">{x.kind} · {fmtDate(x.date)}</span>
+                  <a href={x.url} target="_blank" rel="noopener" className="flex flex-col gap-1 py-3.5 text-ink hover:no-underline">
+                    <span className="text-[16px] leading-[1.5] font-semibold hover:underline">{x.title}</span>
+                    <span className="text-[14px] text-muted"><span className="font-bold text-accent">{fieldName(x.field)}</span> · {x.kind} · {fmtDate(x.date)}</span>
                   </a>
                 </li>
               ))}
@@ -95,7 +93,7 @@ export default function Home() {
             <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
               {files.map((x) => (
                 <Link key={x.id} href={`/library/${x.id}/`} className="flex flex-col gap-1.5 rounded-md border border-line p-3.5 text-ink hover:border-accent hover:bg-accent-soft hover:no-underline">
-                  <span className="flex items-center gap-2"><FormatBadge format={x.format} /><span className="text-[12px] text-muted">{x.category}</span></span>
+                  <span className="flex items-center gap-2"><FormatBadge format={x.format} /><span className="text-[13px] text-muted">{x.category}</span></span>
                   <span className="text-[15px] leading-snug font-bold">{x.title}</span>
                 </Link>
               ))}
@@ -124,7 +122,7 @@ export default function Home() {
             <SectionCard>
               <h2 className="m-0 text-[18px] font-extrabold">이슈리포트</h2>
               {reports.slice(1, 6).map((r) => (
-                <Link key={r.slug} href={`/reports/${r.slug}/`} className="border-t border-line-soft py-2.5 text-[15px] leading-snug">{r.title}</Link>
+                <Link key={r.slug} href={`/reports/${r.slug}/`} className="border-t border-line-soft py-3 text-[15px] leading-[1.5] font-medium text-ink hover:text-accent">{r.title}</Link>
               ))}
             </SectionCard>
           )}
@@ -132,9 +130,9 @@ export default function Home() {
             <h2 className="m-0 text-[18px] font-extrabold">자격증</h2>
             <Link href="/cert/industrial-safety-engineer/" className="flex flex-col gap-0.5 rounded-md border border-line p-3.5 text-ink hover:border-accent hover:no-underline">
               <span className="text-[16px] font-bold">산업안전기사</span>
-              <span className="text-[13px] text-muted">시험 구조 · 과목별 출제 유형 정리</span>
+              <span className="text-[14px] text-muted">시험 구조 · 과목별 출제 유형 정리</span>
             </Link>
-            <p className="m-0 text-[13px] text-muted">다른 종목은 차례로 엽니다.</p>
+            <p className="m-0 text-[14px] text-muted">다른 종목은 차례로 엽니다.</p>
           </SectionCard>
           <SectionCard>
             <h2 className="m-0 text-[18px] font-extrabold">{SITE.name}는</h2>

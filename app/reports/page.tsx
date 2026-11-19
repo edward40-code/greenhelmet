@@ -19,7 +19,7 @@ export default function Page() {
         {reports.map((r) => (
           <li key={r.slug}>
             <Link href={`/reports/${r.slug}/`} className="card flex flex-col gap-2 p-5 text-ink hover:border-accent hover:no-underline">
-              <span className="flex flex-wrap items-center gap-2 text-[13px]">
+              <span className="flex flex-wrap items-center gap-2 text-[14px]">
                 <span className="font-bold text-accent">{fieldName(r.field)}</span>
                 <span className="text-muted">{fmtDate(r.date)}</span>
                 {!r.reviewed && <Unverified label="검수 전" />}

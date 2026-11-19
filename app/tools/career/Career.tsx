@@ -92,7 +92,7 @@ export default function Career() {
         </div>
       )}
 
-      <p className="m-0 text-[13px] leading-[1.7] text-muted">
+      <p className="m-0 text-[14px] leading-[1.7] text-muted">
         입사일과 퇴사일을 모두 포함해 계산합니다. 여러 기간을 합칠 때는 30일을 1개월, 12개월을 1년으로 올립니다. 기관마다 경력 인정 방식이 다를 수 있으니 제출처 기준을 따르세요.
       </p>
     </>

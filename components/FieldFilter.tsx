@@ -12,11 +12,11 @@ export default function FieldFilter({ value, onChange, counts }: { value: string
   return (
     <div role="group" aria-label="분야" className="flex flex-wrap gap-2">
       <button type="button" aria-pressed={value === "all"} className={chip(value === "all", false)} onClick={() => onChange("all")}>
-        전체 <span className="ml-1 text-[12px] opacity-80">{total}</span>
+        전체 <span className="ml-1 text-[13px] opacity-80">{total}</span>
       </button>
       {FIELDS.map((f) => (
         <button key={f.key} type="button" aria-pressed={value === f.key} className={chip(value === f.key, !counts[f.key])} onClick={() => onChange(f.key)}>
-          {f.name} <span className="ml-1 text-[12px] opacity-80">{counts[f.key] ?? 0}</span>
+          {f.name} <span className="ml-1 text-[13px] opacity-80">{counts[f.key] ?? 0}</span>
         </button>
       ))}
     </div>

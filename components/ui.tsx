@@ -10,7 +10,7 @@ export function AdSlot({ slot }: { slot: AdSlotKey }) {
 /** 지시서 10장 검증 필요 항목에 붙이는 표시 */
 export function Unverified({ label = "검증 전" }: { label?: string }) {
   return (
-    <span className="ml-1.5 inline-block whitespace-nowrap rounded border border-warn-line bg-warn-bg px-1.5 py-px align-middle text-[12px] font-bold text-warn-ink">
+    <span className="ml-1.5 inline-block whitespace-nowrap rounded border border-warn-line bg-warn-bg px-1.5 py-px align-middle text-[13px] font-bold text-warn-ink">
       {label}
     </span>
   );

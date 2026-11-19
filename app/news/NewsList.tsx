@@ -47,13 +47,13 @@ export default function NewsList({ items }: { items: NewsItem[] }) {
         {list.slice(0, shown).map((x) => (
           <li key={x.id} className="border-t border-line-soft first:border-t-0">
             <a href={x.url} target="_blank" rel="noopener" className="flex flex-col gap-1 px-4 py-3.5 text-ink hover:bg-[#f7f9fa] hover:no-underline sm:px-5">
-              <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]">
+              <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px]">
                 <span className="font-bold text-accent">{fieldName(x.field)}</span>
                 <span className="rounded bg-bg px-1.5 py-px text-muted">{x.kind}</span>
                 <span className="text-muted">{x.source} · {fmtDate(x.date)}</span>
               </span>
-              <span className="text-[16px] leading-snug font-medium">{x.title}<span className="ml-1 text-[12px] text-muted" aria-label="새 창">↗</span></span>
-              {x.summary && <span className="text-[14px] leading-relaxed text-muted">{x.summary}</span>}
+              <span className="text-[17px] leading-[1.5] font-semibold">{x.title}<span className="ml-1 text-[13px] text-muted" aria-label="새 창">↗</span></span>
+              {x.summary && <span className="text-[15px] leading-relaxed text-muted line-clamp-2">{x.summary}</span>}
             </a>
           </li>
         ))}

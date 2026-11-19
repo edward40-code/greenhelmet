@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ type: string 
             ))}
           </ul>
         </section>
-        <p className="m-0 text-center text-[13px] text-muted">재미로 보는 테스트입니다. 심리검사가 아닙니다.</p>
+        <p className="m-0 text-center text-[14px] text-muted">재미로 보는 테스트입니다. 심리검사가 아닙니다.</p>
       </div>
       <Footer />
     </>

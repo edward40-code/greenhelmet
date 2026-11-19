@@ -39,7 +39,7 @@ export default async function Page({ params }: P) {
           <Link href="/library/">자료실</Link> › {x.category}
         </div>
         <article className="card flex flex-col gap-4 p-5 sm:p-7">
-          <div className="flex flex-wrap items-center gap-2 text-[13px]">
+          <div className="flex flex-wrap items-center gap-2 text-[14px]">
             <FormatBadge format={x.format} />
             <span className="font-bold text-accent">{fieldName(x.field)}</span>
             <span className="text-muted">{x.category} · {x.source} · {fmtDate(x.updated)}</span>
@@ -50,7 +50,7 @@ export default async function Page({ params }: P) {
           <div>
             {x.type === "file" ? (
               <a className={btn} href={`${BASE_PATH}/library/${x.file}`} download>
-                무료 내려받기 <span className="text-[13px] font-normal opacity-90">{x.format}</span>
+                무료 내려받기 <span className="text-[14px] font-normal opacity-90">{x.format}</span>
               </a>
             ) : (
               <a className={btn} href={x.url} target="_blank" rel="noopener">
@@ -77,7 +77,7 @@ export default async function Page({ params }: P) {
           {x.report && (
             <Link href={`/reports/${x.report}/`} className="text-[15px] font-bold">관련 이슈리포트 읽기 →</Link>
           )}
-          <p className="m-0 text-[13px] leading-relaxed text-muted">
+          <p className="m-0 text-[14px] leading-relaxed text-muted">
             {x.type === "file"
               ? x.basis
               ? "법령·고시에 정한 항목을 원문대로 옮긴 서식입니다. 법정 항목은 지우지 말고, 사업장 항목은 추가 칸에 더해 쓰세요."

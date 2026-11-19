@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               </div>
             ))}
           </section>
-          <p className="-mt-1.5 mb-0 text-[13px] text-muted">{cert.sourceNote}</p>
+          <p className="-mt-1.5 mb-0 text-[14px] text-muted">{cert.sourceNote}</p>
 
           <SectionCard>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -59,9 +59,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
               {types.written.map((s) => (
                 <Link key={s.no} href={`${base}/types/#s${s.no}`} className="flex flex-col gap-1.5 rounded-md border border-line p-4 text-ink hover:border-accent hover:bg-accent-soft hover:no-underline">
-                  <span className="text-[13px] font-bold text-accent">{s.no}과목</span>
+                  <span className="text-[14px] font-bold text-accent">{s.no}과목</span>
                   <span className="text-[16px] leading-snug font-bold">{s.subject}</span>
-                  <span className="text-[13px] text-muted">유형 {s.units.length}개 정리</span>
+                  <span className="text-[14px] text-muted">유형 {s.units.length}개 정리</span>
                 </Link>
               ))}
             </div>
@@ -72,9 +72,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <ol className="m-0 grid list-none gap-2 p-0" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(180px, 100%), 1fr))" }}>
               {cert.studyOrder.map((s, i) => (
                 <li key={s.title} className="flex flex-col gap-1 border-t-4 border-accent bg-[#f4f7f5] p-3.5">
-                  <span className="text-[13px] font-bold text-accent">{i + 1}단계</span>
+                  <span className="text-[14px] font-bold text-accent">{i + 1}단계</span>
                   <span className="text-[15px] font-bold">{s.title}</span>
-                  <span className="text-[13px] leading-normal text-muted">{s.desc}</span>
+                  <span className="text-[14px] leading-normal text-muted">{s.desc}</span>
                 </li>
               ))}
             </ol>
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {types.practical.map((p) => (
                 <Link key={p.section} href={`${base}/types/#practical`} className="flex flex-col gap-1.5 rounded-md border border-line p-4 text-ink hover:border-accent hover:bg-accent-soft hover:no-underline">
                   <span className="text-[16px] font-bold">{p.section}</span>
-                  <span className="text-[13px] leading-normal text-muted">{p.intro}</span>
+                  <span className="text-[14px] leading-normal text-muted">{p.intro}</span>
                 </Link>
               ))}
             </div>
@@ -101,10 +101,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {cert.passRates && (
             <SectionCard>
               <h2 className="m-0 text-[18px] font-extrabold">{cert.passRates.year}년 합격률</h2>
-              <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>필기</span><span><strong>{cert.passRates.written.rate}</strong> <span className="text-[13px] text-muted">({cert.passRates.written.applicants} 응시)</span></span></div>
-              <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>실기</span><span><strong>{cert.passRates.practical.rate}</strong> <span className="text-[13px] text-muted">({cert.passRates.practical.applicants} 응시)</span></span></div>
+              <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>필기</span><span><strong>{cert.passRates.written.rate}</strong> <span className="text-[14px] text-muted">({cert.passRates.written.applicants} 응시)</span></span></div>
+              <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>실기</span><span><strong>{cert.passRates.practical.rate}</strong> <span className="text-[14px] text-muted">({cert.passRates.practical.applicants} 응시)</span></span></div>
               {cert.fees && <div className="flex justify-between border-t border-line-soft pt-2.5 text-[15px]"><span>응시료</span><span>필기 {cert.fees.written} · 실기 {cert.fees.practical}</span></div>}
-              <p className="m-0 text-[13px] text-muted">출처: {cert.passRates.source}</p>
+              <p className="m-0 text-[14px] text-muted">출처: {cert.passRates.source}</p>
             </SectionCard>
           )}
           <SectionCard>

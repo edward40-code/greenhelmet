@@ -33,15 +33,15 @@ function TypeBlock({ title, sub, description, study_tip, pitfalls }: { title: st
       <p className="m-0 text-[15px] leading-[1.75]">{description}</p>
       <dl className="m-0 grid gap-2 text-[15px] leading-[1.7]">
         <div className="rounded-md bg-accent-soft px-3.5 py-2.5">
-          <dt className="text-[13px] font-bold text-accent-ink">공부 방향</dt>
+          <dt className="text-[14px] font-bold text-accent-ink">공부 방향</dt>
           <dd className="m-0">{study_tip}</dd>
         </div>
         <div className="rounded-md bg-[#fbf3f1] px-3.5 py-2.5">
-          <dt className="text-[13px] font-bold text-danger">자주 틀리는 지점</dt>
+          <dt className="text-[14px] font-bold text-danger">자주 틀리는 지점</dt>
           <dd className="m-0">{pitfalls}</dd>
         </div>
       </dl>
-      <p className="m-0 text-[13px] text-muted">출제 빈도: 집계 전</p>
+      <p className="m-0 text-[14px] text-muted">출제 빈도: 집계 전</p>
     </article>
   );
 }

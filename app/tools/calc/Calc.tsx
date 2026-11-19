@@ -101,7 +101,7 @@ export default function Calc() {
             <span className="block text-[28px] font-extrabold text-accent-dark">{fmt(ppmOut, 2)} ppm</span>
           )}
         </div>
-        <p className="m-0 text-[13px] leading-relaxed text-muted">
+        <p className="m-0 text-[14px] leading-relaxed text-muted">
           mg/m³ = ppm × 분자량 ÷ 24.45, ppm = mg/m³ × 24.45 ÷ 분자량. 처음 값은 톨루엔(분자량 92.14)입니다.
         </p>
       </section>
@@ -130,7 +130,7 @@ export default function Calc() {
           <Result label="8시간 시간가중평균" value={`${fmt(twa, 1)} dB`} />
         </div>
         <p className="m-0 text-[15px] font-bold">{noiseNote}</p>
-        <p className="m-0 text-[13px] leading-relaxed text-muted">
+        <p className="m-0 text-[14px] leading-relaxed text-muted">
           90dB에 8시간, 5dB 오를 때마다 허용 시간 절반. 허용시간 T = 8 ÷ 2^((L − 90) ÷ 5), 노출량 D = Σ(노출시간 ÷ T) × 100, TWA = 16.61 × log(노출량 ÷ 100) + 90.
         </p>
       </section>
@@ -149,7 +149,7 @@ export default function Calc() {
           <Result label="도수율" value={fmt(freq, 2)} size={22} />
           <Result label="강도율" value={fmt(sev, 2)} size={22} />
         </div>
-        <p className="m-0 text-[13px] leading-relaxed text-muted">
+        <p className="m-0 text-[14px] leading-relaxed text-muted">
           재해율 = 재해자 수 ÷ 근로자 수 × 100. 도수율 = 재해 건수 ÷ 연 근로시간 × 1,000,000. 강도율 = 근로손실일수 ÷ 연 근로시간 × 1,000.
         </p>
       </section>

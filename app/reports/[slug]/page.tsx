@@ -45,7 +45,7 @@ export default async function Page({ params }: P) {
           )}
           <div className="prose-doc mt-2" dangerouslySetInnerHTML={{ __html: r.html }} />
           {r.sources.length > 0 && (
-            <div className="mt-6 border-t border-line pt-4 text-[13px] leading-relaxed text-muted">
+            <div className="mt-6 border-t border-line pt-4 text-[14px] leading-relaxed text-muted">
               <strong>출처</strong>
               <ul className="m-0 mt-1 list-disc pl-5">{r.sources.map((s) => <li key={s}>{s}</li>)}</ul>
             </div>

@@ -15,12 +15,12 @@ export function ToolGrid() {
               t.open ? (
                 <Link key={t.href} href={t.href} className={`${cardCls} hover:border-accent hover:bg-accent-soft hover:no-underline`}>
                   <span className="text-[16px] font-bold text-ink">{t.name}</span>
-                  <span className="text-[13px] leading-normal text-muted">{t.desc}</span>
+                  <span className="text-[14px] leading-normal text-muted">{t.desc}</span>
                 </Link>
               ) : (
                 <div key={t.href} className={`${cardCls} bg-[#f7f9fa]`} aria-disabled="true">
                   <span className="text-[16px] font-bold text-muted">{t.name}<Soon /></span>
-                  <span className="text-[13px] leading-normal text-muted">{t.desc}</span>
+                  <span className="text-[14px] leading-normal text-muted">{t.desc}</span>
                 </div>
               )
             )}

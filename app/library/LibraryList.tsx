@@ -51,14 +51,14 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
         {list.length === 0 && <p className="card m-0 p-6 text-center text-muted">찾는 자료가 없습니다.</p>}
         {list.map((x) => (
           <Link key={x.id} href={`/library/${x.id}/`} className="card flex flex-col gap-2 p-4 text-ink hover:border-accent hover:no-underline">
-            <span className="flex flex-wrap items-center gap-2 text-[12px]">
+            <span className="flex flex-wrap items-center gap-2 text-[13px]">
               <FormatBadge format={x.format} />
               <span className="font-bold text-accent">{fieldName(x.field)}</span>
               <span className="text-muted">{x.category}</span>
             </span>
             <span className="text-[16px] leading-snug font-bold">{x.title}</span>
             <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>
-            <span className="mt-auto text-[13px] font-bold text-accent">{x.type === "file" ? "무료 내려받기 →" : "자료 위치 보기 →"}</span>
+            <span className="mt-auto text-[14px] font-bold text-accent">{x.type === "file" ? "무료 내려받기 →" : "자료 위치 보기 →"}</span>
           </Link>
         ))}
       </div>
