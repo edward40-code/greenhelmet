@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   if (!x) return {};
   return {
     title: `${x.title} · 사고속보`,
-    description: `${x.source} ${fmtDate(x.date)} 보도. 같은 유형 사고와 예방에 쓰는 점검표를 함께 봅니다.`,
+    description: x.summary ?? `${x.source} ${fmtDate(x.date)} 보도. 같은 유형 사고와 예방에 쓰는 점검표를 함께 봅니다.`,
     // 보도 제목만 담은 짧은 페이지라 검색 색인에서는 뺀다 (링크는 따라감)
     robots: { index: false, follow: true },
   };
@@ -55,8 +55,14 @@ export default async function Page({ params }: P) {
 
       <div className="relative mx-auto -mt-8 flex max-w-[860px] flex-col gap-6 px-4 pb-12 sm:px-5">
         <section className="card flex flex-col gap-4 p-5 sm:p-7">
-          <p className="m-0 text-[16px] leading-relaxed">
-            {fmtDate(x.date)}에 <b>{x.source}</b>에서 보도한 산업현장 사고입니다. 그린헬멧기사는 보도 제목·언론사·날짜만 싣고, 보도에 없는 내용(신원, 원인 등)은 덧붙이지 않습니다. 사고 경위는 원문 기사에서 확인하세요.
+          <h2 className="m-0 flex items-center gap-2 text-[18px] font-extrabold"><Icon name="doc" size={19} className="text-danger" />사고 개요</h2>
+          {x.summary ? (
+            <p className="m-0 text-[17px] leading-[1.85]">{x.summary}</p>
+          ) : (
+            <p className="m-0 text-[16px] leading-relaxed text-muted">요약을 준비하고 있습니다. 사고 경위는 원문 기사에서 확인하세요.</p>
+          )}
+          <p className="m-0 rounded-lg bg-[#f6f7f8] px-3.5 py-2.5 text-[13px] leading-relaxed text-muted">
+            {fmtDate(x.date)} {x.source} 보도를 바탕으로 그린헬멧기사가 정리했습니다. 보도에 나온 사실만 옮기고 실명은 싣지 않습니다. 원인은 관계 당국 조사로 확정됩니다.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <a href={x.url} target="_blank" rel="noopener" className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-ink px-5 text-[16px] font-bold text-white hover:text-white hover:no-underline">

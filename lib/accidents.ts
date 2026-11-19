@@ -1,8 +1,15 @@
+import notes from "@/content/accident-notes.json";
 import data from "@/content/feeds/accidents.json";
 import { slugOf, type NewsItem } from "./news";
 
 /** 언론에 보도된 산업현장 사고. 제목·언론사·날짜·원문 링크만 담는다. */
-export const allAccidents = (): NewsItem[] => (data as NewsItem[]).slice().sort((a, b) => b.date.localeCompare(a.date));
+/** 운영자가 원문 기사를 읽고 쓴 요약 (보도된 사실만, 실명 제외) */
+const NOTES = notes as Record<string, { summary: string; checked: string }>;
+
+export const allAccidents = (): NewsItem[] =>
+  (data as NewsItem[])
+    .map((x) => (NOTES[x.id] ? { ...x, summary: NOTES[x.id].summary } : x))
+    .sort((a, b) => b.date.localeCompare(a.date));
 
 /** 제목으로 사고 유형을 짐작해 아이콘·라벨을 붙인다 (보도 제목 그대로, 내용은 바꾸지 않음) */
 const ACC_KIND: [RegExp, string, string][] = [

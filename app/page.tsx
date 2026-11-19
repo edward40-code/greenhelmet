@@ -108,6 +108,7 @@ export default function Home() {
                         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#fdecec] text-danger"><Icon name={k.icon} size={18} /></span>
                         <span className="flex min-w-0 flex-col gap-0.5">
                           <span className="text-[15px] leading-[1.45] font-semibold">{x.title}</span>
+                          {x.summary && <span className="line-clamp-1 text-[13px] text-muted">{x.summary}</span>}
                           <span className="text-[13px] text-muted"><b className="text-danger">{k.label}</b> · {fmtDate(x.date).slice(5)} · {x.source}</span>
                         </span>
                       </Link>
@@ -115,7 +116,7 @@ export default function Home() {
                   );
                 })}
               </ul>
-              <p className="m-0 mt-auto border-t border-line-soft px-5 py-2.5 text-[12px] text-muted">언론 보도 제목을 그대로 싣고, 원문 기사 링크를 함께 둡니다.</p>
+              <p className="m-0 mt-auto border-t border-line-soft px-5 py-2.5 text-[12px] text-muted">언론 보도를 읽고 사실만 간단히 정리했습니다.</p>
             </div>
           )}
         </div>

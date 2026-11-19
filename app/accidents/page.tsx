@@ -19,7 +19,7 @@ export default function Page() {
     >
       <NewsList items={allAccidents()} variant="accidents" />
       <p className="m-0 text-[14px] leading-relaxed text-muted">
-        언론에 보도된 제목·언론사·날짜만 싣고, 보도에 없는 내용(신원, 원인 등)은 덧붙이지 않습니다. 기사 저작권은 각 언론사에 있습니다. 하루 세 번(06:23·12:23·18:23) 새 보도를 받아 옵니다.
+        언론 보도를 읽고 보도된 사실만 짧게 정리합니다. 실명은 싣지 않고, 보도에 없는 내용(원인 추정 등)은 덧붙이지 않습니다. 기사 저작권은 각 언론사에 있습니다. 하루 세 번(06:23·12:23·18:23) 새 보도를 받아 옵니다.
       </p>
       <AdSlot slot="post_bottom" />
     </SiteShell>
