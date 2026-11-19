@@ -17,7 +17,8 @@ export default function CertHero({ cert, tab }: { cert: Cert; tab: string }) {
           <p className="m-0 text-[15px] text-[#dff0e4]">{cert.level} · 시행 {cert.organizer}</p>
         </div>
         <nav aria-label="종목 메뉴" className="mt-2 flex flex-wrap gap-x-1">
-          {CERT_TABS.map((t) => {
+          {/* 아직 열지 않은 탭(공략·합격 후기·질문·답변)은 정식 공개 화면에서 숨긴다 */}
+          {CERT_TABS.filter((t) => t.open).map((t) => {
             const on = t.key === tab;
             if (on)
               return (
@@ -25,17 +26,10 @@ export default function CertHero({ cert, tab }: { cert: Cert; tab: string }) {
                   {t.label}
                 </span>
               );
-            if (t.open)
-              return (
-                <Link key={t.label} href={t.key ? `${base}/${t.key}/` : `${base}/`} className="flex min-h-[48px] items-center px-[18px] text-[15px] text-white hover:text-white">
-                  {t.label}
-                </Link>
-              );
             return (
-              <span key={t.label} className="flex min-h-[48px] items-center px-3 text-[15px] text-[#cfe6d6] sm:px-[18px]">
+              <Link key={t.label} href={t.key ? `${base}/${t.key}/` : `${base}/`} className="flex min-h-[48px] items-center px-[18px] text-[15px] text-white hover:text-white">
                 {t.label}
-                <span className="ml-1 text-[11px] text-[#a9d8b8]">준비 중</span>
-              </span>
+              </Link>
             );
           })}
         </nav>
