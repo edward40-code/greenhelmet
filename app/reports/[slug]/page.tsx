@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { OG_IMAGES, SITE } from "@/lib/site";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
     title: r.title,
     description: r.summary,
     alternates: { canonical: `/reports/${r.slug}/` },
-    openGraph: { type: "article", title: r.title, description: r.summary, publishedTime: r.date },
+    openGraph: { type: "article", title: r.title, description: r.summary, publishedTime: r.date, siteName: SITE.name, locale: "ko_KR", images: OG_IMAGES },
   };
 }
 

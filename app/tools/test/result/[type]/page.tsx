@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { OG_IMAGES, SITE } from "@/lib/site";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ type: str
     title: `${t.name} · 안전 성향 테스트 결과`,
     description: `${t.desc} 잘 맞는 동료: ${t.mate}. 추천 자격증: ${t.cert}.`,
     alternates: { canonical: `/tools/test/result/${t.slug}/` },
-    openGraph: { title: `나는 ${t.name}`, description: t.desc },
+    openGraph: { title: `나는 ${t.name}`, description: t.desc, siteName: SITE.name, locale: "ko_KR", images: OG_IMAGES },
   };
 }
 
