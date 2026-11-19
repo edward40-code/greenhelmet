@@ -38,6 +38,9 @@ export default async function Page({ params }: P) {
   const libs = accLibraryIds(x).map(getLib).filter((v): v is NonNullable<typeof v> => !!v);
   const reports = allReports().filter((r) => r.field === x.field).slice(0, 2);
   const sameCount = all.filter((o) => accKindOf(o).icon === k.icon).length;
+  // 유형을 가리지 못한 보도는 "사고 사고"처럼 겹치지 않게 문구를 따로 쓴다
+  const generic = k.icon === "alert";
+  const kindName = generic ? "산업재해 보도" : `${k.label} 사고`;
 
   return (
     <>
@@ -47,13 +50,13 @@ export default async function Page({ params }: P) {
         <div className="absolute -right-6 -bottom-10 opacity-15" aria-hidden="true"><Icon name={k.icon} size={220} stroke={1.2} /></div>
         <div className="relative mx-auto flex max-w-[860px] flex-col gap-3 px-4 pt-8 pb-14 sm:px-5 sm:pt-10">
           <div className="text-[14px] text-white/75"><Link href="/accidents/" className="text-white/90 hover:text-white">사고속보</Link> › {k.label}</div>
-          <span className="inline-flex items-center gap-2 self-start rounded-full bg-white/15 px-3 py-1 text-[14px] font-bold"><Icon name={k.icon} size={16} />{k.label} 사고</span>
+          <span className="inline-flex items-center gap-2 self-start rounded-full bg-white/15 px-3 py-1 text-[14px] font-bold"><Icon name={k.icon} size={16} />{kindName}</span>
           <h1 className="m-0 text-[25px] leading-[1.35] font-extrabold tracking-[-0.5px] sm:text-[32px]">{x.title}</h1>
           <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)} 보도</p>
           {x.tags && x.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {x.tags.map((t) => (
-                <Link key={t} href={`/accidents/?tag=${encodeURIComponent(t)}`} className="rounded-full border border-white/30 px-2.5 py-0.5 text-[13px] text-white hover:bg-white/15 hover:text-white hover:no-underline">#{t}</Link>
+                <Link key={t} href={`/accidents/?tag=${encodeURIComponent(t)}`} className="inline-flex min-h-[32px] items-center rounded-full border border-white/30 px-3 text-[14px] text-white hover:bg-white/15 hover:text-white hover:no-underline">#{t}</Link>
               ))}
             </div>
           )}
@@ -75,7 +78,7 @@ export default async function Page({ params }: P) {
             <a href={sourceUrl(x)} target="_blank" rel="noopener" className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-ink px-5 text-[16px] font-bold text-white hover:text-white hover:no-underline">
               원문 기사 보기 <span className="text-[13px] font-normal opacity-80">{x.source} ↗</span>
             </a>
-            <span className="text-[14px] text-muted">최근 수집된 {k.label} 사고 보도 <b className="text-danger">{sameCount}건</b></span>
+            {!generic && <span className="text-[14px] text-muted">최근 수집된 {k.label} 사고 보도 <b className="text-danger">{sameCount}건</b></span>}
           </div>
         </section>
 
@@ -101,7 +104,7 @@ export default async function Page({ params }: P) {
         <div className="grid gap-4 sm:grid-cols-2">
           {same.length > 0 && (
             <section className="card flex flex-col p-5">
-              <h2 className="m-0 mb-1 flex items-center gap-2 text-[17px] font-extrabold"><Icon name={k.icon} size={18} className="text-danger" />같은 유형({k.label}) 사고</h2>
+              <h2 className="m-0 mb-1 flex items-center gap-2 text-[17px] font-extrabold"><Icon name={k.icon} size={18} className="text-danger" />{generic ? "그 밖의 산업재해 보도" : `같은 유형(${k.label}) 사고`}</h2>
               {same.map((o) => (
                 <Link key={o.id} href={`/accidents/${slugOf(o.id)}/`} className="flex flex-col gap-0.5 border-t border-line-soft py-3 text-ink first:border-t-0 hover:text-accent hover:no-underline">
                   <span className="text-[15px] leading-snug font-semibold">{o.title}</span>

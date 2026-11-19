@@ -6,8 +6,8 @@ export type AccItem = NewsItem & { srcUrl?: string; tags?: string[]; accType?: s
 /** 제목으로 사고 유형을 짐작해 아이콘·라벨을 붙인다 (보도 제목 그대로, 내용은 바꾸지 않음) */
 const ACC_KIND: [RegExp, string, string][] = [
   [/추락|떨어져|낙하/, "fall", "추락"],
-  [/끼임|끼여|협착|말려/, "caught", "끼임"],
-  [/깔려|깔림|붕괴|무너/, "crush", "깔림·붕괴"],
+  [/끼임|끼여|끼어|낀 |협착|말려/, "caught", "끼임"],
+  [/깔려|깔림|깔린|붕괴|무너/, "crush", "깔림·붕괴"],
   [/질식|가스|중독|밀폐/, "gas", "질식·중독"],
   [/감전|전기/, "shock", "감전"],
   [/폭발|터져/, "explosion", "폭발"],
@@ -16,7 +16,7 @@ const ACC_KIND: [RegExp, string, string][] = [
 ];
 const KIND_LABEL: Record<string, string> = {
   fall: "추락", caught: "끼임", crush: "깔림·붕괴", gas: "질식·중독", shock: "감전", explosion: "폭발", fire: "화재", leak: "누출",
-  struck: "맞음·낙하물", vehicle: "차량 충돌", alert: "사고",
+  struck: "맞음·낙하물", vehicle: "차량 충돌", alert: "산업재해",
 };
 /** 운영자가 정한 유형(accType)이 있으면 그것을, 없으면 제목으로 짐작한 유형 */
 export function accKindOf(x: { title: string; accType?: string }): { icon: string; label: string } {
@@ -25,7 +25,7 @@ export function accKindOf(x: { title: string; accType?: string }): { icon: strin
 }
 export function accKind(title: string): { icon: string; label: string } {
   for (const [re, icon, label] of ACC_KIND) if (re.test(title)) return { icon, label };
-  return { icon: "alert", label: "사고" };
+  return { icon: "alert", label: "산업재해" };
 }
 
 /** 수집된 사고에 붙은 태그와 건수 (많은 순) */

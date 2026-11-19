@@ -94,7 +94,7 @@ export default function NewsList({ items, variant = "news" }: { items: (NewsItem
                   <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted">
                     {acc ? <b className="text-danger">{acc.label}</b> : <FieldChip field={x.field} />}
                     {acc && (x.tags ?? []).map((t) => <span key={t} className="text-[#8a5a50]">#{t}</span>)}
-                    <span className="rounded bg-bg px-1.5 py-px">{x.kind}</span>
+                    {!acc && <span className="rounded bg-bg px-1.5 py-px">{x.kind}</span>}
                     <span>{x.source} · {fmtDate(x.date)}</span>
                   </span>
                 </span>
