@@ -5,8 +5,8 @@ import { allLibrary } from "@/lib/library";
 import LibraryList from "./LibraryList";
 
 export const metadata: Metadata = {
-  title: "안전보건 자료실 · TBM 일지·위험성평가표·점검표 무료 양식",
-  description: "TBM 일지, 안전보건교육 기록, 일일 안전점검표, 위험성평가표 엑셀 양식을 무료로 내려받고, 고용노동부·안전보건공단 공공자료 위치를 한곳에서 찾습니다.",
+  title: "안전보건 자료실 · 지게차·소화기 법정 점검표, TBM 일지, 위험성평가표 무료 양식",
+  description: "지게차·고소작업대·크레인 작업시작 전 점검표와 소화기 외관점검표 등 법령 원문 기반 점검표, TBM 일지, 안전보건교육 기록, 위험성평가표 엑셀 양식을 무료로 내려받고, 고용노동부·안전보건공단 공공자료 위치를 한곳에서 찾습니다.",
   alternates: { canonical: "/library/" },
 };
 

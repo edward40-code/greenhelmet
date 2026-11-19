@@ -14,6 +14,8 @@ export type LibItem = {
   desc: string;
   howto?: string[];
   report?: string; // 관련 이슈리포트 slug
+  basis?: string; // 법적 근거
+  items?: string[]; // 점검 항목 미리보기 (법령 원문)
 };
 
 export const allLibrary = () =>
