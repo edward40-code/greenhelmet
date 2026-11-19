@@ -5,9 +5,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { AdSlot } from "@/components/ui";
 import { allLibrary, getLib } from "@/lib/library";
-import { fieldName, fmtDate } from "@/lib/fields";
+import { fmtDate } from "@/lib/fields";
 import { BASE_PATH } from "@/lib/site";
 import { FormatBadge } from "../LibraryList";
+import { FieldChip, FormatTile } from "@/components/visual";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => allLibrary().map((x) => ({ id: x.id }));
@@ -39,12 +40,16 @@ export default async function Page({ params }: P) {
           <Link href="/library/">자료실</Link> › {x.category}
         </div>
         <article className="card flex flex-col gap-4 p-5 sm:p-7">
-          <div className="flex flex-wrap items-center gap-2 text-[14px]">
-            <FormatBadge format={x.format} />
-            <span className="font-bold text-accent">{fieldName(x.field)}</span>
-            <span className="text-muted">{x.category} · {x.source} · {fmtDate(x.updated)}</span>
+          <div className="flex items-start gap-4">
+            <FormatTile format={x.format} size={64} />
+            <div className="flex min-w-0 flex-col gap-2">
+              <div className="flex flex-wrap items-center gap-2 text-[13px]">
+                <FieldChip field={x.field} />
+                <span className="text-muted">{x.category} · {x.source} · {fmtDate(x.updated)}</span>
+              </div>
+              <h1 className="m-0 text-[24px] leading-snug font-extrabold tracking-[-0.5px] sm:text-[28px]">{x.title}</h1>
+            </div>
           </div>
-          <h1 className="m-0 text-[24px] leading-snug font-extrabold tracking-[-0.5px] sm:text-[28px]">{x.title}</h1>
           <p className="m-0 text-[16px] leading-[1.8]">{x.desc}</p>
 
           <div>

@@ -1,153 +1,253 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ToolGrid } from "@/components/Catalog";
-import { AdSlot, SectionCard, Unverified } from "@/components/ui";
-import { FormatBadge } from "./library/LibraryList";
+import { AdSlot, Unverified } from "@/components/ui";
+import { Icon } from "@/components/icons";
+import { FieldChip, FormatTile, ReportThumb, SectionHead } from "@/components/visual";
+import catalog from "@/content/catalog.json";
 import { allNews } from "@/lib/news";
-import { allAccidents } from "@/lib/accidents";
+import { accKind, allAccidents } from "@/lib/accidents";
 import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
-import { fieldName, fmtDate } from "@/lib/fields";
+import { FIELDS, fieldStyle, fmtDate, readMinutes } from "@/lib/fields";
 import { SITE } from "@/lib/site";
 
-function More({ href, children }: { href: string; children: React.ReactNode }) {
-  return <Link href={href} className="py-2 text-[14px] whitespace-nowrap">{children} →</Link>;
+/** 빌드 시각 기준 한국 날짜 (사이트는 하루 여러 번 다시 만들어진다) */
+function kstToday() {
+  const d = new Date(Date.now() + 9 * 3600 * 1000);
+  return d.toISOString().slice(0, 10);
 }
+const daysAgo = (today: string, n: number) => new Date(new Date(today).getTime() - n * 86400000).toISOString().slice(0, 10);
+const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
+
+const QUICK: [string, string, string][] = [
+  ["/library/checklist-forklift/", "지게차 점검표", "sheet"],
+  ["/library/checklist-confined-space/", "밀폐공간 점검표", "gas"],
+  ["/library/checklist-fire-extinguisher/", "소화기 점검표", "fire"],
+  ["/tools/tbm/", "TBM 자료 만들기", "people"],
+  ["/tools/calc/", "재해율·단위 계산", "calc"],
+];
+
+const TOOL_ICON: Record<string, string> = { "/tools/tbm/": "people", "/tools/calc/": "calc", "/tools/career/": "clock", "/tools/test/": "spark", "/tools/msds/": "chem", "/law/": "doc", "/tools/diagnosis/": "check" };
 
 export default function Home() {
-  const news = allNews().slice(0, 8);
-  const accidents = allAccidents().slice(0, 6);
+  const today = kstToday();
+  const wd = WEEK[new Date(today).getUTCDay()];
+  const news = allNews();
+  const accidents = allAccidents();
   const reports = allReports();
+  const lib = allLibrary();
   const lead = reports[0];
-  const files = allLibrary().filter((x) => x.type === "file").slice(0, 4);
-  const links = allLibrary().filter((x) => x.type === "link").slice(0, 4);
+  const moreReports = reports.slice(1, 4);
+  const files = lib.filter((x) => x.type === "file");
+  const checklists = files.filter((x) => x.category === "법정 점검표").slice(0, 6);
+  const forms = files.filter((x) => x.category !== "법정 점검표").slice(0, 4);
+  const accWeek = accidents.filter((x) => x.date >= daysAgo(today, 6)).length;
+  const newsWeek = news.filter((x) => x.date >= daysAgo(today, 6)).length;
+  const fieldCount: Record<string, number> = {};
+  news.forEach((x) => (fieldCount[x.field] = (fieldCount[x.field] ?? 0) + 1));
+  const tools = catalog.toolGroups.flatMap((g) => g.tools).filter((t) => t.open && t.href.startsWith("/tools/"));
 
   return (
     <>
       <Header />
       <AdSlot slot="top_banner" />
+      <h1 className="sr-only">{SITE.name} · 산업안전·보건·환경 소식과 무료 자료실</h1>
 
-      <div className="mx-auto flex max-w-[1240px] flex-wrap items-start gap-4 px-4 pt-5 pb-10 sm:px-5">
-        <main className="flex min-w-0 flex-[999_1_600px] flex-col gap-4">
-          <h1 className="sr-only">{SITE.name} · 산업안전·보건·환경 소식과 무료 자료실</h1>
+      {/* ── 히어로 ── */}
+      <section className="relative overflow-hidden bg-ink text-white">
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "20px 20px" }} aria-hidden="true" />
+        <div className="absolute top-0 left-0 h-1.5 w-full" style={{ background: "repeating-linear-gradient(-45deg, #f5c518 0 14px, #16242b 14px 28px)" }} aria-hidden="true" />
+        <div className="relative mx-auto flex max-w-[1240px] flex-wrap items-stretch gap-8 px-4 pt-10 pb-12 sm:px-5 sm:pt-14">
+          <div className="flex min-w-0 flex-[1_1_440px] flex-col justify-center gap-5">
+            <span className="inline-flex items-center gap-2 self-start rounded-full bg-white/10 px-3 py-1 text-[13px] font-bold text-[#cfe9d8]">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-logo" />
+              {fmtDate(today)} ({wd}) 오늘의 현장 브리핑
+            </span>
+            <p className="m-0 text-[30px] leading-[1.25] font-extrabold tracking-[-0.8px] sm:text-[42px]">
+              오늘 현장에서 꼭 볼<br />
+              <span className="text-logo">안전·보건·환경</span> 소식
+            </p>
+            <p className="m-0 max-w-[520px] text-[16px] leading-relaxed text-[#c3cfd4]">사고속보와 정책 소식은 하루 세 번 모으고, 법정 점검표와 서식은 법령 원문으로 확인해 무료로 드립니다.</p>
+            <div className="grid max-w-[560px] grid-cols-3 gap-2">
+              {[
+                ["/accidents/", accWeek, "이번 주 사고속보", "#ff8a7a"],
+                ["/news/", newsWeek, "이번 주 새 소식", "#7fd8a0"],
+                ["/library/", files.length, "무료 서식·점검표", "#f5c518"],
+              ].map(([href, n, label, c]) => (
+                <Link key={label as string} href={href as string} className="lift flex flex-col gap-0.5 rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-white hover:border-white/25 hover:text-white hover:no-underline sm:px-4">
+                  <span className="text-[28px] leading-none font-extrabold sm:text-[34px]" style={{ color: c as string }}>{n as number}</span>
+                  <span className="text-[13px] leading-snug text-[#c3cfd4]">{label}</span>
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {QUICK.map(([href, label, icon]) => (
+                <Link key={href} href={href} className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full bg-white px-3.5 text-[14px] font-bold text-ink hover:bg-[#e6f4ea] hover:text-ink hover:no-underline">
+                  <Icon name={icon} size={16} className="text-accent" />
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
           {lead && (
-            <Link href={`/reports/${lead.slug}/`} className="card flex flex-col gap-2 border-l-[6px] border-l-accent p-5 text-ink hover:no-underline sm:p-6">
-              <span className="flex flex-wrap items-center gap-2 text-[14px]">
-                <span className="rounded bg-accent px-2 py-0.5 font-bold text-white">이슈리포트</span>
-                <span className="font-bold text-accent">{fieldName(lead.field)}</span>
-                <span className="text-muted">{fmtDate(lead.date)}</span>
-                {!lead.reviewed && <Unverified label="검수 전" />}
-              </span>
-              <span className="text-[21px] leading-snug font-extrabold tracking-[-0.3px] sm:text-[24px]">{lead.title}</span>
-              <span className="text-[15px] leading-relaxed text-muted">{lead.summary}</span>
+            <Link href={`/reports/${lead.slug}/`} className="lift flex min-w-0 flex-[1_1_380px] flex-col overflow-hidden rounded-2xl bg-white text-ink shadow-2xl hover:text-ink hover:no-underline">
+              <ReportThumb field={lead.field} label="이번 주 이슈리포트" className="h-[170px] sm:h-[200px]" big />
+              <div className="flex flex-1 flex-col gap-2.5 p-5 sm:p-6">
+                <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
+                  <FieldChip field={lead.field} />
+                  <span>{fmtDate(lead.date)}</span>
+                  <span className="inline-flex items-center gap-1"><Icon name="clock" size={13} />{readMinutes(lead.html)}분</span>
+                  {!lead.reviewed && <Unverified label="검수 전" />}
+                </span>
+                <span className="text-[22px] leading-snug font-extrabold tracking-[-0.4px]">{lead.title}</span>
+                <span className="line-clamp-3 text-[15px] leading-relaxed text-muted">{lead.summary}</span>
+                <span className="mt-auto inline-flex items-center gap-1 pt-1 text-[15px] font-bold text-accent">읽어 보기 <Icon name="arrow" size={16} /></span>
+              </div>
             </Link>
           )}
+        </div>
+      </section>
 
-          {accidents.length > 0 && (
-            <SectionCard>
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h2 className="m-0 text-[20px] font-extrabold tracking-[-0.3px]">
-                  <span className="mr-2 rounded bg-danger px-2 py-0.5 align-middle text-[14px] font-bold text-white">속보</span>
-                  사고속보
-                </h2>
-                <More href="/accidents/">전체 사고속보</More>
-              </div>
-              <ul className="m-0 list-none p-0">
-                {accidents.map((x) => (
-                  <li key={x.id} className="border-t border-line-soft first:border-t-0">
-                    <a href={x.url} target="_blank" rel="noopener" className="flex flex-col gap-1 py-3.5 text-ink hover:no-underline">
-                      <span className="text-[16px] leading-[1.5] font-semibold hover:underline">{x.title}</span>
-                      <span className="text-[14px] text-muted"><span className="font-bold text-danger">{fmtDate(x.date).slice(5)}</span> · {x.source}</span>
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-12 px-4 pt-10 pb-6 sm:px-5">
+        {/* ── 사고속보 ── */}
+        {accidents.length > 0 && (
+          <section className="flex flex-col gap-4">
+            <SectionHead icon="alert" tone="#b42318" title={<>사고속보 <span className="ml-1 align-middle rounded bg-[#fdecec] px-1.5 py-0.5 text-[12px] font-extrabold text-danger">LIVE</span></>} desc="언론에 보도된 산업현장 사고를 제목 그대로 모아 원문으로 연결합니다" href="/accidents/" more="전체 사고속보" />
+            <ul className="m-0 grid list-none gap-3 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(360px, 100%), 1fr))" }}>
+              {accidents.slice(0, 6).map((x) => {
+                const k = accKind(x.title);
+                return (
+                  <li key={x.id}>
+                    <a href={x.url} target="_blank" rel="noopener" className="card lift flex h-full items-start gap-3.5 p-4 text-ink hover:border-[#f3c4bd] hover:no-underline">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#fdecec] text-danger"><Icon name={k.icon} size={22} /></span>
+                      <span className="flex min-w-0 flex-col gap-1">
+                        <span className="text-[16px] leading-[1.5] font-semibold">{x.title}</span>
+                        <span className="text-[13px] text-muted"><b className="text-danger">{k.label}</b> · {fmtDate(x.date).slice(5)} · {x.source}</span>
+                      </span>
                     </a>
                   </li>
-                ))}
-              </ul>
-              <p className="m-0 text-[13px] text-muted">언론 보도 제목을 그대로 싣고 원문으로 연결합니다.</p>
-            </SectionCard>
-          )}
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
-          <SectionCard>
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="m-0 text-[20px] font-extrabold tracking-[-0.3px]">최신 소식</h2>
-              <More href="/news/">전체 소식</More>
+        {/* ── 법정 점검표 ── */}
+        <section className="relative overflow-hidden rounded-3xl bg-[#eaf5ee] p-5 sm:p-8">
+          <div className="absolute -top-6 -right-6 text-accent opacity-10" aria-hidden="true"><Icon name="check" size={200} stroke={1.3} /></div>
+          <div className="relative flex flex-col gap-5">
+            <SectionHead icon="download" title="법정 점검표, 무료로 받아 가세요" desc="법령 원문의 점검 항목을 그대로 옮긴 엑셀·워드 서식입니다. 회원가입 없이 내려받습니다." href="/library/" more="자료실 전체" />
+            <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(270px, 100%), 1fr))" }}>
+              {checklists.map((x) => (
+                <Link key={x.id} href={`/library/${x.id}/`} className="lift flex items-start gap-3.5 rounded-2xl border border-white bg-white p-4 text-ink shadow-sm hover:border-accent hover:text-ink hover:no-underline">
+                  <FormatTile format={x.format} />
+                  <span className="flex min-w-0 flex-col gap-1">
+                    <span className="text-[16px] leading-snug font-bold">{x.title}</span>
+                    <span className="line-clamp-2 text-[13px] leading-relaxed text-muted">{x.desc}</span>
+                  </span>
+                </Link>
+              ))}
             </div>
-            <ul className="m-0 list-none p-0">
-              {news.map((x) => (
+          </div>
+        </section>
+
+        {/* ── 이슈리포트 ── */}
+        {moreReports.length > 0 && (
+          <section className="flex flex-col gap-4">
+            <SectionHead icon="doc" tone="#1f4f7a" title="이슈리포트" desc="법령·통계·사고를 실무자 눈높이로 풀어 씁니다" href="/reports/" more="전체 리포트" />
+            <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))" }}>
+              {moreReports.map((r) => (
+                <Link key={r.slug} href={`/reports/${r.slug}/`} className="card lift flex flex-col overflow-hidden text-ink hover:text-ink hover:no-underline">
+                  <ReportThumb field={r.field} className="h-[130px]" />
+                  <span className="flex flex-1 flex-col gap-2 p-4">
+                    <span className="flex items-center gap-2 text-[13px] text-muted"><FieldChip field={r.field} />{fmtDate(r.date)} · {readMinutes(r.html)}분</span>
+                    <span className="text-[17px] leading-snug font-extrabold">{r.title}</span>
+                    <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{r.summary}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── 최신 소식 + 분야별 ── */}
+        <section className="flex flex-wrap items-start gap-6">
+          <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-4">
+            <SectionHead icon="news" title="최신 소식" desc="고용노동부·환경부 등 정책·공지 가운데 EHS 관련만 골랐습니다" href="/news/" more="전체 소식" />
+            <ul className="card m-0 list-none p-0">
+              {news.slice(0, 7).map((x) => (
                 <li key={x.id} className="border-t border-line-soft first:border-t-0">
-                  <a href={x.url} target="_blank" rel="noopener" className="flex flex-col gap-1 py-3.5 text-ink hover:no-underline">
-                    <span className="text-[16px] leading-[1.5] font-semibold hover:underline">{x.title}</span>
-                    <span className="text-[14px] text-muted"><span className="font-bold text-accent">{fieldName(x.field)}</span> · {x.kind} · {fmtDate(x.date)}</span>
+                  <a href={x.url} target="_blank" rel="noopener" className="flex items-start gap-3 px-4 py-3.5 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
+                    <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: fieldStyle(x.field).a }} />
+                    <span className="flex min-w-0 flex-col gap-1">
+                      <span className="text-[16px] leading-[1.5] font-semibold hover:underline">{x.title}</span>
+                      <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted"><FieldChip field={x.field} />{x.kind} · {fmtDate(x.date)}</span>
+                    </span>
                   </a>
                 </li>
               ))}
             </ul>
-          </SectionCard>
-
-          <SectionCard>
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="m-0 text-[20px] font-extrabold tracking-[-0.3px]">자료실 · 무료 서식</h2>
-              <More href="/library/">자료실 전체</More>
+          </div>
+          <aside className="flex min-w-0 flex-[1_1_280px] flex-col gap-4">
+            <h2 className="m-0 text-[17px] font-extrabold">분야별로 보기</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {FIELDS.map((f) => {
+                const s = fieldStyle(f.key);
+                return (
+                  <Link key={f.key} href={`/news/?field=${f.key}`} className="lift flex items-center gap-2.5 rounded-xl border p-3 hover:no-underline" style={{ background: s.soft, borderColor: s.soft, color: s.c }}>
+                    <Icon name={f.key} size={22} />
+                    <span className="flex flex-col leading-tight">
+                      <span className="text-[14px] font-extrabold">{f.name}</span>
+                      <span className="text-[12px] opacity-80">{fieldCount[f.key] ?? 0}건</span>
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
-            <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
-              {files.map((x) => (
-                <Link key={x.id} href={`/library/${x.id}/`} className="flex flex-col gap-1.5 rounded-md border border-line p-3.5 text-ink hover:border-accent hover:bg-accent-soft hover:no-underline">
-                  <span className="flex items-center gap-2"><FormatBadge format={x.format} /><span className="text-[13px] text-muted">{x.category}</span></span>
-                  <span className="text-[15px] leading-snug font-bold">{x.title}</span>
-                </Link>
-              ))}
-            </div>
-            <h3 className="m-0 text-[14px] font-bold text-muted">공공기관 자료 바로가기</h3>
-            <div className="flex flex-wrap gap-2">
-              {links.map((x) => (
-                <Link key={x.id} href={`/library/${x.id}/`} className="inline-flex min-h-[40px] items-center rounded-full border border-line px-3.5 text-[14px] text-ink hover:border-accent hover:no-underline">
-                  {x.title}
-                </Link>
-              ))}
-            </div>
-          </SectionCard>
-
-          <SectionCard id="tools">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="m-0 text-[20px] font-extrabold tracking-[-0.3px]">도구</h2>
-              <More href="/tools/">전체 도구</More>
-            </div>
-            <ToolGrid />
-          </SectionCard>
-        </main>
-
-        <aside className="flex min-w-0 flex-[1_1_280px] flex-col gap-4">
-          {reports.length > 1 && (
-            <SectionCard>
-              <h2 className="m-0 text-[18px] font-extrabold">이슈리포트</h2>
-              {reports.slice(1, 6).map((r) => (
-                <Link key={r.slug} href={`/reports/${r.slug}/`} className="border-t border-line-soft py-3 text-[15px] leading-[1.5] font-medium text-ink hover:text-accent">{r.title}</Link>
-              ))}
-            </SectionCard>
-          )}
-          <SectionCard>
-            <h2 className="m-0 text-[18px] font-extrabold">자격증</h2>
-            <Link href="/cert/industrial-safety-engineer/" className="flex flex-col gap-0.5 rounded-md border border-line p-3.5 text-ink hover:border-accent hover:no-underline">
-              <span className="text-[16px] font-bold">산업안전기사</span>
-              <span className="text-[14px] text-muted">시험 구조 · 과목별 출제 유형 정리</span>
+            <Link href="/cert/industrial-safety-engineer/" className="lift relative flex flex-col gap-1 overflow-hidden rounded-2xl p-5 text-white hover:text-white hover:no-underline" style={{ background: "linear-gradient(135deg,#c2780a,#7a4304)" }}>
+              <span className="absolute -right-4 -bottom-6 opacity-20" aria-hidden="true"><Icon name="cap" size={120} stroke={1.4} /></span>
+              <span className="text-[12px] font-extrabold tracking-widest text-white/75">자격증</span>
+              <span className="text-[19px] font-extrabold">산업안전기사</span>
+              <span className="text-[14px] text-white/85">2027년 바뀐 5과목 시험 구조와 과목별 출제 유형</span>
             </Link>
-            <p className="m-0 text-[14px] text-muted">다른 종목은 차례로 엽니다.</p>
-          </SectionCard>
-          <SectionCard>
-            <h2 className="m-0 text-[18px] font-extrabold">{SITE.name}는</h2>
-            <ul className="m-0 flex list-disc flex-col gap-1.5 pl-5 text-[15px] leading-relaxed">
-              <li>안전·보건·환경 실무자가 매일 확인할 소식과 바로 쓰는 자료를 모읍니다.</li>
-              <li>서식과 도구는 회원가입 없이 무료로 씁니다.</li>
-              <li>커뮤니티 게시판은 회원 기능과 함께 곧 엽니다.</li>
-            </ul>
-            <Link href="/about/" className="py-1 text-[14px]">사이트 소개</Link>
-          </SectionCard>
-          <AdSlot slot="side_main" />
-          <Link href="/tools/tbm/" className="flex min-h-[48px] items-center justify-center rounded-md bg-accent px-4 py-3.5 text-[16px] font-bold text-white hover:text-white">
-            오늘 TBM 자료 만들기
-          </Link>
-        </aside>
+          </aside>
+        </section>
+
+        {/* ── 테스트 배너 ── */}
+        <Link href="/tools/test/" className="lift relative flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-3xl p-6 text-white hover:text-white hover:no-underline sm:p-8" style={{ background: "linear-gradient(110deg,#5b2bb5 0%,#2d5fd6 55%,#1b9e8a 100%)" }}>
+          <span className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#fff 1.5px, transparent 1.5px)", backgroundSize: "22px 22px" }} aria-hidden="true" />
+          <span className="relative flex flex-col gap-1.5">
+            <span className="text-[13px] font-extrabold tracking-widest text-white/75">1분 테스트</span>
+            <span className="text-[24px] leading-tight font-extrabold tracking-[-0.5px] sm:text-[30px]">나는 어떤 안전관리자일까?</span>
+            <span className="text-[15px] text-white/85">원칙파 감독관 · 현장파 해결사 · 데이터파 분석가 · 소통파 교육자</span>
+          </span>
+          <span className="relative inline-flex min-h-[48px] items-center gap-2 rounded-full bg-white px-6 text-[16px] font-extrabold text-[#3b2a8f]">
+            테스트 시작 <Icon name="arrow" size={18} />
+          </span>
+        </Link>
+
+        {/* ── 도구 + 서식 ── */}
+        <section className="flex flex-col gap-4" id="tools">
+          <SectionHead icon="tool" tone="#6d3fc4" title="바로 쓰는 도구" desc="회원가입 없이 브라우저에서 계산하고 만듭니다" href="/tools/" more="전체 도구" />
+          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(250px, 100%), 1fr))" }}>
+            {tools.map((t) => (
+              <Link key={t.href} href={t.href} className="card lift flex flex-col gap-2 p-5 text-ink hover:border-[#cbb8f0] hover:text-ink hover:no-underline">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-[#f0eafc] text-[#6d3fc4]"><Icon name={TOOL_ICON[t.href] ?? "tool"} size={22} /></span>
+                <span className="text-[17px] font-extrabold">{t.name}</span>
+                <span className="text-[14px] leading-relaxed text-muted">{t.desc}</span>
+              </Link>
+            ))}
+            {forms.map((x) => (
+              <Link key={x.id} href={`/library/${x.id}/`} className="card lift flex flex-col gap-2 p-5 text-ink hover:border-accent hover:text-ink hover:no-underline">
+                <FormatTile format={x.format} size={44} />
+                <span className="mt-1 text-[17px] font-extrabold">{x.title}</span>
+                <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
 
       <Footer />
