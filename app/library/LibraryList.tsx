@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import FieldFilter from "@/components/FieldFilter";
+import { FilterLayout, Group, Opt, ResultHead } from "@/components/SideFilter";
+import { FIELDS, fieldName, fieldStyle } from "@/lib/fields";
 import { FieldChip, FormatTile } from "@/components/visual";
 import { Icon } from "@/components/icons";
 import type { LibItem } from "@/lib/library";
@@ -32,22 +33,37 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
     (x) => (field === "all" || x.field === field) && (cat === "all" || x.category === cat) && (!kw || (x.title + x.desc + x.source).includes(kw))
   );
 
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="card flex flex-col gap-3 p-4">
-        <label className="sr-only" htmlFor="libq">자료 검색</label>
-        <input id="libq" type="search" className="field" placeholder="자료 이름이나 내용으로 찾기 (예: TBM, 위험성평가, MSDS)" value={q} onChange={(e) => setQ(e.target.value)} />
-        <FieldFilter value={field} onChange={setField} counts={counts} />
-        <div className="flex flex-wrap items-center gap-2 text-[14px]">
-          <span className="text-muted">종류</span>
-          {["all", ...cats].map((k) => (
-            <button key={k} type="button" aria-pressed={cat === k} onClick={() => setCat(k)} className={`min-h-[36px] rounded-md px-2.5 cursor-pointer ${cat === k ? "bg-ink font-bold text-white" : "text-ink hover:bg-bg"}`}>
-              {k === "all" ? "전체" : k}
-            </button>
-          ))}
-        </div>
-      </div>
+  const catCounts = useMemo(() => {
+    const c: Record<string, number> = {};
+    items.forEach((x) => (c[x.category] = (c[x.category] ?? 0) + 1));
+    return c;
+  }, [items]);
+  const active = [field !== "all" && fieldName(field), cat !== "all" && cat, kw && `"${kw}"`].filter(Boolean) as string[];
 
+  return (
+    <FilterLayout
+      side={
+        <>
+          <div className="flex flex-col gap-1.5">
+            <label className="px-1 text-[12px] font-bold tracking-wide text-muted" htmlFor="libq">자료 찾기</label>
+            <input id="libq" type="search" className="field" placeholder="예: TBM, MSDS" value={q} onChange={(e) => setQ(e.target.value)} />
+          </div>
+          <Group title="분야">
+            <Opt on={field === "all"} onClick={() => setField("all")} label="전체" n={items.length} tone="accent" />
+            {FIELDS.map((f) => (
+              <Opt key={f.key} on={field === f.key} dim={!counts[f.key]} onClick={() => setField(f.key)} label={f.name} n={counts[f.key] ?? 0} dot={fieldStyle(f.key).c} tone="accent" />
+            ))}
+          </Group>
+          <Group title="종류">
+            <Opt on={cat === "all"} onClick={() => setCat("all")} label="전체" tone="ink" />
+            {cats.map((k) => (
+              <Opt key={k} on={cat === k} onClick={() => setCat(k)} label={k} n={catCounts[k]} tone="ink" />
+            ))}
+          </Group>
+        </>
+      }
+    >
+      <ResultHead count={list.length} unit="개" active={active} />
       <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))" }}>
         {list.length === 0 && <p className="card m-0 p-6 text-center text-muted">찾는 자료가 없습니다.</p>}
         {list.map((x) => (
@@ -68,6 +84,6 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
           </Link>
         ))}
       </div>
-    </div>
+    </FilterLayout>
   );
 }
