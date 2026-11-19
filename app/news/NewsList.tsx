@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import FieldFilter from "@/components/FieldFilter";
-import { fmtDate, fieldStyle } from "@/lib/fields";
+import { FIELDS, fieldName, fmtDate, fieldStyle } from "@/lib/fields";
 import { FieldChip } from "@/components/visual";
 import { Icon } from "@/components/icons";
 import { accKindOf, accTagCounts, type AccItem } from "@/lib/accKind";
@@ -10,6 +9,40 @@ import Link from "next/link";
 import { slugOf, type NewsItem } from "@/lib/news";
 
 const PAGE = 30;
+const INDUSTRY = new Set(["건설", "제조", "조선", "물류·유통", "농업·식품", "수산·어업", "청소·시설관리"]);
+
+/** 필터 묶음: 휴대폰은 가로로 밀어 보는 줄, PC(lg)는 왼쪽 세로 메뉴 */
+function Group({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div role="group" aria-label={title} className="flex flex-col gap-1.5">
+      <span className="px-1 text-[12px] font-bold tracking-wide text-muted">{title}</span>
+      <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 lg:mx-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:px-0">{children}</div>
+    </div>
+  );
+}
+
+const TONE = {
+  accent: "border-accent bg-accent text-white lg:bg-accent",
+  danger: "border-danger bg-danger text-white lg:bg-danger",
+  ink: "border-ink bg-ink text-white lg:bg-ink",
+};
+
+function Opt({ on, dim, onClick, label, n, dot, tone }: { on: boolean; dim?: boolean; onClick: () => void; label: string; n?: number; dot?: string; tone: keyof typeof TONE }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className={`flex min-h-[38px] shrink-0 items-center gap-2 rounded-full border px-3.5 text-[14px] whitespace-nowrap cursor-pointer lg:w-full lg:rounded-lg lg:border-transparent lg:px-2.5 lg:text-left ${
+        on ? `${TONE[tone]} font-bold` : dim ? "border-line bg-white text-[#9aa5ab] lg:bg-transparent" : "border-line bg-white text-ink hover:border-ink lg:bg-transparent lg:hover:bg-bg"
+      }`}
+    >
+      {dot && <span aria-hidden="true" className="hidden h-2 w-2 shrink-0 rounded-full lg:inline-block" style={{ background: on ? "#fff" : dot }} />}
+      <span className="lg:flex-1">{label}</span>
+      {n !== undefined && <span className={`text-[12px] ${on ? "opacity-85" : "text-muted"}`}>{n}</span>}
+    </button>
+  );
+}
 
 export default function NewsList({ items, variant = "news" }: { items: (NewsItem & Partial<AccItem>)[]; variant?: "news" | "accidents" }) {
   const [field, setField] = useState("all");
@@ -34,44 +67,57 @@ export default function NewsList({ items, variant = "news" }: { items: (NewsItem
   const kinds = useMemo(() => [...new Set(items.map((x) => x.kind))], [items]);
   const list = items.filter((x) => (field === "all" || x.field === field) && (kind === "all" || x.kind === kind) && (tag === "all" || (x.tags ?? []).includes(tag)));
 
+  const industryTags = tags.filter(([t]) => INDUSTRY.has(t));
+  const situationTags = tags.filter(([t]) => !INDUSTRY.has(t));
+  const total = items.length;
+  const reset = () => { setField("all"); setKind("all"); setTag("all"); setShown(PAGE); };
+  const active = [field !== "all" && fieldName(field), kind !== "all" && kind, tag !== "all" && `#${tag}`].filter(Boolean) as string[];
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="card flex flex-col gap-3 p-4">
-        <FieldFilter value={field} onChange={(v) => { setField(v); setShown(PAGE); }} counts={counts} />
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[232px_minmax(0,1fr)] lg:items-start lg:gap-5">
+      <aside aria-label="목록 거르기" className="card flex flex-col gap-4 p-4 lg:sticky lg:top-[72px] lg:max-h-[calc(100vh-88px)] lg:overflow-y-auto lg:p-3 [scrollbar-width:thin]">
+        <Group title="분야">
+          <Opt on={field === "all"} onClick={() => { setField("all"); setShown(PAGE); }} label="전체" n={total} tone="accent" />
+          {FIELDS.map((f) => (
+            <Opt key={f.key} on={field === f.key} dim={!counts[f.key]} onClick={() => { setField(f.key); setShown(PAGE); }} label={f.name} n={counts[f.key] ?? 0} dot={fieldStyle(f.key).c} tone="accent" />
+          ))}
+        </Group>
         {kinds.length > 1 && (
-          <div className="flex flex-wrap items-center gap-2 text-[14px]">
-            <span className="text-muted">종류</span>
+          <Group title="종류">
             {["all", ...kinds].map((k) => (
-              <button
-                key={k}
-                type="button"
-                aria-pressed={kind === k}
-                onClick={() => { setKind(k); setShown(PAGE); }}
-                className={`min-h-[36px] rounded-md px-2.5 cursor-pointer ${kind === k ? "bg-ink font-bold text-white" : "text-ink hover:bg-bg"}`}
-              >
-                {k === "all" ? "전체" : k}
-              </button>
+              <Opt key={k} on={kind === k} onClick={() => { setKind(k); setShown(PAGE); }} label={k === "all" ? "전체" : k} tone="ink" />
             ))}
-          </div>
+          </Group>
         )}
-        {tags.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5 text-[14px]">
-            <span className="mr-1 text-muted">상황·업종</span>
-            {[["all", 0] as [string, number], ...tags].map(([t, n]) => (
-              <button
-                key={t}
-                type="button"
-                aria-pressed={tag === t}
-                onClick={() => { setTag(t); setShown(PAGE); }}
-                className={`min-h-[34px] rounded-full border px-3 cursor-pointer ${tag === t ? "border-danger bg-danger font-bold text-white" : "border-line bg-white text-ink hover:border-danger"}`}
-              >
-                {t === "all" ? "전체" : `#${t}`}{t !== "all" && <span className="ml-1 text-[12px] opacity-75">{n}</span>}
-              </button>
+        {situationTags.length > 0 && (
+          <Group title="상황·기인물">
+            <Opt on={tag === "all"} onClick={() => { setTag("all"); setShown(PAGE); }} label="전체" tone="danger" />
+            {situationTags.map(([t, n]) => (
+              <Opt key={t} on={tag === t} onClick={() => { setTag(t); setShown(PAGE); }} label={`#${t}`} n={n} tone="danger" />
             ))}
-          </div>
+          </Group>
+        )}
+        {industryTags.length > 0 && (
+          <Group title="업종">
+            {industryTags.map(([t, n]) => (
+              <Opt key={t} on={tag === t} onClick={() => { setTag(t); setShown(PAGE); }} label={`#${t}`} n={n} tone="danger" />
+            ))}
+          </Group>
+        )}
+      </aside>
+
+      <div className="flex min-w-0 flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-2 px-1 text-[14px] text-muted">
+        <span><b className="text-ink">{list.length}</b>건</span>
+        {active.length > 0 && (
+          <>
+            <span className="text-ink">· {active.join(" · ")}</span>
+            <button type="button" onClick={reset} className="ml-auto min-h-[32px] rounded-full border border-line bg-white px-3 text-[13px] text-ink cursor-pointer hover:border-ink">
+              조건 지우기 ✕
+            </button>
+          </>
         )}
       </div>
-
       <ul className="card m-0 list-none p-0">
         {list.length === 0 && <li className="p-6 text-center text-muted">조건에 맞는 항목이 아직 없습니다.</li>}
         {list.slice(0, shown).map((x) => {
@@ -104,6 +150,7 @@ export default function NewsList({ items, variant = "news" }: { items: (NewsItem
           더 보기
         </button>
       )}
+      </div>
     </div>
   );
 }
