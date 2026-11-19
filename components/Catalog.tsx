@@ -2,7 +2,7 @@ import Link from "next/link";
 import catalog from "@/content/catalog.json";
 import { Icon } from "./icons";
 
-const TOOL_ICON: Record<string, string> = { "/tools/tbm/": "people", "/tools/calc/": "calc", "/tools/career/": "clock", "/tools/test/": "spark", "/tools/msds/": "chem", "/law/": "doc", "/tools/diagnosis/": "check" };
+const TOOL_ICON: Record<string, string> = { "/tools/tbm/": "people", "/tools/calc/": "calc", "/tools/career/": "clock", "/tools/test/": "spark", "/tools/msds/": "chem", "/guidemap/": "search", "/tools/diagnosis/": "check" };
 
 const cardCls = "flex flex-col gap-1.5 rounded-xl border border-line-soft bg-white p-4 text-ink";
 

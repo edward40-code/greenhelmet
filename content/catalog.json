@@ -10,10 +10,10 @@
           "open": false
         },
         {
-          "href": "/law/",
-          "name": "법령 DB",
-          "desc": "환경·안전·보건 법령을 조문 단위로 찾고 개정 전후를 비교합니다",
-          "open": false
+          "href": "/guidemap/",
+          "name": "지침 지도",
+          "desc": "주제를 고르면 법 조문·고시·기술지원규정·자료가 어디에 있는지 한 장으로 보여 줍니다",
+          "open": true
         },
         {
           "href": "/tools/diagnosis/",
