@@ -1,5 +1,5 @@
 import data from "@/content/feeds/accidents.json";
-import type { NewsItem } from "./news";
+import { slugOf, type NewsItem } from "./news";
 
 /** 언론에 보도된 산업현장 사고. 제목·언론사·날짜·원문 링크만 담는다. */
 export const allAccidents = (): NewsItem[] => (data as NewsItem[]).slice().sort((a, b) => b.date.localeCompare(a.date));
@@ -19,3 +19,18 @@ export function accKind(title: string): { icon: string; label: string } {
   for (const [re, icon, label] of ACC_KIND) if (re.test(title)) return { icon, label };
   return { icon: "alert", label: "사고" };
 }
+
+export const getAccident = (slug: string) => allAccidents().find((x) => slugOf(x.id) === slug);
+
+/** 사고 유형별로 함께 보여 줄 자료실 서식 id (예방 점검에 쓰는 서식) */
+export const ACC_LIBRARY: Record<string, string[]> = {
+  fall: ["checklist-aerial-work-platform", "checklist-work-start-all", "daily-safety-checklist"],
+  caught: ["checklist-conveyor", "checklist-press", "checklist-work-start-all"],
+  crush: ["checklist-crane", "checklist-mobile-crane", "checklist-forklift"],
+  gas: ["checklist-confined-space", "confined-space-program", "risk-assessment-form"],
+  shock: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
+  explosion: ["checklist-hot-work", "checklist-fire-extinguisher", "risk-assessment-form"],
+  fire: ["checklist-hot-work", "checklist-fire-extinguisher", "checklist-fire-monthly"],
+  leak: ["risk-assessment-form", "checklist-confined-space", "daily-safety-checklist"],
+  alert: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
+};

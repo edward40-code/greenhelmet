@@ -6,7 +6,8 @@ import { fmtDate, fieldStyle } from "@/lib/fields";
 import { FieldChip } from "@/components/visual";
 import { Icon } from "@/components/icons";
 import { accKind } from "@/lib/accidents";
-import type { NewsItem } from "@/lib/news";
+import Link from "next/link";
+import { slugOf, type NewsItem } from "@/lib/news";
 
 const PAGE = 30;
 
@@ -56,14 +57,14 @@ export default function NewsList({ items, variant = "news" }: { items: NewsItem[
           const acc = variant === "accidents" ? accKind(x.title) : null;
           return (
             <li key={x.id} className="border-t border-line-soft first:border-t-0">
-              <a href={x.url} target="_blank" rel="noopener" className="flex items-start gap-3.5 px-4 py-4 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
+              <Link href={`/${variant}/${slugOf(x.id)}/`} className="flex items-start gap-3.5 px-4 py-4 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
                 {acc ? (
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#fdecec] text-danger"><Icon name={acc.icon} size={20} /></span>
                 ) : (
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ background: fieldStyle(x.field).soft, color: fieldStyle(x.field).c }}><Icon name={x.field} size={20} /></span>
                 )}
                 <span className="flex min-w-0 flex-col gap-1">
-                  <span className="text-[17px] leading-[1.5] font-semibold">{x.title}<span className="ml-1 text-[13px] text-muted" aria-label="새 창">↗</span></span>
+                  <span className="text-[17px] leading-[1.5] font-semibold">{x.title}</span>
                   {x.summary && <span className="line-clamp-2 text-[15px] leading-relaxed text-muted">{x.summary}</span>}
                   <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted">
                     {acc ? <b className="text-danger">{acc.label}</b> : <FieldChip field={x.field} />}
@@ -71,7 +72,7 @@ export default function NewsList({ items, variant = "news" }: { items: NewsItem[
                     <span>{x.source} · {fmtDate(x.date)}</span>
                   </span>
                 </span>
-              </a>
+              </Link>
             </li>
           );
         })}

@@ -5,7 +5,7 @@ import { AdSlot } from "@/components/ui";
 import { Icon } from "@/components/icons";
 import { FieldChip, FormatTile, SectionHead } from "@/components/visual";
 import catalog from "@/content/catalog.json";
-import { allNews } from "@/lib/news";
+import { allNews, slugOf } from "@/lib/news";
 import { accKind, allAccidents } from "@/lib/accidents";
 import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
@@ -104,18 +104,18 @@ export default function Home() {
                   const k = accKind(x.title);
                   return (
                     <li key={x.id} className="border-t border-line-soft first:border-t-0">
-                      <a href={x.url} target="_blank" rel="noopener" className="flex items-start gap-3 px-5 py-3.5 text-ink hover:bg-[#fff7f6] hover:no-underline">
+                      <Link href={`/accidents/${slugOf(x.id)}/`} className="flex items-start gap-3 px-5 py-3.5 text-ink hover:bg-[#fff7f6] hover:no-underline">
                         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#fdecec] text-danger"><Icon name={k.icon} size={18} /></span>
                         <span className="flex min-w-0 flex-col gap-0.5">
                           <span className="text-[15px] leading-[1.45] font-semibold">{x.title}</span>
                           <span className="text-[13px] text-muted"><b className="text-danger">{k.label}</b> · {fmtDate(x.date).slice(5)} · {x.source}</span>
                         </span>
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
               </ul>
-              <p className="m-0 mt-auto border-t border-line-soft px-5 py-2.5 text-[12px] text-muted">언론 보도 제목을 그대로 싣고 원문으로 연결합니다.</p>
+              <p className="m-0 mt-auto border-t border-line-soft px-5 py-2.5 text-[12px] text-muted">언론 보도 제목을 그대로 싣고, 원문 기사 링크를 함께 둡니다.</p>
             </div>
           )}
         </div>
@@ -148,13 +148,13 @@ export default function Home() {
             <ul className="card m-0 list-none p-0">
               {news.slice(0, 7).map((x) => (
                 <li key={x.id} className="border-t border-line-soft first:border-t-0">
-                  <a href={x.url} target="_blank" rel="noopener" className="flex items-start gap-3 px-4 py-3.5 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
+                  <Link href={`/news/${slugOf(x.id)}/`} className="flex items-start gap-3 px-4 py-3.5 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
                     <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: fieldStyle(x.field).a }} />
                     <span className="flex min-w-0 flex-col gap-1">
                       <span className="text-[16px] leading-[1.5] font-semibold hover:underline">{x.title}</span>
                       <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted"><FieldChip field={x.field} />{x.kind} · {fmtDate(x.date)}</span>
                     </span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

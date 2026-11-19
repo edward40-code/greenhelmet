@@ -15,7 +15,7 @@ export default function Page() {
     <SiteShell
       active="news"
       title="소식"
-      desc="산업안전·보건·환경 분야 정책자료와 입법·행정예고를 분야별로 모았습니다. 제목을 누르면 원문으로 이동합니다."
+      desc="산업안전·보건·환경 분야 정책자료와 입법·행정예고를 분야별로 모았습니다. 제목을 누르면 요약과 관련 서식을 보고 원문으로 갈 수 있습니다."
     >
       <NewsList items={allNews()} />
       <p className="m-0 text-[14px] leading-relaxed text-muted">
