@@ -42,7 +42,8 @@ jobs:
             git commit -m "소식 자동 수집 $(date -u +%F)"
             git push
           fi
-      - run: npx next build
+      # 구글 폰트 다운로드가 가끔 실패하므로 한 번 더 시도한다
+      - run: npx next build || (sleep 60 && npx next build)
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
