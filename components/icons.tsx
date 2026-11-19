@@ -26,6 +26,8 @@ const PATHS: Record<string, React.ReactNode> = {
   shock: (<><path d="M13 2L5 14h6l-1 8 8-12h-6z" /></>),
   explosion: (<><path d="M12 2l2 5 5-2-2 5 5 2-5 2 2 5-5-2-2 5-2-5-5 2 2-5-5-2 5-2-2-5 5 2z" /></>),
   leak: (<><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" /></>),
+  struck: (<><path d="M9 3h6v4H9z" /><path d="M12 7v5" /><path d="M8 14l4 4 4-4" /><path d="M4 21h16" /></>),
+  vehicle: (<><path d="M3 16V8h11v8" /><path d="M14 11h4l3 3v2h-7" /><circle cx="7" cy="17.5" r="1.8" /><circle cx="17" cy="17.5" r="1.8" /></>),
   alert: (<><path d="M12 3l10 18H2z" /><path d="M12 10v5M12 18h.01" /></>),
   // 일반
   doc: (<><path d="M6 2h9l5 5v15H6z" /><path d="M14 2v6h6" /><path d="M9 13h7M9 17h7" /></>),

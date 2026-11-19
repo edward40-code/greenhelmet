@@ -5,21 +5,26 @@ import FieldFilter from "@/components/FieldFilter";
 import { fmtDate, fieldStyle } from "@/lib/fields";
 import { FieldChip } from "@/components/visual";
 import { Icon } from "@/components/icons";
-import { accKind } from "@/lib/accidents";
+import { accKindOf, accTagCounts, type AccItem } from "@/lib/accKind";
 import Link from "next/link";
 import { slugOf, type NewsItem } from "@/lib/news";
 
 const PAGE = 30;
 
-export default function NewsList({ items, variant = "news" }: { items: NewsItem[]; variant?: "news" | "accidents" }) {
+export default function NewsList({ items, variant = "news" }: { items: (NewsItem & Partial<AccItem>)[]; variant?: "news" | "accidents" }) {
   const [field, setField] = useState("all");
   const [kind, setKind] = useState("all");
   const [shown, setShown] = useState(PAGE);
-  // 메인의 '분야별로 보기'에서 ?field=... 로 들어오면 그 분야를 먼저 보여 준다
+  const [tag, setTag] = useState("all");
+  // ?field=... (메인 '분야별로 보기'), ?tag=... (사고 상세의 #태그) 로 들어오면 그 조건을 먼저 건다
   useEffect(() => {
-    const f = new URLSearchParams(window.location.search).get("field");
+    const q = new URLSearchParams(window.location.search);
+    const f = q.get("field");
     if (f) setField(f);
+    const t = q.get("tag");
+    if (t) setTag(t);
   }, []);
+  const tags = useMemo(() => accTagCounts(items as AccItem[]), [items]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -27,7 +32,7 @@ export default function NewsList({ items, variant = "news" }: { items: NewsItem[
     return c;
   }, [items]);
   const kinds = useMemo(() => [...new Set(items.map((x) => x.kind))], [items]);
-  const list = items.filter((x) => (field === "all" || x.field === field) && (kind === "all" || x.kind === kind));
+  const list = items.filter((x) => (field === "all" || x.field === field) && (kind === "all" || x.kind === kind) && (tag === "all" || (x.tags ?? []).includes(tag)));
 
   return (
     <div className="flex flex-col gap-4">
@@ -49,12 +54,28 @@ export default function NewsList({ items, variant = "news" }: { items: NewsItem[
             ))}
           </div>
         )}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 text-[14px]">
+            <span className="mr-1 text-muted">상황·업종</span>
+            {[["all", 0] as [string, number], ...tags].map(([t, n]) => (
+              <button
+                key={t}
+                type="button"
+                aria-pressed={tag === t}
+                onClick={() => { setTag(t); setShown(PAGE); }}
+                className={`min-h-[34px] rounded-full border px-3 cursor-pointer ${tag === t ? "border-danger bg-danger font-bold text-white" : "border-line bg-white text-ink hover:border-danger"}`}
+              >
+                {t === "all" ? "전체" : `#${t}`}{t !== "all" && <span className="ml-1 text-[12px] opacity-75">{n}</span>}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <ul className="card m-0 list-none p-0">
-        {list.length === 0 && <li className="p-6 text-center text-muted">이 분야 소식은 아직 없습니다.</li>}
+        {list.length === 0 && <li className="p-6 text-center text-muted">조건에 맞는 항목이 아직 없습니다.</li>}
         {list.slice(0, shown).map((x) => {
-          const acc = variant === "accidents" ? accKind(x.title) : null;
+          const acc = variant === "accidents" ? accKindOf(x) : null;
           return (
             <li key={x.id} className="border-t border-line-soft first:border-t-0">
               <Link href={`/${variant}/${slugOf(x.id)}/`} className="flex items-start gap-3.5 px-4 py-4 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
@@ -68,6 +89,7 @@ export default function NewsList({ items, variant = "news" }: { items: NewsItem[
                   {x.summary && <span className="line-clamp-2 text-[15px] leading-relaxed text-muted">{x.summary}</span>}
                   <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted">
                     {acc ? <b className="text-danger">{acc.label}</b> : <FieldChip field={x.field} />}
+                    {acc && (x.tags ?? []).map((t) => <span key={t} className="text-[#8a5a50]">#{t}</span>)}
                     <span className="rounded bg-bg px-1.5 py-px">{x.kind}</span>
                     <span>{x.source} · {fmtDate(x.date)}</span>
                   </span>

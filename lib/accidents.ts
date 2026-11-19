@@ -1,31 +1,24 @@
 import notes from "@/content/accident-notes.json";
 import data from "@/content/feeds/accidents.json";
 import { slugOf, type NewsItem } from "./news";
+import { accKindOf, type AccItem } from "./accKind";
 
-/** 언론에 보도된 산업현장 사고. 제목·언론사·날짜·원문 링크만 담는다. */
-/** 운영자가 원문 기사를 읽고 쓴 요약 (보도된 사실만, 실명 제외) */
-const NOTES = notes as Record<string, { summary: string; checked: string }>;
+export * from "./accKind";
 
-export const allAccidents = (): NewsItem[] =>
+/** 언론에 보도된 산업현장 사고 + 운영자가 원문 기사를 읽고 쓴 요약·태그 (보도된 사실만, 실명 제외) */
+type Note = { summary: string; checked: string; url?: string; tags?: string[]; kind?: string };
+const NOTES = notes as Record<string, Note>;
+
+export const allAccidents = (): AccItem[] =>
   (data as NewsItem[])
-    .map((x) => (NOTES[x.id] ? { ...x, summary: NOTES[x.id].summary } : x))
+    .map((x): AccItem => {
+      const n = NOTES[x.id];
+      return n ? { ...x, summary: n.summary, srcUrl: n.url, tags: n.tags, accType: n.kind } : x;
+    })
     .sort((a, b) => b.date.localeCompare(a.date));
 
-/** 제목으로 사고 유형을 짐작해 아이콘·라벨을 붙인다 (보도 제목 그대로, 내용은 바꾸지 않음) */
-const ACC_KIND: [RegExp, string, string][] = [
-  [/추락|떨어져|낙하/, "fall", "추락"],
-  [/끼임|끼여|협착|말려/, "caught", "끼임"],
-  [/깔려|깔림|붕괴|무너/, "crush", "깔림·붕괴"],
-  [/질식|가스|중독|밀폐/, "gas", "질식·중독"],
-  [/감전|전기/, "shock", "감전"],
-  [/폭발|터져/, "explosion", "폭발"],
-  [/화재|불길|불이|불나|화염|불…|불\.\.\./, "fire", "화재"],
-  [/누출|유출|새어/, "leak", "누출"],
-];
-export function accKind(title: string): { icon: string; label: string } {
-  for (const [re, icon, label] of ACC_KIND) if (re.test(title)) return { icon, label };
-  return { icon: "alert", label: "사고" };
-}
+/** 원문 링크: 언론사 기사 주소를 알면 그 주소, 모르면 수집한 주소 */
+export const sourceUrl = (x: AccItem) => x.srcUrl ?? x.url;
 
 export const getAccident = (slug: string) => allAccidents().find((x) => slugOf(x.id) === slug);
 
@@ -39,5 +32,28 @@ export const ACC_LIBRARY: Record<string, string[]> = {
   explosion: ["checklist-hot-work", "checklist-fire-extinguisher", "risk-assessment-form"],
   fire: ["checklist-hot-work", "checklist-fire-extinguisher", "checklist-fire-monthly"],
   leak: ["risk-assessment-form", "checklist-confined-space", "daily-safety-checklist"],
+  struck: ["checklist-crane", "checklist-mobile-crane", "daily-safety-checklist"],
+  vehicle: ["checklist-truck", "checklist-work-start-all", "tbm-log"],
   alert: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
 };
+
+/** 세부 태그에 딱 맞는 서식이 있으면 맨 앞에 둔다 */
+export const TAG_LIBRARY: Record<string, string> = {
+  지게차: "checklist-forklift",
+  크레인: "checklist-crane",
+  밀폐공간: "checklist-confined-space",
+  "차량 적재함": "checklist-truck",
+  차량: "checklist-truck",
+  건설기계: "checklist-work-start-all",
+  "기계 말림": "checklist-conveyor",
+  화학물질: "risk-assessment-form",
+  "설비 폭발": "checklist-hot-work",
+};
+
+/** 사고에 맞는 서식 id 목록 (태그 우선, 그다음 유형별, 중복 제거, 3개) */
+export function accLibraryIds(x: AccItem): string[] {
+  const k = accKindOf(x).icon;
+  const ids = [...(x.tags ?? []).map((t) => TAG_LIBRARY[t]).filter(Boolean), ...(ACC_LIBRARY[k] ?? ACC_LIBRARY.alert)];
+  return [...new Set(ids)].slice(0, 3);
+}
+

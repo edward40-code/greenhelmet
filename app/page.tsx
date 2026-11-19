@@ -6,7 +6,7 @@ import { Icon } from "@/components/icons";
 import { FieldChip, FormatTile, SectionHead } from "@/components/visual";
 import catalog from "@/content/catalog.json";
 import { allNews, slugOf } from "@/lib/news";
-import { accKind, allAccidents } from "@/lib/accidents";
+import { accKindOf, allAccidents } from "@/lib/accidents";
 import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
 import { FIELDS, fieldStyle, fmtDate } from "@/lib/fields";
@@ -101,7 +101,7 @@ export default function Home() {
               </div>
               <ul className="m-0 flex list-none flex-col p-0">
                 {accidents.slice(0, 5).map((x) => {
-                  const k = accKind(x.title);
+                  const k = accKindOf(x);
                   return (
                     <li key={x.id} className="border-t border-line-soft first:border-t-0">
                       <Link href={`/accidents/${slugOf(x.id)}/`} className="flex items-start gap-3 px-5 py-3.5 text-ink hover:bg-[#fff7f6] hover:no-underline">

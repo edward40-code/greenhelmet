@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { AdSlot } from "@/components/ui";
 import { Icon } from "@/components/icons";
 import { FieldChip, FormatTile } from "@/components/visual";
-import { ACC_LIBRARY, accKind, allAccidents, getAccident } from "@/lib/accidents";
+import { accKindOf, accLibraryIds, allAccidents, getAccident, sourceUrl } from "@/lib/accidents";
 import { slugOf } from "@/lib/news";
 import { getLib } from "@/lib/library";
 import { allReports } from "@/lib/reports";
@@ -31,13 +31,13 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
 export default async function Page({ params }: P) {
   const x = getAccident((await params).slug);
   if (!x) notFound();
-  const k = accKind(x.title);
+  const k = accKindOf(x);
   const all = allAccidents();
-  const same = all.filter((o) => o.id !== x.id && accKind(o.title).icon === k.icon).slice(0, 5);
+  const same = all.filter((o) => o.id !== x.id && accKindOf(o).icon === k.icon).slice(0, 5);
   const recent = all.filter((o) => o.id !== x.id && !same.includes(o)).slice(0, 5);
-  const libs = (ACC_LIBRARY[k.icon] ?? ACC_LIBRARY.alert).map(getLib).filter((v): v is NonNullable<typeof v> => !!v);
+  const libs = accLibraryIds(x).map(getLib).filter((v): v is NonNullable<typeof v> => !!v);
   const reports = allReports().filter((r) => r.field === x.field).slice(0, 2);
-  const sameCount = all.filter((o) => accKind(o.title).icon === k.icon).length;
+  const sameCount = all.filter((o) => accKindOf(o).icon === k.icon).length;
 
   return (
     <>
@@ -50,6 +50,13 @@ export default async function Page({ params }: P) {
           <span className="inline-flex items-center gap-2 self-start rounded-full bg-white/15 px-3 py-1 text-[14px] font-bold"><Icon name={k.icon} size={16} />{k.label} 사고</span>
           <h1 className="m-0 text-[25px] leading-[1.35] font-extrabold tracking-[-0.5px] sm:text-[32px]">{x.title}</h1>
           <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)} 보도</p>
+          {x.tags && x.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {x.tags.map((t) => (
+                <Link key={t} href={`/accidents/?tag=${encodeURIComponent(t)}`} className="rounded-full border border-white/30 px-2.5 py-0.5 text-[13px] text-white hover:bg-white/15 hover:text-white hover:no-underline">#{t}</Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -65,7 +72,7 @@ export default async function Page({ params }: P) {
             {fmtDate(x.date)} {x.source} 보도를 바탕으로 그린헬멧기사가 정리했습니다. 보도에 나온 사실만 옮기고 실명은 싣지 않습니다. 원인은 관계 당국 조사로 확정됩니다.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <a href={x.url} target="_blank" rel="noopener" className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-ink px-5 text-[16px] font-bold text-white hover:text-white hover:no-underline">
+            <a href={sourceUrl(x)} target="_blank" rel="noopener" className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-ink px-5 text-[16px] font-bold text-white hover:text-white hover:no-underline">
               원문 기사 보기 <span className="text-[13px] font-normal opacity-80">{x.source} ↗</span>
             </a>
             <span className="text-[14px] text-muted">최근 수집된 {k.label} 사고 보도 <b className="text-danger">{sameCount}건</b></span>
@@ -106,7 +113,7 @@ export default async function Page({ params }: P) {
           <section className="card flex flex-col p-5">
             <h2 className="m-0 mb-1 text-[17px] font-extrabold">최근 사고속보</h2>
             {recent.map((o) => {
-              const ok = accKind(o.title);
+              const ok = accKindOf(o);
               return (
                 <Link key={o.id} href={`/accidents/${slugOf(o.id)}/`} className="flex flex-col gap-0.5 border-t border-line-soft py-3 text-ink first:border-t-0 hover:text-accent hover:no-underline">
                   <span className="text-[15px] leading-snug font-semibold">{o.title}</span>
