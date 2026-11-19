@@ -66,7 +66,7 @@ export default async function Page({ params }: P) {
         <article className="card p-5 sm:p-9">
           {!r.reviewed && (
             <div className="mb-4">
-              <Notice><strong>검수 전</strong> 원고입니다. 운영자가 원문과 대조한 뒤 이 표시를 뗍니다.</Notice>
+              <Notice><strong>검수 전</strong></Notice>
             </div>
           )}
           <div className="prose-doc" dangerouslySetInnerHTML={{ __html: r.html }} />
@@ -113,7 +113,7 @@ export default async function Page({ params }: P) {
 
         {others.length > 0 && (
           <section className="flex flex-col gap-3">
-            <h2 className="m-0 text-[19px] font-extrabold">이어서 읽어 보세요</h2>
+            <h2 className="m-0 text-[19px] font-extrabold">다른 리포트</h2>
             <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(230px, 100%), 1fr))" }}>
               {others.map((o) => (
                 <Link key={o.slug} href={`/reports/${o.slug}/`} className="card lift flex flex-col overflow-hidden text-ink hover:text-ink hover:no-underline">

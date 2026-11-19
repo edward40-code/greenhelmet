@@ -77,7 +77,7 @@ export default async function Page({ params }: P) {
           )}
           {x.howto && x.howto.length > 0 && (
             <section className="rounded-md bg-accent-soft p-4">
-              <h2 className="m-0 mb-1.5 text-[16px] font-extrabold text-accent-ink">이렇게 쓰세요</h2>
+              <h2 className="m-0 mb-1.5 text-[16px] font-extrabold text-accent-ink">쓰는 법</h2>
               <ul className="m-0 list-disc pl-5 text-[15px] leading-[1.8]">{x.howto.map((h) => <li key={h}>{h}</li>)}</ul>
             </section>
           )}
@@ -87,17 +87,7 @@ export default async function Page({ params }: P) {
           {x.report && (
             <Link href={`/reports/${x.report}/`} className="text-[15px] font-bold">관련 이슈리포트 읽기 →</Link>
           )}
-          <p className="m-0 text-[14px] leading-relaxed text-muted">
-            {x.type === "file"
-              ? x.category === "교육자료"
-              ? "법령 내용을 쉬운 말로 풀어 쓴 교육 보조자료입니다. 사업장 실정에 맞게 고쳐 쓰고, 법정 교육의 시간과 내용은 현행 법령으로 확인하세요."
-              : x.basis && x.category === "법정 점검표"
-              ? "법령·고시에 정한 항목을 원문대로 옮긴 서식입니다. 법정 항목은 지우지 말고, 사업장 항목은 추가 칸에 더해 쓰세요."
-              : x.basis
-              ? "법령 내용을 줄여 옮긴 서식입니다. 정확한 요건과 예외는 현행 법령 원문으로 확인하고, 사업장에 맞게 고쳐 쓰세요."
-              : "그린헬멧기사가 만든 기본 서식입니다. 현장 위험성평가 결과와 사내 규정에 맞게 고쳐 쓰세요."
-              : `자료의 저작권은 ${x.source}에 있습니다. 그린헬멧기사는 원본 위치만 안내합니다.`}
-          </p>
+          {x.type !== "file" && <p className="m-0 text-[13px] text-muted">저작권 {x.source}</p>}
         </article>
 
         <AdSlot slot="edu_inline" />

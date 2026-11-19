@@ -69,11 +69,9 @@ export default async function Page({ params }: P) {
           {x.summary ? (
             <p className="m-0 text-[17px] leading-[1.85]">{x.summary}</p>
           ) : (
-            <p className="m-0 text-[16px] leading-relaxed text-muted">요약을 준비하고 있습니다. 사고 경위는 원문 기사에서 확인하세요.</p>
+            <p className="m-0 text-[16px] leading-relaxed text-muted">요약 준비 중</p>
           )}
-          <p className="m-0 rounded-lg bg-[#f6f7f8] px-3.5 py-2.5 text-[13px] leading-relaxed text-muted">
-            {fmtDate(x.date)} {x.source} 보도를 바탕으로 그린헬멧기사가 정리했습니다. 보도에 나온 사실만 옮기고 실명은 싣지 않습니다. 원인은 관계 당국 조사로 확정됩니다.
-          </p>
+          <p className="m-0 text-[13px] text-muted">{fmtDate(x.date)} {x.source} 보도 기준 · 실명 미게재</p>
           <div className="flex flex-wrap items-center gap-3">
             <a href={sourceUrl(x)} target="_blank" rel="noopener" className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-ink px-5 text-[16px] font-bold text-white hover:text-white hover:no-underline">
               원문 기사 보기 <span className="text-[13px] font-normal opacity-80">{x.source} ↗</span>
@@ -84,7 +82,7 @@ export default async function Page({ params }: P) {
 
         {libs.length > 0 && (
           <section className="flex flex-col gap-3 rounded-2xl bg-[#eaf5ee] p-5 sm:p-6">
-            <h2 className="m-0 flex items-center gap-2 text-[19px] font-extrabold text-accent-dark"><Icon name="check" size={21} />우리 현장은 괜찮을까? 이 점검표로 확인하세요</h2>
+            <h2 className="m-0 flex items-center gap-2 text-[19px] font-extrabold text-accent-dark"><Icon name="check" size={21} />관련 점검표</h2>
             <div className="grid gap-2.5" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
               {libs.map((l) => (
                 <Link key={l.id} href={`/library/${l.id}/`} className="lift flex items-start gap-3 rounded-xl bg-white p-3.5 text-ink shadow-sm hover:text-ink hover:no-underline">

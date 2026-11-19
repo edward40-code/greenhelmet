@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </SectionCard>
 
           <div className="rounded-md border border-dashed border-accent bg-white px-5 py-4 text-[15px]">
-            <strong className="text-accent">이 사이트는 시험문제를 싣지 않습니다.</strong> 문제는 문제집으로 풀고, 여기서는 유형과 공부 방향을 잡습니다.
+            <strong className="text-accent">시험문제는 싣지 않습니다.</strong>
           </div>
         </main>
 

@@ -76,7 +76,7 @@ export default function Calc() {
   // 16.61은 근삿값이라 85dB 8시간이 84.9999로 나오지 않게 화면에 보이는 자리(소수 1자리)로 맞춰 판정한다
   const twaR = Math.round(twa * 10) / 10;
   const doseR = Math.round(dose * 10) / 10;
-  let noiseNote = "값을 넣으면 판정이 나옵니다.";
+  let noiseNote = "값을 입력하세요";
   if (any && D === 0) noiseNote = "80dB 미만만 입력되어 노출량이 0%입니다.";
   else if (Number.isFinite(twa)) {
     if (doseR > 100) noiseNote = "노출기준 초과: 8시간 시간가중평균이 90dB을 넘습니다. 개선 조치가 필요합니다.";
@@ -101,7 +101,6 @@ export default function Calc() {
       <section className="card flex flex-col gap-3.5 p-5">
         <div className="flex flex-col gap-1">
           <h2 className="m-0 text-[20px] font-extrabold">가스·증기 농도 환산</h2>
-          <p className="m-0 text-[14px] leading-relaxed text-muted">공기 중 가스·증기 농도의 단위를 ppm과 mg/m³ 사이에서 바꿉니다.</p>
         </div>
         <div className="flex gap-2" role="group" aria-label="환산 방향">
           <button type="button" aria-pressed={mode === "toMg"} className={tab(mode === "toMg")} onClick={() => setMode("toMg")}>ppm → mg/m³</button>
@@ -122,19 +121,18 @@ export default function Calc() {
           )}
         </div>
         <p className="m-0 text-[14px] leading-relaxed text-muted">
-          mg/m³ = ppm × 분자량 ÷ 24.45, ppm = mg/m³ × 24.45 ÷ 분자량. 처음 값은 톨루엔(분자량 92.14) 50ppm으로 넣은 계산 예시이며, 노출기준 값이 아닙니다.
+          mg/m³ = ppm × 분자량 ÷ 24.45, ppm = mg/m³ × 24.45 ÷ 분자량. 예시 값: 톨루엔(분자량 92.14) 50ppm. 노출기준 아님.
           <br />
           근거: 「작업환경측정 및 정도관리 등에 관한 고시」 제20조제2항 계산식 1 (25℃, 1기압 기준 24.45). 가스·증기 노출기준은 ppm으로 표시합니다(「화학물질 및 물리적 인자의 노출기준」 제11조제1항).
         </p>
         <p className="m-0 rounded-md border border-warn-line bg-warn-bg px-3.5 py-2.5 text-[14px] leading-relaxed text-warn-ink">
-          <strong>가스·증기에만 씁니다.</strong> 분진·흄·미스트 같은 입자상 물질은 mg/m³로만 측정하므로 ppm으로 바꾸지 않습니다.
+          <strong>가스·증기 전용.</strong> 분진·흄·미스트는 mg/m³로만 측정합니다.
         </p>
       </section>
 
       <section className="card flex flex-col gap-3.5 p-5">
         <div className="flex flex-col gap-1">
           <h2 className="m-0 text-[20px] font-extrabold">소음 노출량</h2>
-          <p className="m-0 text-[14px] leading-relaxed text-muted">소음 수준별 노출 시간을 넣으면 하루 노출량(%)과 8시간 시간가중평균을 계산합니다.</p>
         </div>
         <div className="grid grid-cols-2 gap-2 text-[14px] font-bold">
           <span>소음 수준 (dB(A))</span>
@@ -175,7 +173,7 @@ export default function Calc() {
           근거: 「작업환경측정 및 정도관리 등에 관한 고시」 제26조제4호(기준 90dB, 5dB 반감, 80dB 미만 제외)와 제36조제4항 계산식 6, 「화학물질 및 물리적 인자의 노출기준」 별표 2-1(90dB 8시간~115dB 15분), 「산업안전보건기준에 관한 규칙」 제512조·제513조·제514조·제516조·제517조.
         </p>
         <p className="m-0 rounded-md border border-warn-line bg-warn-bg px-3.5 py-2.5 text-[14px] leading-relaxed text-warn-ink">
-          <strong>연속 소음을 미리 가늠해 보는 계산입니다.</strong> 충격소음은 기준이 따로 있고, 법정 평가는 작업환경측정 결과로 합니다.
+          <strong>연속 소음 추정용.</strong> 충격소음은 기준이 따로 있고, 법정 평가는 작업환경측정 결과로 합니다.
         </p>
       </section>
 

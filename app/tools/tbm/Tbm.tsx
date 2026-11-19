@@ -103,7 +103,7 @@ export default function Tbm() {
               ))}
             </div>
           </section>
-          <p className="m-0 text-[14px] text-muted">기본 문구는 일반적인 내용입니다. 현장 위험성평가 결과에 맞게 고쳐 쓰세요.</p>
+          <p className="m-0 text-[14px] text-muted">기본 문구 · 현장 위험성평가 결과에 맞게 수정</p>
         </article>
       </div>
     </>

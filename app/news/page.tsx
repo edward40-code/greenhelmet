@@ -15,12 +15,10 @@ export default function Page() {
     <SiteShell
       active="news"
       title="소식"
-      desc="산업안전·보건·환경 분야 정책자료와 입법·행정예고를 분야별로 모았습니다. 제목을 누르면 요약과 관련 서식을 보고 원문으로 갈 수 있습니다."
+      desc="정책자료 · 입법·행정예고 · 공지"
     >
       <NewsList items={allNews()} />
-      <p className="m-0 text-[14px] leading-relaxed text-muted">
-        고용노동부 정책자료·입법·행정예고·공지는 매일 아침 자동으로 받아 오고, 그 밖의 소식은 운영자가 직접 골라 올립니다. 소식의 저작권은 각 출처에 있습니다.
-      </p>
+      <p className="m-0 text-[13px] text-muted">저작권은 각 출처에 있습니다.</p>
       <AdSlot slot="post_bottom" />
     </SiteShell>
   );

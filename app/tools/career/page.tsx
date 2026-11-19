@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ToolShell title="경력 계산" width={1000} desc="근무 기간을 넣으면 총 경력을 연·월·일로 합산합니다. 응시자격, 선임 자격 증빙 전에 확인하세요.">
+    <ToolShell title="경력 계산" width={1000} desc="근무 기간을 연·월·일로 합산">
       <Career />
     </ToolShell>
   );

@@ -88,12 +88,12 @@ export default function Career() {
 
       {overlap && (
         <div className="rounded-md border border-warn-line bg-warn-bg px-4 py-3 text-[15px] leading-relaxed text-warn-ink">
-          겹치는 기간이 있습니다. 겹친 기간은 경력으로 두 번 인정되지 않는 경우가 많으니 확인하세요.
+          겹치는 기간이 있습니다.
         </div>
       )}
 
       <p className="m-0 text-[14px] leading-[1.7] text-muted">
-        입사일과 퇴사일을 모두 포함해 계산합니다. 여러 기간을 합칠 때는 30일을 1개월, 12개월을 1년으로 올립니다. 기관마다 경력 인정 방식이 다를 수 있으니 제출처 기준을 따르세요.
+        입사일·퇴사일 포함 · 30일 = 1개월, 12개월 = 1년
       </p>
     </>
   );

@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-[1240px] flex-wrap gap-x-10 gap-y-8 px-4 pt-10 pb-8 sm:px-5">
         <div className="flex min-w-[240px] flex-[1_1_280px] flex-col gap-3">
           <span className="flex items-center gap-2 text-[20px] font-extrabold text-white"><HelmetLogo size={26} />{SITE.name}</span>
-          <p className="m-0 max-w-[360px] text-[14px] leading-relaxed">안전·보건·환경 실무자가 매일 확인할 소식과, 현장에서 바로 쓰는 법정 점검표·서식을 무료로 모읍니다.</p>
+          <p className="m-0 max-w-[360px] text-[14px] leading-relaxed">안전·보건·환경 소식과 법정 점검표·서식</p>
           {SITE.contactEmail && <a href={`mailto:${SITE.contactEmail}`} className="text-[14px] text-[#6fd08c]">문의하기</a>}
         </div>
         {COLS.map((c) => (
@@ -29,7 +29,7 @@ export default function Footer() {
       </div>
       <div className="border-t border-white/10">
         <p className="mx-auto m-0 max-w-[1240px] px-4 py-4 text-[13px] text-[#8b9aa2] sm:px-5">
-          © {new Date().getFullYear()} {SITE.operator ? `${SITE.name} · ${SITE.operator}` : SITE.name}. 법령 기준은 국가법령정보센터 현행 원문으로 최종 확인하세요.
+          © {new Date().getFullYear()} {SITE.operator ? `${SITE.name} · ${SITE.operator}` : SITE.name}. 법령 기준은 국가법령정보센터 현행 원문 확인.
         </p>
       </div>
     </footer>

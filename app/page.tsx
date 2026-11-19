@@ -67,7 +67,6 @@ export default function Home() {
               오늘 현장에서 꼭 볼<br />
               <span className="text-logo">안전·보건·환경</span> 소식
             </p>
-            <p className="m-0 max-w-[520px] text-[16px] leading-relaxed text-[#c3cfd4]">사고속보와 정책 소식은 하루 세 번 모으고, 법정 점검표와 서식은 법령 원문으로 확인해 무료로 드립니다.</p>
             <div className="grid max-w-[560px] grid-cols-3 gap-2">
               {[
                 ["/accidents/", accWeek, "이번 주 사고속보", "#ff8a7a"],
@@ -116,7 +115,6 @@ export default function Home() {
                   );
                 })}
               </ul>
-              <p className="m-0 mt-auto border-t border-line-soft px-5 py-2.5 text-[12px] text-muted">언론 보도를 읽고 사실만 간단히 정리했습니다.</p>
             </div>
           )}
         </div>
@@ -127,7 +125,7 @@ export default function Home() {
         <section className="relative overflow-hidden rounded-3xl bg-[#eaf5ee] p-5 sm:p-8">
           <div className="absolute -top-6 -right-6 text-accent opacity-10" aria-hidden="true"><Icon name="check" size={200} stroke={1.3} /></div>
           <div className="relative flex flex-col gap-5">
-            <SectionHead icon="download" title="법정 점검표, 무료로 받아 가세요" desc="법령 원문의 점검 항목을 그대로 옮긴 엑셀·워드 서식입니다. 회원가입 없이 내려받습니다." href="/library/" more="자료실 전체" />
+            <SectionHead icon="download" title="법정 점검표" href="/library/" more="자료실 전체" />
             <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(270px, 100%), 1fr))" }}>
               {checklists.map((x) => (
                 <Link key={x.id} href={`/library/${x.id}/`} className="lift flex items-start gap-3.5 rounded-2xl border border-white bg-white p-4 text-ink shadow-sm hover:border-accent hover:text-ink hover:no-underline">
@@ -145,7 +143,7 @@ export default function Home() {
         {/* ── 최신 소식 + 분야별 ── */}
         <section className="flex flex-wrap items-start gap-6">
           <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-4">
-            <SectionHead icon="news" title="최신 소식" desc="고용노동부·환경부 등 정책·공지 가운데 EHS 관련만 골랐습니다" href="/news/" more="전체 소식" />
+            <SectionHead icon="news" title="최신 소식" href="/news/" more="전체 소식" />
             <ul className="card m-0 list-none p-0">
               {news.slice(0, 7).map((x) => (
                 <li key={x.id} className="border-t border-line-soft first:border-t-0">
@@ -211,7 +209,7 @@ export default function Home() {
 
         {/* ── 도구 + 서식 ── */}
         <section className="flex flex-col gap-4" id="tools">
-          <SectionHead icon="tool" tone="#6d3fc4" title="바로 쓰는 도구" desc="회원가입 없이 브라우저에서 계산하고 만듭니다" href="/tools/" more="전체 도구" />
+          <SectionHead icon="tool" tone="#6d3fc4" title="도구" href="/tools/" more="전체 도구" />
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(250px, 100%), 1fr))" }}>
             {tools.map((t) => (
               <Link key={t.href} href={t.href} className="card lift flex flex-col gap-2 p-5 text-ink hover:border-[#cbb8f0] hover:text-ink hover:no-underline">

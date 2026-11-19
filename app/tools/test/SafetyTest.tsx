@@ -21,7 +21,7 @@ export default function SafetyTest() {
     <>
       <div className="flex flex-col gap-1.5 text-center">
         <h1 className="m-0 text-[26px] font-extrabold tracking-[-0.5px] sm:text-[28px]">나는 어떤 그린헬멧기사일까</h1>
-        <p className="m-0 text-[16px] text-muted">여섯 문항, 1분이면 끝납니다.</p>
+        <p className="m-0 text-[16px] text-muted">6문항 · 1분</p>
       </div>
       <div className="flex flex-col gap-2">
         <div className="text-[14px] text-muted">{i + 1} / {total}</div>

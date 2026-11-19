@@ -16,7 +16,7 @@ export default function Page() {
       <Header active="tools" />
       <div className="mx-auto flex max-w-[760px] flex-col gap-5 px-4 pt-8 pb-12 sm:px-5">
         <SafetyTest />
-        <p className="m-0 text-center text-[14px] text-muted">재미로 보는 테스트입니다. 심리검사가 아닙니다.</p>
+        <p className="m-0 text-center text-[14px] text-muted">재미로 보는 테스트</p>
         <AdSlot slot="tool_bottom" />
       </div>
       <Footer />

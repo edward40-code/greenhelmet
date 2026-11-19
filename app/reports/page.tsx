@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function Page() {
   const reports = allReports();
   return (
-    <SiteShell active="reports" title="이슈리포트" desc="법령 개정, 통계·사고 발표, 업계 동향을 실무자 눈높이로 풀어 씁니다.">
+    <SiteShell active="reports" title="이슈리포트" desc="법령 개정 · 통계 · 업계 동향">
       <ul className="m-0 grid list-none gap-4 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))" }}>
         {reports.map((r) => (
           <li key={r.slug}>

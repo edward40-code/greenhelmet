@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ToolShell title="단위환산·안전계산" desc="숫자를 바꾸면 결과가 바로 바뀝니다. 식은 각 계산기 아래에 적어 두었습니다.">
+    <ToolShell title="단위환산·안전계산" desc="가스 농도 환산 · 소음 노출량 · 재해율">
       <Calc />
     </ToolShell>
   );

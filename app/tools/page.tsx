@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ToolShell title="도구" desc="회원가입 없이 바로 씁니다. 입력한 값은 이 브라우저 안에서만 계산하고 어디에도 보내지 않습니다.">
+    <ToolShell title="도구" desc="회원가입 없이 사용 · 입력값은 이 브라우저 안에서만 계산">
       <section className="card flex flex-col gap-4 p-[18px] sm:px-5">
         <ToolGrid />
       </section>

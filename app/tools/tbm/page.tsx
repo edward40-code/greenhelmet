@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <ToolShell title="TBM 생성기" desc="작업 종류를 고르면 작업 전 안전회의 자료가 바로 만들어집니다. 인쇄해서 서명을 받으면 됩니다.">
+    <ToolShell title="TBM 생성기" desc="작업 종류별 작업 전 안전회의 자료">
       <Tbm />
     </ToolShell>
   );

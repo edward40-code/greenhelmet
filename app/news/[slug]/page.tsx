@@ -26,12 +26,6 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   };
 }
 
-const KIND_NOTE: Record<string, string> = {
-  "입법·행정예고": "입법·행정예고는 법령·고시 개정안을 미리 알리고 의견을 받는 단계입니다. 확정된 내용이 아니므로, 시행일과 최종 조문은 공포 후 국가법령정보센터에서 확인하세요. 의견 제출 기간과 방법은 원문에 있습니다.",
-  정책자료: "정부가 배포한 가이드·지침·점검표 등 정책자료입니다. 첨부파일은 원문 페이지에서 내려받을 수 있습니다.",
-  공지: "기관 공지사항입니다. 신청 기간·대상 등 세부 내용은 원문에서 확인하세요.",
-};
-
 export default async function Page({ params }: P) {
   const x = getNews((await params).slug);
   if (!x) notFound();
@@ -63,16 +57,11 @@ export default async function Page({ params }: P) {
       <div className="relative mx-auto -mt-8 flex max-w-[860px] flex-col gap-6 px-4 pb-12 sm:px-5">
         <section className="card flex flex-col gap-4 p-5 sm:p-7">
           {x.summary && <p className="m-0 text-[17px] leading-relaxed">{x.summary}</p>}
-          {KIND_NOTE[x.kind] && (
-            <p className="m-0 rounded-xl bg-[#f4f7f5] px-4 py-3 text-[15px] leading-relaxed text-muted">
-              <b className="text-ink">{x.kind}란?</b> {KIND_NOTE[x.kind]}
-            </p>
-          )}
           <div className="flex flex-wrap items-center gap-3">
             <a href={x.url} target="_blank" rel="noopener" className="inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-ink px-5 text-[16px] font-bold text-white hover:text-white hover:no-underline">
               원문 보기 <span className="text-[13px] font-normal opacity-80">{x.source} ↗</span>
             </a>
-            <span className="text-[14px] text-muted">원문의 저작권은 {x.source}에 있습니다.</span>
+            <span className="text-[14px] text-muted">저작권 {x.source}</span>
           </div>
         </section>
 

@@ -23,13 +23,10 @@ export default function Page() {
         <li><Link href="/news/">소식</Link> — 고용노동부 정책자료·입법·행정예고를 매일 받아 분야별로 정리</li>
         <li><Link href="/reports/">이슈리포트</Link> — 법령 개정, 통계·사고 발표, 업계 동향을 실무 관점으로 해설</li>
         <li><Link href="/library/">자료실</Link> — TBM 일지, 교육 기록, 점검표, 위험성평가표 무료 양식과 공공기관 자료 위치 안내</li>
-        <li><Link href="/tools/">도구</Link> — 단위환산·안전계산, 경력 계산, TBM 생성기, 안전 성향 테스트</li>
+        <li><Link href="/tools/">도구</Link> — 지침 인벤토리, 단위환산·안전계산, 경력 계산, TBM 생성기, 안전 성향 테스트</li>
         <li><Link href="/cert/industrial-safety-engineer/">자격증</Link> — 산업안전기사 시험 구조와 출제 유형 정리</li>
       </ul>
       <p>서식과 도구는 회원가입 없이 씁니다. 도구에 입력한 값은 이용자의 브라우저 안에서만 계산하고 서버로 보내지 않습니다.</p>
-
-      <h2>앞으로 열 것</h2>
-      <p>회원 기능과 함께 커뮤니티 게시판(자유게시판, 질의응답, 점검·감독 후기)과 회원 자료 올리기를 엽니다. MSDS 분석기, 법령 DB, 법령 적용 진단도 차례로 엽니다.</p>
 
       <h2>하지 않는 것</h2>
       <ul>

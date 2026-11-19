@@ -61,12 +61,12 @@ export default async function Page({ params }: P) {
         <main className="flex min-w-0 flex-[999_1_600px] flex-col gap-4">
           {!types.reviewed && (
             <Notice>
-              <strong>검수 전 초안입니다.</strong> {types.basis} 과목·단원 구분이 현행 출제기준과 맞는지, 운영자 검수를 거친 뒤 이 표시를 뗍니다.
+              <strong>검수 전</strong> · {types.basis}
             </Notice>
           )}
           {types.reviewed && <p className="m-0 text-[14px] leading-relaxed text-muted">{types.basis}</p>}
           <p className="m-0 text-[15px] leading-relaxed text-muted">
-            이 사이트는 기출 원문, 복원 문제, 자체 제작 문제를 싣지 않습니다. 무엇을 어떤 형태로 묻는지와 공부 방향만 다룹니다. 출제 빈도는 근거가 모이면(운영자 분석 또는 회원 후기 집계) 근거와 함께 표시합니다.
+            기출 원문과 복원 문제는 싣지 않습니다.
           </p>
 
           <nav aria-label="과목 바로가기" className="card flex flex-wrap gap-2 p-4">
