@@ -25,9 +25,9 @@ export default function RulesTable({ rules, recentFrom }: { rules: Rule[]; recen
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
         <label htmlFor="ruleq" className="sr-only">고시 이름으로 찾기</label>
-        <input id="ruleq" type="search" className="field min-w-0 flex-1" placeholder="이름·번호로 찾기 (예: 지침, 석면, 안전인증)" value={q} onChange={(e) => setQ(e.target.value)} />
+        <input id="ruleq" type="search" className="field min-w-0 flex-1" placeholder="이름·번호로 찾기" value={q} onChange={(e) => setQ(e.target.value)} />
         <button type="button" aria-pressed={recent} onClick={() => setRecent(!recent)} className={chip(recent)}>
-          2025년 이후 바뀐 것만
+          2025년 이후 개정
         </button>
       </div>
       <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1" role="group" aria-label="분류로 거르기">
@@ -42,7 +42,7 @@ export default function RulesTable({ rules, recentFrom }: { rules: Rule[]; recen
         <b className="text-[16px] text-ink">{list.length}</b>건
       </p>
       <ul className="m-0 flex list-none flex-col p-0">
-        {list.length === 0 && <li className="py-6 text-center text-muted">찾는 고시가 없습니다.</li>}
+        {list.length === 0 && <li className="py-6 text-center text-muted">찾는 항목이 없습니다.</li>}
         {list.map((r) => (
           <li key={r.name} className="flex flex-col gap-0.5 border-t border-line-soft py-2.5 sm:flex-row sm:items-baseline sm:gap-3">
             <a href={encodeURI(r.url)} target="_blank" rel="noopener" className="min-w-0 flex-1 text-[15px] leading-snug font-semibold">{r.name}</a>

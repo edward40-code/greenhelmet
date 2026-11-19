@@ -82,7 +82,7 @@ export default async function Page({ params }: P) {
             </section>
           )}
           {inv && (
-            <Link href={`/inventory/${inv.slug}/`} className="text-[15px] font-bold">{`${inv.title} 지침 인벤토리 보기 — 법 조문·고시·공단 기술지원규정 목록 →`}</Link>
+            <Link href={`/inventory/${inv.slug}/`} className="text-[15px] font-bold">{`${inv.title} 지침 인벤토리 →`}</Link>
           )}
           {x.report && (
             <Link href={`/reports/${x.report}/`} className="text-[15px] font-bold">관련 이슈리포트 읽기 →</Link>
