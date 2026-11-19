@@ -4,7 +4,7 @@ import { OPEN_TABS, certSlugs } from "@/lib/certs";
 import { TYPES } from "@/lib/safetyTest";
 import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
-import { allMaps } from "@/lib/guidemaps";
+import { allInventories } from "@/lib/inventory";
 
 export const dynamic = "force-static";
 
@@ -19,8 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...allLibrary().map((x) => `/library/${x.id}/`),
     ...certSlugs().flatMap((s) => [`/cert/${s}/`, ...OPEN_TABS.map((t) => `/cert/${s}/${t}/`)]),
     "/tools/",
-    "/guidemap/",
-    ...allMaps().map((m) => `/guidemap/${m.slug}/`),
+    "/inventory/",
+    ...allInventories().map((m) => `/inventory/${m.slug}/`),
     "/tools/calc/",
     "/tools/career/",
     "/tools/tbm/",

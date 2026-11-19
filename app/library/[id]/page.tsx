@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { AdSlot } from "@/components/ui";
 import { allLibrary, getLib } from "@/lib/library";
-import { mapOfLibrary } from "@/lib/guidemaps";
+import { inventoryOfLibrary } from "@/lib/inventory";
 import { fmtDate } from "@/lib/fields";
 import { BASE_PATH } from "@/lib/site";
 import { FormatBadge } from "../LibraryList";
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
 export default async function Page({ params }: P) {
   const x = getLib((await params).id);
   if (!x) notFound();
-  const gmap = mapOfLibrary(x.id);
+  const inv = inventoryOfLibrary(x.id);
   const related = allLibrary().filter((o) => o.id !== x.id && (o.field === x.field || o.category === x.category)).slice(0, 4);
   const btn = "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md bg-accent px-6 text-[17px] font-bold text-white hover:text-white hover:no-underline";
 
@@ -81,8 +81,8 @@ export default async function Page({ params }: P) {
               <ul className="m-0 list-disc pl-5 text-[15px] leading-[1.8]">{x.howto.map((h) => <li key={h}>{h}</li>)}</ul>
             </section>
           )}
-          {gmap && (
-            <Link href={`/guidemap/${gmap.slug}/`} className="text-[15px] font-bold">{gmap.title} 지침 지도 보기 — 법 조문·고시·공단 기술지원규정이 어디에 있는지 →</Link>
+          {inv && (
+            <Link href={`/inventory/${inv.slug}/`} className="text-[15px] font-bold">{`${inv.title} 지침 인벤토리 보기 — 법 조문·고시·공단 기술지원규정 목록 →`}</Link>
           )}
           {x.report && (
             <Link href={`/reports/${x.report}/`} className="text-[15px] font-bold">관련 이슈리포트 읽기 →</Link>

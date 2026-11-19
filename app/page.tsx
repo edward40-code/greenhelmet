@@ -28,7 +28,7 @@ const QUICK: [string, string, string][] = [
   ["/tools/calc/", "재해율·단위 계산", "calc"],
 ];
 
-const TOOL_ICON: Record<string, string> = { "/tools/tbm/": "people", "/tools/calc/": "calc", "/tools/career/": "clock", "/tools/test/": "spark", "/tools/msds/": "chem", "/guidemap/": "search", "/tools/diagnosis/": "check" };
+const TOOL_ICON: Record<string, string> = { "/tools/tbm/": "people", "/tools/calc/": "calc", "/tools/career/": "clock", "/tools/test/": "spark", "/tools/msds/": "chem", "/inventory/": "search", "/tools/diagnosis/": "check" };
 
 export default function Home() {
   const today = kstToday();
