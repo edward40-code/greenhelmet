@@ -1,15 +1,15 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { AdSlot, Unverified } from "@/components/ui";
+import { AdSlot } from "@/components/ui";
 import { Icon } from "@/components/icons";
-import { FieldChip, FormatTile, ReportThumb, SectionHead } from "@/components/visual";
+import { FieldChip, FormatTile, SectionHead } from "@/components/visual";
 import catalog from "@/content/catalog.json";
 import { allNews } from "@/lib/news";
 import { accKind, allAccidents } from "@/lib/accidents";
 import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
-import { FIELDS, fieldStyle, fmtDate, readMinutes } from "@/lib/fields";
+import { FIELDS, fieldStyle, fmtDate } from "@/lib/fields";
 import { SITE } from "@/lib/site";
 
 /** 빌드 시각 기준 한국 날짜 (사이트는 하루 여러 번 다시 만들어진다) */
@@ -37,8 +37,7 @@ export default function Home() {
   const accidents = allAccidents();
   const reports = allReports();
   const lib = allLibrary();
-  const lead = reports[0];
-  const moreReports = reports.slice(1, 4);
+  const moreReports = reports.slice(0, 3);
   const files = lib.filter((x) => x.type === "file");
   const checklists = files.filter((x) => x.category === "법정 점검표").slice(0, 6);
   const forms = files.filter((x) => x.category !== "법정 점검표").slice(0, 4);
@@ -91,49 +90,38 @@ export default function Home() {
             </div>
           </div>
 
-          {lead && (
-            <Link href={`/reports/${lead.slug}/`} className="lift flex min-w-0 flex-[1_1_380px] flex-col overflow-hidden rounded-2xl bg-white text-ink shadow-2xl hover:text-ink hover:no-underline">
-              <ReportThumb field={lead.field} label="이번 주 이슈리포트" className="h-[170px] sm:h-[200px]" big />
-              <div className="flex flex-1 flex-col gap-2.5 p-5 sm:p-6">
-                <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
-                  <FieldChip field={lead.field} />
-                  <span>{fmtDate(lead.date)}</span>
-                  <span className="inline-flex items-center gap-1"><Icon name="clock" size={13} />{readMinutes(lead.html)}분</span>
-                  {!lead.reviewed && <Unverified label="검수 전" />}
+          {accidents.length > 0 && (
+            <div className="flex min-w-0 flex-[1_1_380px] flex-col overflow-hidden rounded-2xl bg-white text-ink shadow-2xl">
+              <div className="flex items-center justify-between gap-2 bg-[#b42318] px-5 py-3.5 text-white">
+                <span className="flex items-center gap-2 text-[17px] font-extrabold">
+                  <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
+                  사고속보
                 </span>
-                <span className="text-[22px] leading-snug font-extrabold tracking-[-0.4px]">{lead.title}</span>
-                <span className="line-clamp-3 text-[15px] leading-relaxed text-muted">{lead.summary}</span>
-                <span className="mt-auto inline-flex items-center gap-1 pt-1 text-[15px] font-bold text-accent">읽어 보기 <Icon name="arrow" size={16} /></span>
+                <Link href="/accidents/" className="inline-flex items-center gap-1 text-[14px] font-bold text-white/90 hover:text-white">전체 보기 <Icon name="arrow" size={15} /></Link>
               </div>
-            </Link>
+              <ul className="m-0 flex list-none flex-col p-0">
+                {accidents.slice(0, 5).map((x) => {
+                  const k = accKind(x.title);
+                  return (
+                    <li key={x.id} className="border-t border-line-soft first:border-t-0">
+                      <a href={x.url} target="_blank" rel="noopener" className="flex items-start gap-3 px-5 py-3.5 text-ink hover:bg-[#fff7f6] hover:no-underline">
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#fdecec] text-danger"><Icon name={k.icon} size={18} /></span>
+                        <span className="flex min-w-0 flex-col gap-0.5">
+                          <span className="text-[15px] leading-[1.45] font-semibold">{x.title}</span>
+                          <span className="text-[13px] text-muted"><b className="text-danger">{k.label}</b> · {fmtDate(x.date).slice(5)} · {x.source}</span>
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="m-0 mt-auto border-t border-line-soft px-5 py-2.5 text-[12px] text-muted">언론 보도 제목을 그대로 싣고 원문으로 연결합니다.</p>
+            </div>
           )}
         </div>
       </section>
 
       <div className="mx-auto flex max-w-[1240px] flex-col gap-12 px-4 pt-10 pb-6 sm:px-5">
-        {/* ── 사고속보 ── */}
-        {accidents.length > 0 && (
-          <section className="flex flex-col gap-4">
-            <SectionHead icon="alert" tone="#b42318" title={<>사고속보 <span className="ml-1 align-middle rounded bg-[#fdecec] px-1.5 py-0.5 text-[12px] font-extrabold text-danger">LIVE</span></>} desc="언론에 보도된 산업현장 사고를 제목 그대로 모아 원문으로 연결합니다" href="/accidents/" more="전체 사고속보" />
-            <ul className="m-0 grid list-none gap-3 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(360px, 100%), 1fr))" }}>
-              {accidents.slice(0, 6).map((x) => {
-                const k = accKind(x.title);
-                return (
-                  <li key={x.id}>
-                    <a href={x.url} target="_blank" rel="noopener" className="card lift flex h-full items-start gap-3.5 p-4 text-ink hover:border-[#f3c4bd] hover:no-underline">
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#fdecec] text-danger"><Icon name={k.icon} size={22} /></span>
-                      <span className="flex min-w-0 flex-col gap-1">
-                        <span className="text-[16px] leading-[1.5] font-semibold">{x.title}</span>
-                        <span className="text-[13px] text-muted"><b className="text-danger">{k.label}</b> · {fmtDate(x.date).slice(5)} · {x.source}</span>
-                      </span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )}
-
         {/* ── 법정 점검표 ── */}
         <section className="relative overflow-hidden rounded-3xl bg-[#eaf5ee] p-5 sm:p-8">
           <div className="absolute -top-6 -right-6 text-accent opacity-10" aria-hidden="true"><Icon name="check" size={200} stroke={1.3} /></div>
@@ -152,25 +140,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ── 이슈리포트 ── */}
-        {moreReports.length > 0 && (
-          <section className="flex flex-col gap-4">
-            <SectionHead icon="doc" tone="#1f4f7a" title="이슈리포트" desc="법령·통계·사고를 실무자 눈높이로 풀어 씁니다" href="/reports/" more="전체 리포트" />
-            <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))" }}>
-              {moreReports.map((r) => (
-                <Link key={r.slug} href={`/reports/${r.slug}/`} className="card lift flex flex-col overflow-hidden text-ink hover:text-ink hover:no-underline">
-                  <ReportThumb field={r.field} className="h-[130px]" />
-                  <span className="flex flex-1 flex-col gap-2 p-4">
-                    <span className="flex items-center gap-2 text-[13px] text-muted"><FieldChip field={r.field} />{fmtDate(r.date)} · {readMinutes(r.html)}분</span>
-                    <span className="text-[17px] leading-snug font-extrabold">{r.title}</span>
-                    <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{r.summary}</span>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* ── 최신 소식 + 분야별 ── */}
         <section className="flex flex-wrap items-start gap-6">
@@ -200,7 +169,7 @@ export default function Home() {
                     <Icon name={f.key} size={22} />
                     <span className="flex flex-col leading-tight">
                       <span className="text-[14px] font-extrabold">{f.name}</span>
-                      <span className="text-[12px] opacity-80">{fieldCount[f.key] ?? 0}건</span>
+                      {(fieldCount[f.key] ?? 0) > 0 && <span className="text-[12px] opacity-80">소식 {fieldCount[f.key]}건</span>}
                     </span>
                   </Link>
                 );
@@ -212,6 +181,17 @@ export default function Home() {
               <span className="text-[19px] font-extrabold">산업안전기사</span>
               <span className="text-[14px] text-white/85">2027년 바뀐 5과목 시험 구조와 과목별 출제 유형</span>
             </Link>
+            {moreReports.length > 0 && (
+              <div className="flex flex-col">
+                <div className="flex items-baseline justify-between">
+                  <h2 className="m-0 text-[15px] font-bold text-muted">이슈리포트</h2>
+                  <Link href="/reports/" className="text-[13px]">전체</Link>
+                </div>
+                {moreReports.map((r) => (
+                  <Link key={r.slug} href={`/reports/${r.slug}/`} className="border-b border-line-soft py-2.5 text-[14px] leading-snug text-ink hover:text-accent">{r.title}</Link>
+                ))}
+              </div>
+            )}
           </aside>
         </section>
 

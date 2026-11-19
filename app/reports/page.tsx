@@ -18,10 +18,10 @@ export default function Page() {
   return (
     <SiteShell active="reports" title="이슈리포트" desc="법령 개정, 통계·사고 발표, 업계 동향을 실무자 눈높이로 풀어 씁니다.">
       <ul className="m-0 grid list-none gap-4 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))" }}>
-        {reports.map((r, i) => (
-          <li key={r.slug} className={i === 0 ? "sm:col-span-2" : ""}>
-            <Link href={`/reports/${r.slug}/`} className={`card lift flex h-full overflow-hidden text-ink hover:text-ink hover:no-underline ${i === 0 ? "flex-col sm:flex-row" : "flex-col"}`}>
-              <ReportThumb field={r.field} className={i === 0 ? "h-[160px] sm:h-auto sm:w-[42%] sm:min-h-[240px]" : "h-[130px]"} big={i === 0} label={i === 0 ? "최신 리포트" : undefined} />
+        {reports.map((r) => (
+          <li key={r.slug}>
+            <Link href={`/reports/${r.slug}/`} className="card lift flex h-full flex-col overflow-hidden text-ink hover:text-ink hover:no-underline">
+              <ReportThumb field={r.field} className="h-[110px]" />
               <span className="flex flex-1 flex-col gap-2 p-5">
                 <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
                   <FieldChip field={r.field} />
@@ -29,8 +29,8 @@ export default function Page() {
                   <span className="inline-flex items-center gap-1"><Icon name="clock" size={13} />{readMinutes(r.html)}분</span>
                   {!r.reviewed && <Unverified label="검수 전" />}
                 </span>
-                <span className={`${i === 0 ? "text-[23px]" : "text-[18px]"} leading-snug font-extrabold tracking-[-0.3px]`}>{r.title}</span>
-                <span className={`${i === 0 ? "line-clamp-4" : "line-clamp-3"} text-[15px] leading-relaxed text-muted`}>{r.summary}</span>
+                <span className="text-[18px] leading-snug font-extrabold tracking-[-0.3px]">{r.title}</span>
+                <span className="line-clamp-3 text-[15px] leading-relaxed text-muted">{r.summary}</span>
                 <span className="mt-auto inline-flex items-center gap-1 pt-1 text-[14px] font-bold text-accent">읽기 <Icon name="arrow" size={15} /></span>
               </span>
             </Link>
