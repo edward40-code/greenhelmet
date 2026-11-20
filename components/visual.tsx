@@ -23,9 +23,12 @@ export function ReportThumb({ field, label, className = "" }: { field: string; l
 /** 섹션 머리: 제목 + 더보기 */
 export function SectionHead({ title, desc, href, more }: { icon?: string; title: ReactNode; desc?: string; href?: string; more?: string; tone?: string }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-b border-ink pb-2">
+    <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-b-2 border-ink pb-2">
       <div className="flex flex-col">
-        <h2 className="m-0 text-[20px] leading-tight font-extrabold tracking-[-0.4px]">{title}</h2>
+        <h2 className="m-0 flex items-center gap-2.5 text-[22px] leading-tight font-extrabold tracking-[-0.5px]">
+          <span aria-hidden="true" className="h-[18px] w-[6px] shrink-0 bg-[#f5c518]" />
+          {title}
+        </h2>
         {desc && <p className="m-0 text-[14px] text-muted">{desc}</p>}
       </div>
       {href && (

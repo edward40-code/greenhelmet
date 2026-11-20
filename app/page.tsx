@@ -38,7 +38,10 @@ export default function Home() {
   const accidents = allAccidents();
   const reports = allReports().slice(0, 4);
   const files = allLibrary().filter((x) => x.type === "file");
-  const picks = [...files.filter((x) => x.category === "법정 점검표").slice(0, 4), ...files.filter((x) => x.category !== "법정 점검표").slice(0, 4)];
+  const feat = files[0]; // 가장 최근에 올린 자료
+  const featThumb = feat ? thumbOf(feat.id) : null;
+  const rest = files.filter((x) => x.id !== feat?.id);
+  const picks = [...rest.filter((x) => x.category === "법정 점검표").slice(0, 4), ...rest.filter((x) => x.category !== "법정 점검표").slice(0, 4)];
   const fieldCount: Record<string, number> = {};
   news.forEach((x) => (fieldCount[x.field] = (fieldCount[x.field] ?? 0) + 1));
   const tools = catalog.toolGroups.flatMap((g) => g.tools).filter((t) => t.open && t.href !== "/library/");
@@ -49,48 +52,103 @@ export default function Home() {
       <AdSlot slot="top_banner" />
       <h1 className="sr-only">{SITE.name} · {SITE.tagline}</h1>
 
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-10 px-4 pt-6 pb-6 sm:px-5">
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-          <p className="m-0 text-[14px] text-muted">
-            {fmtDate(now.date)} ({wd}) {now.time} 갱신
-          </p>
-          <nav aria-label="바로가기" className="flex flex-wrap gap-1.5">
-            {QUICK.map(([href, label]) => (
-              <Link key={href} href={href} className="inline-flex min-h-[36px] items-center rounded-md border border-line bg-white px-3 text-[14px] font-semibold text-ink hover:border-accent hover:text-accent hover:no-underline">
-                {label}
+      {/* 윗부분: 사고속보 + 새 자료 */}
+      <section className="bg-ink text-white">
+        <div className="mx-auto flex max-w-[1240px] flex-col gap-5 px-4 pt-7 pb-10 sm:px-5 sm:pt-9">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+            <p className="m-0 text-[14px] text-[#9fb0b8]">
+              {fmtDate(now.date)} ({wd}) {now.time} 갱신
+            </p>
+            <nav aria-label="바로가기" className="flex flex-wrap gap-1.5">
+              {QUICK.map(([href, label]) => (
+                <Link key={href} href={href} className="inline-flex min-h-[36px] items-center rounded-md border border-white/20 px-3 text-[14px] font-semibold text-white hover:border-[#f5c518] hover:text-[#f5c518] hover:no-underline">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="grid items-start gap-5 lg:grid-cols-[1.25fr_1fr]">
+            {/* 사고속보 */}
+            <div className="flex min-w-0 flex-col overflow-hidden rounded-md bg-white text-ink">
+              <div className="flex items-center justify-between gap-2 bg-[#b42318] px-5 py-3 text-white">
+                <h2 className="m-0 text-[18px] font-extrabold">사고속보</h2>
+                <Link href="/accidents/" className="text-[14px] font-bold text-white/90 hover:text-white">전체 보기 →</Link>
+              </div>
+              <ul className="m-0 flex list-none flex-col p-0">
+                {accidents.slice(0, 5).map((x) => {
+                  const k = accKindOf(x);
+                  const sum = shortSummary(x.summary);
+                  return (
+                    <li key={x.id} className="border-t border-line-soft first:border-t-0">
+                      <Link href={`/accidents/${slugOf(x.id)}/`} className="flex gap-3 px-5 py-3.5 text-ink hover:bg-[#fff7f6] hover:no-underline [&:hover_.t]:underline">
+                        <span className="w-[52px] shrink-0 pt-0.5 text-[13px] leading-tight font-bold text-danger">{k.label || "\u00a0"}</span>
+                        <span className="flex min-w-0 flex-col gap-0.5">
+                          <span className="t text-[16px] leading-[1.45] font-semibold">{x.title}</span>
+                          {sum && <span className="line-clamp-1 text-[14px] text-muted">{sum}</span>}
+                          <span className="text-[13px] text-muted">{fmtDate(x.date).slice(5)} {x.source}</span>
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* 새 자료 */}
+            {feat && (
+              <Link href={`/library/${feat.id}/`} className="group flex min-w-0 flex-col overflow-hidden rounded-md border border-white/15 bg-white/[0.04] text-white hover:border-[#f5c518] hover:text-white hover:no-underline">
+                <span className="flex items-center justify-between gap-2 px-5 py-3">
+                  <span className="text-[14px] font-extrabold text-[#f5c518]">새 자료</span>
+                  <span className="text-[13px] text-[#9fb0b8]">{fmtDate(feat.updated)}</span>
+                </span>
+                {featThumb && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={featThumb} alt="" className="block aspect-[16/9] w-full object-cover object-top" />
+                )}
+                <span className="flex flex-col gap-1.5 px-5 pt-4 pb-5">
+                  <span className="text-[20px] leading-snug font-extrabold group-hover:underline">{feat.title}</span>
+                  <span className="text-[15px] leading-relaxed text-[#c3cfd4]">{feat.desc}</span>
+                  <span className="mt-2 inline-flex min-h-[40px] items-center self-start rounded-md bg-[#f5c518] px-4 text-[15px] font-extrabold text-ink">{feat.format} 내려받기</span>
+                </span>
               </Link>
-            ))}
-          </nav>
+            )}
+          </div>
         </div>
+      </section>
 
-        {/* 사고속보 + 최신 소식 */}
-        <div className="grid gap-x-8 gap-y-10 lg:grid-cols-[1.15fr_1fr]">
-          <section className="flex min-w-0 flex-col gap-3">
-            <SectionHead title={<span className="text-danger">사고속보</span>} href="/accidents/" more="전체 사고속보" />
-            <ul className="m-0 flex list-none flex-col p-0">
-              {accidents.slice(0, 6).map((x) => {
-                const k = accKindOf(x);
-                const sum = shortSummary(x.summary);
-                return (
-                  <li key={x.id} className="border-b border-line-soft">
-                    <Link href={`/accidents/${slugOf(x.id)}/`} className="flex flex-col gap-1 py-3 text-ink hover:no-underline [&:hover_.t]:underline">
-                      <span className="t text-[16px] leading-[1.45] font-semibold">{x.title}</span>
-                      {sum && <span className="line-clamp-1 text-[14px] text-muted">{sum}</span>}
-                      <span className="text-[13px] text-muted">
-                        {k.label && <b className="mr-1.5 text-danger">{k.label}</b>}
-                        {fmtDate(x.date).slice(5)} {x.source}
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-12 px-4 pt-10 pb-6 sm:px-5">
+        {/* 자료실 */}
+        <section className="flex flex-col gap-4">
+          <SectionHead title="자료실" href="/library/" more={`자료 ${files.length}개 전체`} />
+          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(270px, 100%), 1fr))" }}>
+            {picks.map((x) => {
+              const th = thumbOf(x.id);
+              return (
+                <Link key={x.id} href={`/library/${x.id}/`} className="card lift flex flex-col overflow-hidden text-ink hover:text-ink hover:no-underline">
+                  <span className="relative block h-[140px] overflow-hidden border-b border-line-soft bg-white">
+                    {th && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={th} alt="" loading="lazy" className="block w-full object-cover object-top" />
+                    )}
+                    <span className="absolute top-2 right-2"><FormatTile format={x.format} size={40} /></span>
+                  </span>
+                  <span className="flex flex-col gap-1 p-4">
+                    <span className="text-[16px] leading-snug font-bold">{x.title}</span>
+                    <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
+        {/* 최신 소식 + 이슈리포트 */}
+        <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[1.2fr_1fr]">
           <section className="flex min-w-0 flex-col gap-3">
             <SectionHead title="최신 소식" href="/news/" more="전체 소식" />
             <ul className="m-0 flex list-none flex-col p-0">
-              {news.slice(0, 7).map((x) => (
+              {news.slice(0, 6).map((x) => (
                 <li key={x.id} className="border-b border-line-soft">
                   <Link href={`/news/${slugOf(x.id)}/`} className="flex flex-col gap-1 py-3 text-ink hover:no-underline [&:hover_.t]:underline">
                     <span className="t text-[16px] leading-[1.45] font-semibold">{x.title}</span>
@@ -111,72 +169,39 @@ export default function Home() {
               ))}
             </p>
           </section>
-        </div>
 
-        {/* 자료실 */}
-        <section className="flex flex-col gap-4">
-          <SectionHead title="자료실" href="/library/" more={`자료 ${files.length}개 전체`} />
-          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))" }}>
-            {picks.map((x) => {
-              const th = thumbOf(x.id);
-              return (
-                <Link key={x.id} href={`/library/${x.id}/`} className="card lift flex flex-col overflow-hidden text-ink hover:text-ink hover:no-underline">
-                  {th ? (
-                    <span className="relative block h-[132px] overflow-hidden border-b border-line-soft bg-white">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={th} alt="" loading="lazy" className="block w-full object-cover object-top" />
-                      <span className="absolute top-2 right-2"><FormatTile format={x.format} size={40} /></span>
-                    </span>
-                  ) : (
-                    <span className="flex h-[52px] items-center border-b border-line-soft bg-bg px-4"><FormatTile format={x.format} size={40} /></span>
-                  )}
-                  <span className="flex flex-col gap-1 p-4">
-                    <span className="text-[16px] leading-snug font-bold">{x.title}</span>
-                    <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 도구 · 이슈리포트 · 자격증 */}
-        <div className="grid gap-x-8 gap-y-10 md:grid-cols-3">
-          <section className="flex flex-col gap-2">
-            <SectionHead title="도구" href="/tools/" more="전체" />
-            <ul className="m-0 flex list-none flex-col p-0">
-              {tools.map((t) => (
-                <li key={t.href} className="border-b border-line-soft">
-                  <Link href={t.href} className="block py-2.5 text-[15px] font-semibold">{t.name}</Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section className="flex flex-col gap-2">
-            <SectionHead title="이슈리포트" href="/reports/" more="전체" />
+          <section className="flex min-w-0 flex-col gap-3">
+            <SectionHead title="이슈리포트" href="/reports/" more="전체 리포트" />
             <ul className="m-0 flex list-none flex-col p-0">
               {reports.map((r) => (
                 <li key={r.slug} className="border-b border-line-soft">
-                  <Link href={`/reports/${r.slug}/`} className="flex flex-col py-2.5 text-ink hover:no-underline [&:hover_.t]:underline">
-                    {r.series && <span className="text-[12px] font-bold text-muted">{r.series}</span>}
-                    <span className="t text-[15px] leading-snug font-semibold">{r.title}</span>
+                  <Link href={`/reports/${r.slug}/`} className="flex flex-col gap-0.5 py-3 text-ink hover:no-underline [&:hover_.t]:underline">
+                    {r.series && <span className="text-[12px] font-bold text-accent">{r.series}</span>}
+                    <span className="t text-[16px] leading-snug font-semibold">{r.title}</span>
+                    <span className="line-clamp-1 text-[14px] text-muted">{r.summary}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </section>
-          <section className="flex flex-col gap-2">
-            <SectionHead title="자격증" href="/cert/industrial-safety-engineer/" more="전체" />
-            <ul className="m-0 flex list-none flex-col p-0">
-              <li className="border-b border-line-soft">
-                <Link href="/cert/industrial-safety-engineer/" className="flex flex-col py-2.5 text-ink hover:no-underline [&:hover_.t]:underline">
-                  <span className="t text-[15px] font-semibold">산업안전기사</span>
-                  <span className="text-[13px] text-muted">2027년부터 5과목, 과목별 출제 유형</span>
-                </Link>
-              </li>
-            </ul>
-          </section>
         </div>
+
+        {/* 도구 + 자격증 */}
+        <section className="flex flex-col gap-4">
+          <SectionHead title="도구" href="/tools/" more="전체 도구" />
+          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(180px, 100%), 1fr))" }}>
+            {tools.map((t) => (
+              <Link key={t.href} href={t.href} className="card lift flex flex-col gap-1 p-4 text-ink hover:text-ink hover:no-underline">
+                <span className="text-[17px] font-extrabold">{t.name}</span>
+                <span className="text-[14px] leading-relaxed text-muted">{t.desc}</span>
+              </Link>
+            ))}
+            <Link href="/cert/industrial-safety-engineer/" className="card lift flex flex-col gap-1 border-accent p-4 text-ink hover:text-ink hover:no-underline">
+              <span className="text-[17px] font-extrabold">산업안전기사</span>
+              <span className="text-[14px] leading-relaxed text-muted">2027년부터 5과목, 과목별 출제 유형</span>
+            </Link>
+          </div>
+        </section>
       </div>
 
       <Footer />
