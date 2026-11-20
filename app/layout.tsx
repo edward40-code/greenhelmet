@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   openGraph: { siteName: SITE.name, locale: "ko_KR", type: "website", images: OG_IMAGES },
   twitter: { card: "summary_large_image", images: [OG_IMAGES[0].url] },
   icons: { icon: `${BASE_PATH}/icon.svg` },
+  verification: {
+    ...(SITE.verification.google ? { google: SITE.verification.google } : {}),
+    ...(SITE.verification.naver ? { other: { "naver-site-verification": SITE.verification.naver } } : {}),
+  },
 };
 
 export const viewport: Viewport = { themeColor: "#16242b", width: "device-width", initialScale: 1 };

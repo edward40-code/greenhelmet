@@ -7,6 +7,7 @@ export const SITE = site as {
   operator: string | null;
   contactEmail: string | null;
   policyEffectiveDate: string;
+  verification: { google: string | null; naver: string | null };
 };
 
 /** GitHub Pages 하위 경로(예: /greenhelmet). 로컬에서는 빈 값 */

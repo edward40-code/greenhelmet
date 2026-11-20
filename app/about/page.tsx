@@ -21,9 +21,11 @@ export default function Page() {
       <h2>지금 쓸 수 있는 것</h2>
       <ul>
         <li><Link href="/news/">소식</Link>: 고용노동부 정책자료·입법·행정예고를 매일 받아 분야별로 정리</li>
+        <li><Link href="/accidents/">사고속보</Link>: 보도된 산업재해를 사실만 추려 정리</li>
         <li><Link href="/reports/">이슈리포트</Link>: 법령 개정, 통계·사고 발표, 업계 동향을 실무 관점으로 해설</li>
-        <li><Link href="/library/">자료실</Link>: TBM 일지, 교육 기록, 점검표, 위험성평가표 무료 양식과 공공기관 자료 위치 안내</li>
-        <li><Link href="/tools/">도구</Link>: 지침 인벤토리, 단위환산, 안전계산, 경력 계산, TBM 생성기, 안전 성향 테스트</li>
+        <li><Link href="/library/">자료실</Link>: 점검표, 위험성평가표, 중대재해처벌법 반기 점검 세트, 교육자료 무료 양식과 공공기관 자료 위치 안내</li>
+        <li><Link href="/tools/">도구</Link>: 중대재해처벌법 점검, 지침 인벤토리, TBM 생성기, 단위환산·안전계산, 경력 계산, 안전 성향 테스트</li>
+        <li><Link href="/market/">안전장터</Link>: 작업별 보호구·장비와 안전인증 대상 여부</li>
         <li><Link href="/cert/industrial-safety-engineer/">자격증</Link>: 산업안전기사 시험 구조와 출제 유형 정리</li>
       </ul>
       <p>서식과 도구는 회원가입 없이 씁니다. 도구에 입력한 값은 이용자의 브라우저 안에서만 계산하고 서버로 보내지 않습니다.</p>
@@ -32,7 +34,7 @@ export default function Page() {
       <ul>
         <li>언론 기사 본문이나 다른 사이트 자료를 옮겨 싣지 않습니다. 제목·요약과 원문 링크로 안내합니다.</li>
         <li>시험문제 원문, 복원 문제, 자체 제작 문제를 싣지 않습니다.</li>
-        <li>구인·구직, 업체 홍보, 장비 거래, 견적 중개를 하지 않습니다.</li>
+        <li>구인·구직, 업체 홍보, 견적 중개를 하지 않고, 장비를 직접 팔지 않습니다.</li>
       </ul>
 
       <h2>정보의 정확성</h2>
