@@ -4,6 +4,12 @@
       "name": "찾기와 진단",
       "tools": [
         {
+          "href": "/tools/sapa/",
+          "name": "중대재해처벌법 점검",
+          "desc": "적용 여부와 경영책임자 의무 17가지",
+          "open": true
+        },
+        {
           "href": "/tools/msds/",
           "name": "MSDS 분석기",
           "desc": "CAS 번호를 넣으면 주요 독성, 유해화학물질 해당 여부, 적용 법령이 나옵니다",
