@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SiteShell from "@/components/SiteShell";
 import { AdSlot } from "@/components/ui";
 import { allLibrary } from "@/lib/library";
+import { downloadsText, viewsText } from "@/lib/views";
 import LibraryList from "./LibraryList";
 
 export const metadata: Metadata = {
@@ -13,7 +14,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <SiteShell active="library" title="자료실" desc="점검표 · 양식 · 교육자료 · 공공자료">
-      <LibraryList items={allLibrary()} />
+      <LibraryList
+        items={allLibrary()}
+        stats={Object.fromEntries(
+          allLibrary().map((x) => [x.id, [viewsText(`/library/${x.id}/`), x.type === "file" ? downloadsText(x.id) : null].filter(Boolean).join(" · ")])
+        )}
+      />
       <AdSlot slot="edu_inline" />
     </SiteShell>
   );

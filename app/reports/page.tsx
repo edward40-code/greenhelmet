@@ -5,6 +5,7 @@ import { Unverified } from "@/components/ui";
 import { FieldChip } from "@/components/visual";
 import { allReports } from "@/lib/reports";
 import { fmtDate, readMinutes } from "@/lib/fields";
+import { viewsText } from "@/lib/views";
 
 export const metadata: Metadata = {
   title: "이슈리포트 · EHS 법령 개정·통계·업계 동향 해설",
@@ -25,6 +26,7 @@ export default function Page() {
                   <FieldChip field={r.field} />
                   <span>{fmtDate(r.date)}</span>
                   <span>{readMinutes(r.html)}분</span>
+                  {viewsText(`/reports/${r.slug}/`) && <span>{viewsText(`/reports/${r.slug}/`)}</span>}
                   {!r.reviewed && <Unverified label="검수 전" />}
                 </span>
                 {r.series && <span className="-mb-1 text-[13px] font-bold text-muted">{r.series}</span>}

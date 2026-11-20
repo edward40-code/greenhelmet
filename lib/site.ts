@@ -8,6 +8,8 @@ export const SITE = site as {
   contactEmail: string | null;
   policyEffectiveDate: string;
   verification: { google: string | null; naver: string | null };
+  /** gaId: GA4 측정 ID(G-...), gaProperty: 숫자 속성 ID(조회수 수집용), since: 집계 시작일 */
+  analytics: { gaId: string | null; gaProperty: string | null; since: string };
 };
 
 /** GitHub Pages 하위 경로(예: /greenhelmet). 로컬에서는 빈 값 */

@@ -11,6 +11,7 @@ import { inventoryOfLibrary } from "@/lib/inventory";
 import { marketOfLibrary } from "@/lib/market";
 import { fmtDate } from "@/lib/fields";
 import { BASE_PATH } from "@/lib/site";
+import { downloadsText, viewsText } from "@/lib/views";
 import { FormatBadge } from "../LibraryList";
 import { FieldChip, FormatTile } from "@/components/visual";
 
@@ -37,6 +38,7 @@ export default async function Page({ params }: P) {
   const mk = marketOfLibrary(x.id);
   const thumb = existsSync(path.join(process.cwd(), "public", "library", "thumbs", `${x.id}.png`)) ? `${BASE_PATH}/library/thumbs/${x.id}.png` : null;
   const related = allLibrary().filter((o) => o.id !== x.id && (o.field === x.field || o.category === x.category)).slice(0, 4);
+  const stat = [viewsText(`/library/${x.id}/`), x.type === "file" ? downloadsText(x.id) : null].filter(Boolean).join(" · ");
   const btn = "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md bg-accent px-6 text-[17px] font-bold text-white hover:text-white hover:no-underline";
 
   return (
@@ -52,7 +54,7 @@ export default async function Page({ params }: P) {
             <div className="flex min-w-0 flex-col gap-2">
               <div className="flex flex-wrap items-center gap-2 text-[13px]">
                 <FieldChip field={x.field} />
-                <span className="text-muted">{x.category} · {x.source} · {fmtDate(x.updated)}</span>
+                <span className="text-muted">{x.category} · {x.source} · {fmtDate(x.updated)}{stat && ` · ${stat}`}</span>
               </div>
               <h1 className="m-0 text-[24px] leading-snug font-extrabold tracking-[-0.5px] sm:text-[28px]">{x.title}</h1>
             </div>

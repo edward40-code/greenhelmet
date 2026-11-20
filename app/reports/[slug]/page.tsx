@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { AdSlot, Notice } from "@/components/ui";
 import { allReports, getReport } from "@/lib/reports";
 import { fieldName, fmtDate, readMinutes } from "@/lib/fields";
+import { viewsText } from "@/lib/views";
 import { allLibrary } from "@/lib/library";
 import { FormatTile } from "@/components/visual";
 import ReadProgress from "@/components/ReadProgress";
@@ -53,6 +54,7 @@ export default async function Page({ params }: P) {
             <span className="rounded-full bg-white/15 px-2.5 py-0.5 font-bold text-white">{fieldName(r.field)}</span>
             <span>{fmtDate(r.date)}</span>
             <span className="inline-flex items-center gap-1">{readMinutes(r.html)}분 읽기</span>
+            {viewsText(`/reports/${r.slug}/`) && <span>{viewsText(`/reports/${r.slug}/`)}</span>}
             {r.reviewed && <span className="inline-flex items-center gap-1">법령 원문 대조 완료</span>}
           </p>
         </div>

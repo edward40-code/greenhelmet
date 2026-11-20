@@ -10,6 +10,7 @@ import { slugOf } from "@/lib/news";
 import { getLib } from "@/lib/library";
 import { allReports } from "@/lib/reports";
 import { fmtDate } from "@/lib/fields";
+import { viewsText } from "@/lib/views";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => allAccidents().map((x) => ({ slug: slugOf(x.id) }));
@@ -49,7 +50,7 @@ export default async function Page({ params }: P) {
           <div className="text-[14px] text-white/75"><Link href="/accidents/" className="text-white/90 hover:text-white">사고속보</Link> › {k.label}</div>
           <span className="self-start text-[14px] font-bold text-[#ffb4a8]">{kindName}</span>
           <h1 className="m-0 text-[25px] leading-[1.35] font-extrabold tracking-[-0.5px] sm:text-[32px]">{x.title}</h1>
-          <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)} 보도</p>
+          <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)} 보도{viewsText(`/accidents/${slugOf(x.id)}/`) && ` · ${viewsText(`/accidents/${slugOf(x.id)}/`)}`}</p>
           {x.tags && x.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {x.tags.map((t) => (

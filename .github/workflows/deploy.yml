@@ -33,13 +33,17 @@ jobs:
       - run: npm ci
       - name: 소식 수집 (실패해도 기존 소식으로 계속)
         run: node scripts/fetch-feeds.mjs
-      - name: 수집한 소식 저장
+      - name: 조회수 받기 (실패해도 기존 값으로 계속)
+        run: node scripts/fetch-views.mjs
+        env:
+          GA_SA_KEY: ${{ secrets.GA_SA_KEY }}
+      - name: 수집한 소식·조회수 저장
         run: |
-          if ! git diff --quiet content/feeds; then
+          if ! git diff --quiet content/feeds content/views.json; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add content/feeds
-            git commit -m "소식 자동 수집 $(date -u +%F)"
+            git add content/feeds content/views.json
+            git commit -m "소식·조회수 자동 수집 $(date -u +%F)"
             git push
           fi
       # 구글 폰트 다운로드가 가끔 실패하므로 한 번 더 시도한다

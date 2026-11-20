@@ -16,7 +16,7 @@ export function FormatBadge({ format }: { format: string }) {
   );
 }
 
-export default function LibraryList({ items }: { items: LibItem[] }) {
+export default function LibraryList({ items, stats = {} }: { items: LibItem[]; stats?: Record<string, string> }) {
   const [field, setField] = useState("all");
   const [cat, setCat] = useState("all");
   const [q, setQ] = useState("");
@@ -79,8 +79,9 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
               </span>
               <span className="text-[16px] leading-snug font-bold">{x.title}</span>
               <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>
-              <span className="mt-auto inline-flex items-center gap-1 pt-1 text-[14px] font-bold text-accent">
-                {x.type === "file" ? "내려받기" : "자료 위치 보기 ↗"}
+              <span className="mt-auto flex flex-wrap items-baseline justify-between gap-x-3 pt-1">
+                <span className="text-[14px] font-bold text-accent">{x.type === "file" ? "내려받기" : "자료 위치 보기 ↗"}</span>
+                {stats[x.id] && <span className="text-[13px] text-muted">{stats[x.id]}</span>}
               </span>
             </span>
           </Link>

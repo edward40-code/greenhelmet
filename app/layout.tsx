@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { BASE_PATH, OG_IMAGES, SITE, SITE_URL } from "@/lib/site";
 
@@ -25,7 +26,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
       </head>
-      <body className="m-0 min-h-screen">{children}</body>
+      <body className="m-0 min-h-screen">
+        {children}
+        {SITE.analytics.gaId && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${SITE.analytics.gaId}`} strategy="afterInteractive" />
+            <Script id="ga4" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${SITE.analytics.gaId}');`}
+            </Script>
+          </>
+        )}
+      </body>
     </html>
   );
 }

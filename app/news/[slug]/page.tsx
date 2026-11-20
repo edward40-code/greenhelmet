@@ -9,6 +9,7 @@ import { allNews, getNews, slugOf } from "@/lib/news";
 import { allLibrary } from "@/lib/library";
 import { allReports } from "@/lib/reports";
 import { fieldName, fmtDate } from "@/lib/fields";
+import { viewsText } from "@/lib/views";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => allNews().map((x) => ({ slug: slugOf(x.id) }));
@@ -46,7 +47,7 @@ export default async function Page({ params }: P) {
             <span className="rounded-full bg-white/15 px-3 py-1">{x.kind}</span>
           </span>
           <h1 className="m-0 text-[25px] leading-[1.35] font-extrabold tracking-[-0.5px] sm:text-[32px]">{x.title}</h1>
-          <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)}</p>
+          <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)}{viewsText(`/news/${slugOf(x.id)}/`) && ` · ${viewsText(`/news/${slugOf(x.id)}/`)}`}</p>
         </div>
       </div>
 
