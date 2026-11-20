@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/library/",
     ...allLibrary().map((x) => `/library/${x.id}/`),
     ...certSlugs().flatMap((s) => [`/cert/${s}/`, ...OPEN_TABS.map((t) => `/cert/${s}/${t}/`)]),
+    "/market/",
     "/tools/",
     "/inventory/",
     ...allInventories().map((m) => `/inventory/${m.slug}/`),

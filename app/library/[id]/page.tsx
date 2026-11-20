@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { AdSlot } from "@/components/ui";
 import { allLibrary, getLib } from "@/lib/library";
 import { inventoryOfLibrary } from "@/lib/inventory";
+import { marketOfLibrary } from "@/lib/market";
 import { fmtDate } from "@/lib/fields";
 import { BASE_PATH } from "@/lib/site";
 import { FormatBadge } from "../LibraryList";
@@ -33,6 +34,7 @@ export default async function Page({ params }: P) {
   const x = getLib((await params).id);
   if (!x) notFound();
   const inv = inventoryOfLibrary(x.id);
+  const mk = marketOfLibrary(x.id);
   const thumb = existsSync(path.join(process.cwd(), "public", "library", "thumbs", `${x.id}.png`)) ? `${BASE_PATH}/library/thumbs/${x.id}.png` : null;
   const related = allLibrary().filter((o) => o.id !== x.id && (o.field === x.field || o.category === x.category)).slice(0, 4);
   const btn = "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md bg-accent px-6 text-[17px] font-bold text-white hover:text-white hover:no-underline";
@@ -92,6 +94,9 @@ export default async function Page({ params }: P) {
           )}
           {inv && (
             <Link href={`/inventory/${inv.slug}/`} className="text-[15px] font-bold">{`${inv.title} 지침 인벤토리 →`}</Link>
+          )}
+          {mk && (
+            <Link href={`/market/#${mk.key}`} className="text-[15px] font-bold">{`안전장터: ${mk.name} 보호구·장비 →`}</Link>
           )}
           {x.report && (
             <Link href={`/reports/${x.report}/`} className="text-[15px] font-bold">관련 이슈리포트 읽기 →</Link>

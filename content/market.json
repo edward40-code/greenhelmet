@@ -1,0 +1,245 @@
+{
+  "checked": "2026-11-20",
+  "disclosure": "이 페이지의 상품 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+  "certs": {
+    "kcs": {
+      "label": "안전인증 대상",
+      "basis": "산업안전보건법 제84조, 같은 법 시행령 제74조 (세부 종류·규격은 고용노동부 고시)"
+    },
+    "self": {
+      "label": "자율안전확인 대상",
+      "basis": "산업안전보건법 제89조, 같은 법 시행령 제77조제1항"
+    },
+    "none": {
+      "label": "산업안전보건법 인증 대상 아님",
+      "basis": ""
+    }
+  },
+  "groups": [
+    {
+      "key": "confined",
+      "name": "밀폐공간",
+      "library": [
+        "checklist-confined-space",
+        "edu-confined-space"
+      ],
+      "items": [
+        {
+          "id": "gas-detector",
+          "name": "복합가스측정기 (산소·황화수소·일산화탄소·가연성가스)",
+          "cert": "none",
+          "certNote": "폭발위험장소에서 쓰면 방폭구조 인증 제품 (시행령 제74조제1항제2호사목)",
+          "law": "산업안전보건기준에 관한 규칙 제619조의2 (측정자에게 측정 장비 지급)",
+          "check": [
+            "적정공기 기준 네 가지(O₂, CO₂, CO, H₂S) 중 무엇을 재는지",
+            "경보음과 진동 경보",
+            "교정 주기와 교정 방법"
+          ],
+          "products": []
+        },
+        {
+          "id": "airline-mask",
+          "name": "송기마스크",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호바목",
+          "law": "산업안전보건기준에 관한 규칙 제620조, 제625조",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "공기 공급 방식(호스, 송풍기)과 호스 길이",
+            "작업자 수만큼 준비"
+          ],
+          "products": []
+        },
+        {
+          "id": "blower",
+          "name": "이동식 환기 송풍기와 덕트",
+          "cert": "none",
+          "certNote": "폭발위험장소에서 쓰면 방폭구조 인증 제품 (시행령 제74조제1항제2호사목)",
+          "law": "산업안전보건기준에 관한 규칙 제620조 (환기)",
+          "check": [
+            "풍량",
+            "덕트 길이와 지름",
+            "전원 방식"
+          ],
+          "products": []
+        }
+      ]
+    },
+    {
+      "key": "fall",
+      "name": "추락",
+      "library": [
+        "checklist-aerial-work-platform",
+        "daily-safety-checklist"
+      ],
+      "items": [
+        {
+          "id": "harness",
+          "name": "안전대 (그네식)",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호자목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "죔줄 길이와 충격흡수장치",
+            "몸에 맞는 크기"
+          ],
+          "products": []
+        },
+        {
+          "id": "helmet",
+          "name": "안전모 (추락·감전 위험방지용)",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호가목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "턱끈",
+            "사용 기한과 교체 시기"
+          ],
+          "products": []
+        }
+      ]
+    },
+    {
+      "key": "caught",
+      "name": "끼임·정비",
+      "library": [
+        "edu-caught-in",
+        "checklist-conveyor",
+        "checklist-press"
+      ],
+      "items": [
+        {
+          "id": "loto",
+          "name": "잠금장치 세트 (자물쇠, 잠금 걸쇠, 표지)",
+          "cert": "none",
+          "law": "산업안전보건기준에 관한 규칙 제92조 (정비 등의 작업 시의 운전정지 등)",
+          "check": [
+            "작업자마다 따로 쓰는 개인 자물쇠",
+            "차단기·밸브 모양에 맞는 잠금장치",
+            "\"운전 금지\" 표지"
+          ],
+          "products": []
+        }
+      ]
+    },
+    {
+      "key": "chem",
+      "name": "화학물질·분진",
+      "library": [
+        "risk-assessment-form"
+      ],
+      "items": [
+        {
+          "id": "dust-mask",
+          "name": "방진마스크",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호라목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "얼굴에 맞는 크기와 밀착",
+            "필터 교체 주기"
+          ],
+          "products": []
+        },
+        {
+          "id": "gas-mask",
+          "name": "방독마스크와 정화통",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호마목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "다루는 물질에 맞는 정화통",
+            "산소결핍 장소에서는 쓰지 않음"
+          ],
+          "products": []
+        },
+        {
+          "id": "suit",
+          "name": "화학물질용 보호복",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호아목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "다루는 물질과 형식",
+            "크기"
+          ],
+          "products": []
+        },
+        {
+          "id": "goggles",
+          "name": "보안경",
+          "cert": "kcs",
+          "certSub": "차광·비산물 위험방지용은 안전인증 (제74조제1항제3호차목), 그 밖의 보안경은 자율안전확인 (제77조제1항제3호나목)",
+          "check": [
+            "인증 표시",
+            "안경 위에 쓰는지 여부",
+            "김 서림 방지"
+          ],
+          "products": []
+        }
+      ]
+    },
+    {
+      "key": "noise",
+      "name": "소음",
+      "library": [],
+      "items": [
+        {
+          "id": "ear",
+          "name": "귀마개·귀덮개",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호타목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "차음 성능",
+            "안전모와 같이 쓸 수 있는지"
+          ],
+          "products": []
+        }
+      ]
+    },
+    {
+      "key": "weld",
+      "name": "용접·화재",
+      "library": [
+        "checklist-hot-work",
+        "checklist-fire-extinguisher"
+      ],
+      "items": [
+        {
+          "id": "weld-shield",
+          "name": "용접용 보안면",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호카목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "차광 번호",
+            "자동 차광 여부"
+          ],
+          "products": []
+        }
+      ]
+    },
+    {
+      "key": "common",
+      "name": "공통 보호구",
+      "library": [
+        "daily-safety-checklist"
+      ],
+      "items": [
+        {
+          "id": "shoes",
+          "name": "안전화",
+          "cert": "kcs",
+          "certSub": "시행령 제74조제1항제3호나목",
+          "check": [
+            "안전인증 표시와 인증번호",
+            "작업에 맞는 종류(가죽, 고무, 정전기 방지 등)",
+            "발 크기"
+          ],
+          "products": []
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import { HelmetLogo } from "./Header";
 
 const COLS: { h: string; links: [string, string][] }[] = [
   { h: "읽을거리", links: [["/news/", "소식"], ["/accidents/", "사고속보"], ["/reports/", "이슈리포트"]] },
-  { h: "자료와 도구", links: [["/library/", "자료실"], ["/tools/sapa/", "중대재해처벌법 점검"], ["/tools/tbm/", "TBM 생성기"], ["/tools/calc/", "단위환산, 안전계산"], ["/tools/test/", "안전 성향 테스트"]] },
+  { h: "자료와 도구", links: [["/library/", "자료실"], ["/market/", "안전장터"], ["/tools/sapa/", "중대재해처벌법 점검"], ["/tools/tbm/", "TBM 생성기"], ["/tools/calc/", "단위환산, 안전계산"], ["/tools/test/", "안전 성향 테스트"]] },
   { h: "자격증", links: [["/cert/industrial-safety-engineer/", "산업안전기사"]] },
   { h: "사이트", links: [["/about/", "소개"], ["/terms/", "이용약관"], ["/privacy/", "개인정보처리방침"]] },
 ];
