@@ -38,9 +38,13 @@ export default function Sapa() {
   const [s, setS] = useState<Saved>(EMPTY);
   const [ready, setReady] = useState(false);
 
+  // 창(탭)을 닫으면 지워지도록 sessionStorage에 둔다. 예전 판의 localStorage 값은 지운다
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(KEY);
+      localStorage.removeItem(KEY);
+    } catch {}
+    try {
+      const raw = sessionStorage.getItem(KEY);
       if (raw) setS({ ...EMPTY, ...JSON.parse(raw) });
     } catch {}
     setReady(true);
@@ -48,7 +52,7 @@ export default function Sapa() {
   useEffect(() => {
     if (!ready) return;
     try {
-      localStorage.setItem(KEY, JSON.stringify(s));
+      sessionStorage.setItem(KEY, JSON.stringify(s));
     } catch {}
   }, [s, ready]);
 
@@ -172,12 +176,12 @@ export default function Sapa() {
           <div className="no-print flex flex-wrap gap-2 pt-1">
             <button type="button" onClick={() => window.print()} className="min-h-[44px] cursor-pointer rounded-md bg-ink px-[18px] text-[15px] font-bold text-white">인쇄</button>
             <Link href="/library/sapa-half-year-set/" className="inline-flex min-h-[44px] items-center rounded-md border border-ink px-[18px] text-[15px] font-bold text-ink hover:no-underline">반기 점검 세트 내려받기</Link>
-            <button type="button" onClick={() => up({ st: {} })} className="min-h-[44px] cursor-pointer rounded-md border border-line bg-white px-[18px] text-[15px] text-ink">표시 지우기</button>
+            <button type="button" onClick={() => setS(EMPTY)} className="min-h-[44px] cursor-pointer rounded-md border border-line bg-white px-[18px] text-[15px] text-ink">처음부터</button>
           </div>
         </section>
       )}
 
-      <p className="m-0 text-[13px] text-muted">중대재해처벌법 시행령 2025.10.1. 시행본 기준 · 2026.11.20 확인 · 입력값은 이 브라우저에만 저장</p>
+      <p className="m-0 text-[13px] text-muted">중대재해처벌법 시행령 2025.10.1. 시행본 기준 · 2026.11.20 확인 · 입력값은 창을 닫으면 삭제</p>
     </>
   );
 }
