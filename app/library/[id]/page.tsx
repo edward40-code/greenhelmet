@@ -77,7 +77,7 @@ export default async function Page({ params }: P) {
           )}
           {x.howto && x.howto.length > 0 && (
             <section className="rounded-md bg-accent-soft p-4">
-              <h2 className="m-0 mb-1.5 text-[16px] font-extrabold text-accent-ink">쓰는 법</h2>
+              <h2 className="m-0 mb-1.5 text-[16px] font-extrabold text-accent-ink">참고</h2>
               <ul className="m-0 list-disc pl-5 text-[15px] leading-[1.8]">{x.howto.map((h) => <li key={h}>{h}</li>)}</ul>
             </section>
           )}
