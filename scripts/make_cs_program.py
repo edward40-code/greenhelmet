@@ -84,6 +84,7 @@ def bullet(doc, text, size=10.5):
 
 
 def shade(cell, hex_color):
+    return  # 양식에는 어떤 색도 넣지 않는다
     tcPr = cell._element.get_or_add_tcPr()
     shd = OxmlElement("w:shd")
     shd.set(qn("w:val"), "clear")

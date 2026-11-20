@@ -17,7 +17,7 @@ OUT = ROOT / "public" / "library"
 DATA = json.loads((Path(__file__).with_name("checklists.json")).read_text(encoding="utf-8"))
 
 FONT = "맑은 고딕"
-HEAD = PatternFill("solid", fgColor="E8F3EC")
+HEAD = PatternFill(fill_type=None)  # 양식에는 어떤 색도 넣지 않는다
 thin = Side(style="thin", color="000000")
 BOX = Border(left=thin, right=thin, top=thin, bottom=thin)
 WRAP = Alignment(wrap_text=True, vertical="center")
