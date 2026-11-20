@@ -18,7 +18,7 @@ DATA = json.loads((Path(__file__).with_name("checklists.json")).read_text(encodi
 
 FONT = "맑은 고딕"
 HEAD = PatternFill("solid", fgColor="E8F3EC")
-thin = Side(style="thin", color="7A8A82")
+thin = Side(style="thin", color="000000")
 BOX = Border(left=thin, right=thin, top=thin, bottom=thin)
 WRAP = Alignment(wrap_text=True, vertical="center")
 CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
@@ -66,7 +66,7 @@ def work_sheet(ws, w):
     cell(ws, "A1", f"{w['title']} 작업시작 전 점검표", f(16, True), align=CENTER, border=False)
     ws.row_dimensions[1].height = 30
     ws.merge_cells("A2:F2")
-    cell(ws, "A2", f"대상 작업: {w['work']}", f(9, color="4A5A63"), align=CENTER, border=False)
+    cell(ws, "A2", f"대상 작업: {w['work']}", f(9, color="000000"), align=CENTER, border=False)
     ws.row_dimensions[2].height = 28
 
     r = 4
@@ -93,7 +93,7 @@ def work_sheet(ws, w):
     # 자율 추가 항목
     cell(ws, f"A{r}", "추가", f(10, True), HEAD, CENTER)
     ws.merge_cells(f"B{r}:F{r}")
-    cell(ws, f"B{r}", "아래 칸은 법정 항목 외에 사업장이 스스로 정하는 점검 항목입니다 (제조사 취급설명서·위험성평가 결과 반영).", f(9, color="4A5A63"))
+    cell(ws, f"B{r}", "아래 칸은 법정 항목 외에 사업장이 스스로 정하는 점검 항목입니다 (제조사 취급설명서·위험성평가 결과 반영).", f(9, color="000000"))
     boxrange(ws, f"B{r}:F{r}")
     r += 1
     for _ in range(4):
@@ -106,7 +106,7 @@ def work_sheet(ws, w):
     r += 1
     ws.merge_cells(f"A{r}:F{r}")
     cell(ws, f"A{r}", "점검 결과 이상이 발견되면 즉시 수리하거나 그 밖에 필요한 조치를 해야 합니다 (산업안전보건기준에 관한 규칙 제35조제3항). 조치 전에는 사용하지 마세요.",
-         f(9, True, "B3261E"), border=False)
+         f(9, True, "000000"), border=False)
     ws.row_dimensions[r].height = 30
     r += 2
     for label in ["점검자", "관리감독자 확인"]:
@@ -122,7 +122,7 @@ def work_sheet(ws, w):
     r += 1
     ws.merge_cells(f"A{r}:F{r}")
     cell(ws, f"A{r}", f"근거: 산업안전보건기준에 관한 규칙 제35조제2항, [별표 3] 제{w['no']}호 ({w['part']}). 점검 내용은 별표 원문을 옮겼습니다. 법령이 바뀌면 국가법령정보센터 현행본을 확인하세요. · 서식 제공: 그린헬멧기사",
-         f(8, color="4A5A63"), border=False)
+         f(8, color="000000"), border=False)
     ws.row_dimensions[r].height = 36
 
 
@@ -139,14 +139,14 @@ def write_work(path, works, cover=None):
         cell(ws, "A1", cover, f(16, True), align=CENTER, border=False)
         ws.row_dimensions[1].height = 30
         ws.merge_cells("A2:C2")
-        cell(ws, "A2", "산업안전보건기준에 관한 규칙 [별표 3] 작업시작 전 점검사항(제35조제2항 관련)의 작업별 점검표입니다. 시트 이름을 눌러 해당 점검표로 이동하세요.", f(9, color="4A5A63"), border=False)
+        cell(ws, "A2", "산업안전보건기준에 관한 규칙 [별표 3] 작업시작 전 점검사항(제35조제2항 관련)의 작업별 점검표입니다. 시트 이름을 눌러 해당 점검표로 이동하세요.", f(9, color="000000"), border=False)
         ws.row_dimensions[2].height = 30
         for col, h in zip("ABC", ["별표 3", "작업", "시트"]):
             cell(ws, f"{col}4", h, f(10, True), HEAD, CENTER)
         for i, w in enumerate(works, 5):
             cell(ws, f"A{i}", f"제{w['no']}호", align=CENTER)
             cell(ws, f"B{i}", w["title"])
-            c = cell(ws, f"C{i}", w["sheet"], f(10, color="1F5FA8"))
+            c = cell(ws, f"C{i}", w["sheet"], f(10, color="000000"))
             c.hyperlink = f"#'{w['sheet']}'!A1"
             ws.row_dimensions[i].height = 20
     for w in works:
@@ -193,7 +193,7 @@ def fire_sheet(ws, sec, year_note=True):
     r += 1
     ws.merge_cells(f"A{r}:{last}{r}")
     cell(ws, f"A{r}", "근거: 소방시설 자체점검사항 등에 관한 고시 [별지 제6호서식] 소방시설등 외관점검표의 점검 내용을 옮겼습니다. 공공기관은 외관점검 때 이 서식을 사용해야 합니다(같은 고시 제7조). · 서식 제공: 그린헬멧기사",
-         f(8, color="4A5A63"), border=False)
+         f(8, color="000000"), border=False)
     ws.row_dimensions[r].height = 30
 
 
@@ -212,7 +212,7 @@ def write_fire(path, secs, extra_ledger=False):
         ws.row_dimensions[1].height = 28
         ws.merge_cells("A2:H2")
         cell(ws, "A2", "설치된 소화기를 한 줄에 하나씩 적습니다. 분말소화기 내용연수 10년은 외관점검표의 점검 항목(수동식 분말소화기 내용연수(10년) 적정 여부)에 따른 것입니다. 제조 연월은 소화기 몸통 표시를 보고 적으세요.",
-             f(9, color="4A5A63"), border=False)
+             f(9, color="000000"), border=False)
         ws.row_dimensions[2].height = 30
         for i, (h, w) in enumerate(zip(heads, widths)):
             col = chr(ord("A") + i)

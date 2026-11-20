@@ -14,9 +14,9 @@ from docx.shared import Cm, Pt, RGBColor
 sys.stdout.reconfigure(encoding="utf-8")
 OUT = Path(__file__).resolve().parent.parent / "public" / "library" / "confined-space-program.docx"
 FONT = "맑은 고딕"
-GRAY = RGBColor(0x5A, 0x67, 0x6E)
-GREEN = RGBColor(0x1B, 0x6B, 0x3A)
-RED = RGBColor(0xB3, 0x26, 0x1E)
+GRAY = RGBColor(0, 0, 0)  # 양식에는 연한 녹색 말고 색을 넣지 않는다
+GREEN = RGBColor(0, 0, 0)
+RED = RGBColor(0, 0, 0)
 
 BYUL18 = [
     "1. 다음의 지층에 접하거나 통하는 우물·수직갱·터널·잠함·피트 또는 그 밖에 이와 유사한 것의 내부 (가. 상층에 물이 통과하지 않는 지층이 있는 역암층 중 함수 또는 용수가 없거나 적은 부분 / 나. 제1철 염류 또는 제1망간 염류를 함유하는 지층 / 다. 메탄·에탄 또는 부탄을 함유하는 지층 / 라. 탄산수를 용출하고 있거나 용출할 우려가 있는 지층)",
@@ -72,7 +72,7 @@ def heading(doc, text, level=1):
 
 
 def guide(doc, text):
-    """회색 작성 안내 (양식에서 지우고 쓰는 부분)"""
+    """작성 안내 (양식에서 지우고 쓰는 부분)"""
     return para(doc, "※ " + text, size=9.5, color=GRAY)
 
 
@@ -296,7 +296,7 @@ def main():
     # 사용 안내
     heading(doc, "밀폐공간 작업 프로그램 양식·예문 사용 안내", 0)
     para(doc, "이 파일은 두 부분으로 되어 있습니다.")
-    bullet(doc, "1부 양식: 회색 '※' 안내문을 읽고 지운 뒤 우리 사업장 내용을 채웁니다.")
+    bullet(doc, "1부 양식: '※' 안내문을 읽고 지운 뒤 우리 사업장 내용을 채웁니다.")
     bullet(doc, "2부 예문: 가상의 식품공장을 예로 들어 끝까지 채운 예입니다. 어느 정도로 쓰면 되는지 감을 잡는 데 씁니다.")
     para(doc, "밀폐공간에서 근로자에게 작업을 시키는 사업주는 다음 5가지를 포함한 밀폐공간 작업 프로그램을 수립·시행해야 합니다(안전보건규칙 제619조제1항).", space_after=2)
     for i, x in enumerate(["사업장 내 밀폐공간의 위치 파악 및 관리 방안", "밀폐공간 내 질식·중독 등을 일으킬 수 있는 유해·위험 요인의 파악 및 관리 방안",

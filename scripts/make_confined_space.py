@@ -7,8 +7,8 @@ from openpyxl.styles import Alignment
 from make_checklists import OUT, HEAD, CENTER, WRAP, f, setup, cell, boxrange
 
 LAW = "산업안전보건기준에 관한 규칙"
-NOTE = f(8, color="4A5A63")
-RED = f(9, True, "B3261E")
+NOTE = f(8, color="000000")
+RED = f(9, True, "000000")
 
 
 def title(ws, last, text, sub=None):
@@ -17,7 +17,7 @@ def title(ws, last, text, sub=None):
     ws.row_dimensions[1].height = 30
     if sub:
         ws.merge_cells(f"A2:{last}2")
-        cell(ws, "A2", sub, f(9, color="4A5A63"), align=CENTER, border=False)
+        cell(ws, "A2", sub, f(9, color="000000"), align=CENTER, border=False)
         ws.row_dimensions[2].height = 30
 
 
@@ -170,7 +170,7 @@ def sheet_measure(ws):
         cell(ws, f"{col}4", h, f(10, True), HEAD, CENTER)
     stds = ["", "상·중·하 위치 구분", "18~23.5 미만", "1.5 미만", "30 미만", "10 미만", "", "", "", "", ""]
     for i, s in enumerate(stds):
-        cell(ws, f"{chr(ord('A') + i)}5", s or None, f(8, color="4A5A63"), align=CENTER)
+        cell(ws, f"{chr(ord('A') + i)}5", s or None, f(8, color="000000"), align=CENTER)
     for r in range(6, 26):
         for i in range(len(heads)):
             cell(ws, f"{chr(ord('A') + i)}{r}", None, align=CENTER)

@@ -10,10 +10,10 @@ from make_checklists import OUT, HEAD, CENTER, WRAP, FONT, f, setup, cell, boxra
 from make_confined_space import title, note, section, field, NOTE, RED
 
 MADE = "서식 제공: 그린헬멧기사"
-GREY = f(9, color="4A5A63")
+GREY = f(9, color="000000")
 RIGHT = Alignment(horizontal="right", vertical="center")
-SOFT = PatternFill("solid", fgColor="F6F8F7")
-YELLOW = PatternFill("solid", fgColor="FFD400")
+SOFT = PatternFill(fill_type=None)  # 양식에는 연한 녹색 말고 색을 넣지 않는다
+YELLOW = PatternFill(fill_type=None)  # 실제 표지는 노란 바탕(별표 5). 본에는 색을 넣지 않는다
 
 
 def col(i):
@@ -152,7 +152,7 @@ def permit_check(ws):
         for c in "CDE":
             cell(ws, f"{c}{r}", None, align=CENTER)
         cell(ws, f"F{r}", todo, f(9))
-        cell(ws, f"G{r}", basis, f(8, color="4A5A63"))
+        cell(ws, f"G{r}", basis, f(8, color="000000"))
         ws.row_dimensions[r].height = max(30, 13.5 * max(lines(q, 25), lines(todo, 25), lines(basis, 22)) + 8)
         r += 1
     r += 1
@@ -567,7 +567,7 @@ def cap_form(ws, example=False):
         ws.column_dimensions[c].width = w
     title(ws, "F", "시정조치 계획서" + (" (작성 예)" if example else ""),
           "지적 한 건에 한 장씩 씁니다. 다섯 줄이 모두 채워져야 계획입니다.")
-    ex = f(10, color="1F5FA8")
+    ex = f(10, color="000000")
     r = 4
     info = [("지적 받은 날", None), ("지적한 곳", "본사 환경안전 감사" if example else None),
             ("지적 사항", "배출시설 원료 변경 후 변경신고 누락" if example else None),
