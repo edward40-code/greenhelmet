@@ -36,7 +36,7 @@ export function Opt({ on, dim, onClick, label, n, dot, tone }: { on: boolean; di
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      className={`flex min-h-[38px] shrink-0 items-center gap-2 rounded-full border px-3.5 text-[14px] whitespace-nowrap cursor-pointer lg:w-full lg:rounded-lg lg:px-2.5 lg:text-left ${
+      className={`flex min-h-[38px] shrink-0 items-center gap-2 rounded-md border px-3.5 text-[14px] whitespace-nowrap cursor-pointer lg:w-full lg:rounded-lg lg:px-2.5 lg:text-left ${
         on ? `${TONE[tone]} font-bold` : dim ? "border-line bg-white text-[#9aa5ab] lg:border-transparent lg:bg-transparent" : "border-line bg-white text-ink hover:border-ink lg:border-transparent lg:bg-transparent lg:hover:bg-bg"
       }`}
     >

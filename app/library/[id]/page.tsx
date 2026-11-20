@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -31,6 +33,7 @@ export default async function Page({ params }: P) {
   const x = getLib((await params).id);
   if (!x) notFound();
   const inv = inventoryOfLibrary(x.id);
+  const thumb = existsSync(path.join(process.cwd(), "public", "library", "thumbs", `${x.id}.png`)) ? `${BASE_PATH}/library/thumbs/${x.id}.png` : null;
   const related = allLibrary().filter((o) => o.id !== x.id && (o.field === x.field || o.category === x.category)).slice(0, 4);
   const btn = "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md bg-accent px-6 text-[17px] font-bold text-white hover:text-white hover:no-underline";
 
@@ -57,7 +60,7 @@ export default async function Page({ params }: P) {
           <div>
             {x.type === "file" ? (
               <a className={btn} href={`${BASE_PATH}/library/${x.file}`} download>
-                무료 내려받기 <span className="text-[14px] font-normal opacity-90">{x.format}</span>
+                내려받기 <span className="text-[14px] font-normal opacity-90">{x.format}</span>
               </a>
             ) : (
               <a className={btn} href={x.url} target="_blank" rel="noopener">
@@ -66,6 +69,12 @@ export default async function Page({ params }: P) {
             )}
           </div>
 
+          {thumb && (
+            <figure className="m-0 overflow-hidden rounded-md border border-line-soft">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={thumb} alt={`${x.title} 첫 장`} loading="lazy" className="block w-full" />
+            </figure>
+          )}
           {x.basis && (
             <p className="m-0 rounded-md border border-line px-4 py-3 text-[14px] leading-relaxed"><strong>법적 근거</strong> · {x.basis}</p>
           )}

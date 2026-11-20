@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { FIELDS, fieldName, fmtDate, fieldStyle } from "@/lib/fields";
+import { FIELDS, fieldName, fmtDate } from "@/lib/fields";
 import { FieldChip } from "@/components/visual";
-import { Icon } from "@/components/icons";
-import { accKindOf, accTagCounts, type AccItem } from "@/lib/accKind";
+import { accKindOf, accTagCounts, shortSummary, type AccItem } from "@/lib/accKind";
 import Link from "next/link";
 import { slugOf, type NewsItem } from "@/lib/news";
 import { FilterLayout, Group, Opt, ResultHead } from "@/components/SideFilter";
@@ -47,7 +46,7 @@ export default function NewsList({ items, variant = "news" }: { items: (NewsItem
         <Group title="분야">
           <Opt on={field === "all"} onClick={() => { setField("all"); setShown(PAGE); }} label="전체" n={total} tone="accent" />
           {FIELDS.map((f) => (
-            <Opt key={f.key} on={field === f.key} dim={!counts[f.key]} onClick={() => { setField(f.key); setShown(PAGE); }} label={f.name} n={counts[f.key] ?? 0} dot={fieldStyle(f.key).c} tone="accent" />
+            <Opt key={f.key} on={field === f.key} dim={!counts[f.key]} onClick={() => { setField(f.key); setShown(PAGE); }} label={f.name} n={counts[f.key] ?? 0} tone="accent" />
           ))}
         </Group>
         {kinds.length > 1 && (
@@ -83,16 +82,11 @@ export default function NewsList({ items, variant = "news" }: { items: (NewsItem
           return (
             <li key={x.id} className="border-t border-line-soft first:border-t-0">
               <Link href={`/${variant}/${slugOf(x.id)}/`} className="flex items-start gap-3.5 px-4 py-4 text-ink hover:bg-[#f7faf8] hover:no-underline sm:px-5">
-                {acc ? (
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#fdecec] text-danger"><Icon name={acc.icon} size={20} /></span>
-                ) : (
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ background: fieldStyle(x.field).soft, color: fieldStyle(x.field).c }}><Icon name={x.field} size={20} /></span>
-                )}
                 <span className="flex min-w-0 flex-col gap-1">
                   <span className="text-[17px] leading-[1.5] font-semibold">{x.title}</span>
-                  {x.summary && <span className="line-clamp-2 text-[15px] leading-relaxed text-muted">{x.summary}</span>}
+                  {x.summary && <span className="line-clamp-2 text-[15px] leading-relaxed text-muted">{shortSummary(x.summary)}</span>}
                   <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted">
-                    {acc ? <b className="text-danger">{acc.label}</b> : <FieldChip field={x.field} />}
+                    {acc ? acc.label && <b className="text-danger">{acc.label}</b> : <FieldChip field={x.field} />}
                     {acc && (x.tags ?? []).map((t) => <span key={t} className="text-[#8a5a50]">#{t}</span>)}
                     {!acc && <span className="rounded bg-bg px-1.5 py-px">{x.kind}</span>}
                     <span>{x.source} · {fmtDate(x.date)}</span>

@@ -33,15 +33,15 @@ export default function ResultCard({ result, onRestart }: { result: ResultType; 
         <span>추천 자격증: {result.cert}</span>
       </div>
       <div className="mt-1.5 flex flex-wrap justify-center gap-2.5">
-        <button type="button" onClick={share} className="min-h-[48px] rounded-3xl bg-accent px-[22px] text-[16px] font-bold text-white cursor-pointer">
+        <button type="button" onClick={share} className="min-h-[48px] rounded-md bg-accent px-[22px] text-[16px] font-bold text-white cursor-pointer">
           결과 공유
         </button>
         {onRestart ? (
-          <button type="button" onClick={onRestart} className="min-h-[48px] rounded-3xl border border-field bg-white px-[22px] text-[16px] text-ink cursor-pointer">
+          <button type="button" onClick={onRestart} className="min-h-[48px] rounded-md border border-field bg-white px-[22px] text-[16px] text-ink cursor-pointer">
             다시 하기
           </button>
         ) : (
-          <Link href="/tools/test/" className="flex min-h-[48px] items-center rounded-3xl border border-field bg-white px-[22px] text-[16px] text-ink hover:no-underline">
+          <Link href="/tools/test/" className="flex min-h-[48px] items-center rounded-md border border-field bg-white px-[22px] text-[16px] text-ink hover:no-underline">
             나도 해 보기
           </Link>
         )}

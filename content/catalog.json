@@ -1,7 +1,7 @@
 {
   "toolGroups": [
     {
-      "name": "조회·진단",
+      "name": "찾기와 진단",
       "tools": [
         {
           "href": "/tools/msds/",
@@ -12,7 +12,7 @@
         {
           "href": "/inventory/",
           "name": "지침 인벤토리",
-          "desc": "산업안전보건 고시·지침·기술지원규정·자료 목록",
+          "desc": "고시, 지침, 공단 기술지원규정 목록",
           "open": true
         },
         {
@@ -24,36 +24,36 @@
         {
           "href": "/tools/test/",
           "name": "안전 성향 테스트",
-          "desc": "문항에 답하면 나의 안전 성향 유형을 알려 줍니다",
+          "desc": "6문항, 1분",
           "open": true
         }
       ]
     },
     {
-      "name": "작성·계산",
+      "name": "만들기와 계산",
       "tools": [
         {
           "href": "/tools/tbm/",
           "name": "TBM 생성기",
-          "desc": "작업 종류를 고르면 작업 전 안전회의 자료를 만들어 줍니다",
+          "desc": "작업 종류를 고르면 회의 자료가 나옵니다",
           "open": true
         },
         {
           "href": "/tools/calc/",
-          "name": "단위환산·안전계산",
-          "desc": "가스 농도(ppm↔mg/m³) 환산, 소음 노출량, 재해율을 계산합니다",
+          "name": "단위환산, 안전계산",
+          "desc": "ppm과 mg/m³ 환산, 소음 노출량, 재해율",
           "open": true
         },
         {
           "href": "/tools/career/",
           "name": "경력 계산",
-          "desc": "입사·퇴사일을 넣으면 총 경력을 연·월·일로 합산합니다",
+          "desc": "입사일과 퇴사일로 총 경력 합산",
           "open": true
         },
         {
           "href": "/library/",
           "name": "자료실",
-          "desc": "TBM 일지·위험성평가표·점검표 양식과 공공기관 자료를 무료로 받습니다",
+          "desc": "법정 점검표, 서식, 교육자료",
           "open": true
         }
       ]

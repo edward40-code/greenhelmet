@@ -1,9 +1,9 @@
 ---
-title: 폐기물 위탁업체가 적발됐다 — 배출자인 우리 책임은 어디까지인가
+title: 폐기물 위탁업체가 적발되면 배출자 책임은 어디까지인가
 date: 2026-11-16
 field: env
 summary: 몇 년째 맡겨 온 허가 업체가 불법 투기로 적발됐고, 그 야적장에 우리 폐기물이 있었습니다. 위탁했다고 배출자 의무가 끝나지 않습니다. 위탁 전 확인 절차, 처리과정 확인, 조치명령 대상이 되는 경우, 벌칙까지 폐기물관리법 기준으로 정리했습니다.
-sources: EHS Deal Brief, 「Your Waste Contractor Just Got in Trouble. Is That Your Problem Now?」(The Korea EHS Playbook #8, 2026-08-30) — 국내 실무자용으로 다시 씀 | 폐기물관리법 제17조제1항제3호, 제48조(폐기물 처리에 대한 조치명령 등), 제66조제3호의4 | 같은 법 시행규칙 제16조의13(위탁·수탁의 기준 및 절차), 제17조의3, 제17조의4
+sources: EHS Deal Brief, 「Your Waste Contractor Just Got in Trouble. Is That Your Problem Now?」(The Korea EHS Playbook #8, 2026-08-30), 국내 실무자용으로 다시 씀 | 폐기물관리법 제17조제1항제3호, 제48조(폐기물 처리에 대한 조치명령 등), 제66조제3호의4 | 같은 법 시행규칙 제16조의13(위탁·수탁의 기준 및 절차), 제17조의3, 제17조의4
 reviewed: true
 ---
 

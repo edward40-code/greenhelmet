@@ -44,7 +44,7 @@ export default function InventoryView({ groups, head }: { groups: InvGroup[]; he
     requestAnimationFrame(() => listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
   const tile = (on: boolean) =>
-    `flex cursor-pointer flex-col gap-0.5 rounded-xl border p-3.5 text-left ${on ? "border-accent bg-accent text-white" : "border-transparent bg-bg text-ink hover:border-accent"}`;
+    `flex cursor-pointer flex-col gap-0.5 rounded-md border p-3.5 text-left ${on ? "border-accent bg-accent text-white" : "border-transparent bg-bg text-ink hover:border-accent"}`;
 
   return (
     <>
@@ -72,7 +72,7 @@ export default function InventoryView({ groups, head }: { groups: InvGroup[]; he
             type="button"
             aria-pressed={pick}
             onClick={() => setPick(!pick)}
-            className={`inline-flex min-h-[40px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 text-[14px] whitespace-nowrap ${pick ? "border-accent bg-accent font-bold text-white" : "border-line bg-white text-ink hover:border-ink"}`}
+            className={`inline-flex min-h-[40px] shrink-0 cursor-pointer items-center gap-1.5 rounded-md border px-3.5 text-[14px] whitespace-nowrap ${pick ? "border-accent bg-accent font-bold text-white" : "border-line bg-white text-ink hover:border-ink"}`}
           >
             ★ 먼저 볼 것
           </button>

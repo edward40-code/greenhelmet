@@ -12,10 +12,10 @@ export const QUESTIONS: { text: string; opts: [TypeKey, string][] }[] = [
 export type ResultType = { key: TypeKey; slug: string; name: string; desc: string; mate: string; cert: string };
 
 export const TYPES: Record<TypeKey, ResultType> = {
-  A: { key: "A", slug: "principle", name: "원칙파 감독관", desc: "규정과 절차가 가장 단단한 안전장치라고 믿습니다. 서류 하나 빠지지 않는 사업장은 대개 당신 덕분입니다.", mate: "현장파 해결사", cert: "산업안전지도사" },
-  B: { key: "B", slug: "fixer", name: "현장파 해결사", desc: "문제는 책상이 아니라 현장에서 풀린다고 생각합니다. 위험을 보면 손이 먼저 나갑니다.", mate: "데이터파 분석가", cert: "건설안전기사" },
-  C: { key: "C", slug: "analyst", name: "데이터파 분석가", desc: "숫자 속에서 다음 사고를 먼저 봅니다. 재해율이 오르기 전에 이미 표를 그리고 있습니다.", mate: "소통파 교육자", cert: "산업위생관리기사" },
-  D: { key: "D", slug: "communicator", name: "소통파 교육자", desc: "사람이 바뀌어야 현장이 바뀐다고 믿습니다. 당신과 이야기한 작업자는 다음 날 안전모를 씁니다.", mate: "원칙파 감독관", cert: "산업안전기사" },
+  A: { key: "A", slug: "principle", name: "법대로 하는 사람", desc: "규정과 절차가 가장 단단한 안전장치라고 믿습니다. 서류 하나 빠지지 않는 사업장은 대개 당신 덕분입니다.", mate: "현장부터 가는 사람", cert: "산업안전지도사" },
+  B: { key: "B", slug: "fixer", name: "현장부터 가는 사람", desc: "문제는 책상이 아니라 현장에서 풀린다고 생각합니다. 위험을 보면 손이 먼저 나갑니다.", mate: "숫자부터 보는 사람", cert: "건설안전기사" },
+  C: { key: "C", slug: "analyst", name: "숫자부터 보는 사람", desc: "숫자 속에서 다음 사고를 먼저 봅니다. 재해율이 오르기 전에 이미 표를 그리고 있습니다.", mate: "사람부터 챙기는 사람", cert: "산업위생관리기사" },
+  D: { key: "D", slug: "communicator", name: "사람부터 챙기는 사람", desc: "사람이 바뀌어야 현장이 바뀐다고 믿습니다. 당신과 이야기한 작업자는 다음 날 안전모를 씁니다.", mate: "법대로 하는 사람", cert: "산업안전기사" },
 };
 
 export const typeBySlug = (slug: string) => Object.values(TYPES).find((t) => t.slug === slug);

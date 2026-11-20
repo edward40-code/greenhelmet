@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ type: string 
           <ul className="m-0 flex flex-wrap gap-2 p-0">
             {Object.values(TYPES).filter((x) => x.slug !== t.slug).map((x) => (
               <li key={x.slug} className="list-none">
-                <Link href={`/tools/test/result/${x.slug}/`} className="inline-flex min-h-[44px] items-center rounded-full border border-line px-4 text-[15px]">{x.name}</Link>
+                <Link href={`/tools/test/result/${x.slug}/`} className="inline-flex min-h-[44px] items-center rounded-md border border-line px-4 text-[15px]">{x.name}</Link>
               </li>
             ))}
           </ul>

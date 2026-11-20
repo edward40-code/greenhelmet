@@ -4,7 +4,7 @@ import { BASE_PATH, OG_IMAGES, SITE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE.name} · 산업안전·보건·환경 소식과 자료실`, template: `%s · ${SITE.name}` },
+  title: { default: `${SITE.name} · ${SITE.tagline}`, template: `%s · ${SITE.name}` },
   description: SITE.description,
   openGraph: { siteName: SITE.name, locale: "ko_KR", type: "website", images: OG_IMAGES },
   twitter: { card: "summary_large_image", images: [OG_IMAGES[0].url] },

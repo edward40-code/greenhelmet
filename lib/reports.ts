@@ -6,6 +6,7 @@ import { BASE_PATH } from "./site";
 export type Report = {
   slug: string;
   title: string;
+  series?: string; // 연재명 (예: 감사관의 눈 1)
   date: string;
   field: string;
   summary: string;
@@ -29,6 +30,7 @@ function parse(file: string): Report {
   return {
     slug: file.replace(/\.md$/, ""),
     title: meta.title ?? file,
+    series: meta.series || undefined,
     date: meta.date ?? "",
     field: meta.field ?? "common",
     summary: meta.summary ?? "",

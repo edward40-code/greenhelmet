@@ -16,7 +16,7 @@ const ACC_KIND: [RegExp, string, string][] = [
 ];
 const KIND_LABEL: Record<string, string> = {
   fall: "추락", caught: "끼임", crush: "깔림·붕괴", gas: "질식·중독", shock: "감전", explosion: "폭발", fire: "화재", leak: "누출",
-  struck: "맞음·낙하물", vehicle: "차량 충돌", alert: "산업재해",
+  struck: "맞음", vehicle: "차량 충돌", alert: "",
 };
 /** 운영자가 정한 유형(accType)이 있으면 그것을, 없으면 제목으로 짐작한 유형 */
 export function accKindOf(x: { title: string; accType?: string }): { icon: string; label: string } {
@@ -25,7 +25,7 @@ export function accKindOf(x: { title: string; accType?: string }): { icon: strin
 }
 export function accKind(title: string): { icon: string; label: string } {
   for (const [re, icon, label] of ACC_KIND) if (re.test(title)) return { icon, label };
-  return { icon: "alert", label: "산업재해" };
+  return { icon: "alert", label: "" }; // 유형을 정할 수 없으면 태그를 달지 않는다
 }
 
 /** 수집된 사고에 붙은 태그와 건수 (많은 순) */
@@ -34,3 +34,6 @@ export function accTagCounts(items: AccItem[]): [string, number][] {
   items.forEach((x) => (x.tags ?? []).forEach((t) => (c[t] = (c[t] ?? 0) + 1)));
   return Object.entries(c).sort((a, b) => b[1] - a[1]);
 }
+
+/** 목록에 보여 줄 요약: 앞의 두 문장까지 */
+export const shortSummary = (s?: string) => (s ? (s.match(/[^.!?]+[.!?]+/g) ?? [s]).slice(0, 2).join("").trim() : "");

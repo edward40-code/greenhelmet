@@ -6,14 +6,23 @@ import { accKindOf, type AccItem } from "./accKind";
 export * from "./accKind";
 
 /** 언론에 보도된 산업현장 사고 + 운영자가 원문 기사를 읽고 쓴 요약·태그 (보도된 사실만, 실명 제외) */
-type Note = { summary: string; checked: string; url?: string; tags?: string[]; kind?: string };
+type Note = { summary: string; checked: string; url?: string; tags?: string[]; kind?: string; hide?: boolean };
 const NOTES = notes as Record<string, Note>;
+
+/** 수집한 제목의 꼬리표를 뗀다: 앞의 [속보]·【사고】·[3보], 뒤의 " : 사회" 같은 언론사 섹션명 */
+export function cleanAccTitle(t: string) {
+  let s = t.trim();
+  for (let i = 0; i < 3; i++) s = s.replace(/^(\[[^\]]{1,12}\]|【[^】]{1,10}】)\s*/, "");
+  return s.replace(/\s+:\s+[가-힣A-Za-z·]{1,8}$/, "").trim();
+}
 
 export const allAccidents = (): AccItem[] =>
   (data as NewsItem[])
+    .filter((x) => !NOTES[x.id]?.hide) // 해외 기사, 여러 사고를 묶은 보도, 같은 사고 중복
     .map((x): AccItem => {
       const n = NOTES[x.id];
-      return n ? { ...x, summary: n.summary, srcUrl: n.url, tags: n.tags, accType: n.kind } : x;
+      const y = { ...x, title: cleanAccTitle(x.title) };
+      return n?.summary ? { ...y, summary: n.summary, srcUrl: n.url, tags: n.tags, accType: n.kind } : y;
     })
     .sort((a, b) => b.date.localeCompare(a.date));
 

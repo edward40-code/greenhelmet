@@ -4,7 +4,7 @@ import { ToolGrid } from "@/components/Catalog";
 
 export const metadata: Metadata = {
   title: "EHS 실무 도구 모음",
-  description: "단위환산·안전계산, 경력 계산, TBM 생성기, 안전 성향 테스트 등 환경·안전·보건 실무자와 수험생이 브라우저에서 바로 쓰는 무료 도구 모음입니다.",
+  description: "단위환산, 안전계산, 경력 계산, TBM 생성기, 안전 성향 테스트 등 환경·안전·보건 실무자와 수험생이 브라우저에서 바로 쓰는 무료 도구 모음입니다.",
   alternates: { canonical: "/tools/" },
 };
 

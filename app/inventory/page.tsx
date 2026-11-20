@@ -33,7 +33,7 @@ export default function Page() {
         <h2 className="m-0 text-[18px] font-extrabold">어디에 몇 건</h2>
         <div className="grid gap-2.5" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(210px, 100%), 1fr))" }}>
           {SCALE.map(([n, what, where, note]) => (
-            <div key={what} className="flex flex-col gap-1 rounded-xl bg-bg p-4">
+            <div key={what} className="flex flex-col gap-1 rounded-md bg-bg p-4">
               <span className="text-[26px] leading-tight font-extrabold text-accent">{n}<span className="text-[15px]">건</span></span>
               <span className="text-[15px] leading-snug font-bold">{what}</span>
               <span className="text-[13px] text-muted">{where}</span>
@@ -48,7 +48,7 @@ export default function Page() {
         <h2 className="m-0 text-[18px] font-extrabold">주제별</h2>
         <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))" }}>
           {invs.map((m) => (
-            <Link key={m.slug} href={`/inventory/${m.slug}/`} className="lift flex flex-col gap-2 rounded-xl border border-line-soft bg-white p-4 text-ink hover:border-accent hover:text-ink hover:no-underline">
+            <Link key={m.slug} href={`/inventory/${m.slug}/`} className="lift flex flex-col gap-2 rounded-md border border-line-soft bg-white p-4 text-ink hover:border-accent hover:text-ink hover:no-underline">
               <span><FieldChip field={m.field} /></span>
               <span className="text-[19px] font-extrabold">{m.title} <span className="text-accent">{totalOf(m)}건</span></span>
               <span className="text-[14px] leading-relaxed text-muted">{m.groups.map((g) => `${g.short} ${g.items.length}`).join(" · ")}</span>

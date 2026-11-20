@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { AdSlot } from "@/components/ui";
-import { Icon } from "@/components/icons";
 import { FieldChip, FormatTile } from "@/components/visual";
 import { accKindOf, accLibraryIds, allAccidents, getAccident, sourceUrl } from "@/lib/accidents";
 import { slugOf } from "@/lib/news";
@@ -45,12 +44,10 @@ export default async function Page({ params }: P) {
   return (
     <>
       <Header active="accidents" />
-      <div className="relative overflow-hidden text-white" style={{ background: "linear-gradient(120deg,#b42318 0%,#5c1209 100%)" }}>
-        <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "18px 18px" }} aria-hidden="true" />
-        <div className="absolute -right-6 -bottom-10 opacity-15" aria-hidden="true"><Icon name={k.icon} size={220} stroke={1.2} /></div>
+      <div className="relative bg-ink text-white">
         <div className="relative mx-auto flex max-w-[860px] flex-col gap-3 px-4 pt-8 pb-14 sm:px-5 sm:pt-10">
           <div className="text-[14px] text-white/75"><Link href="/accidents/" className="text-white/90 hover:text-white">사고속보</Link> › {k.label}</div>
-          <span className="inline-flex items-center gap-2 self-start rounded-full bg-white/15 px-3 py-1 text-[14px] font-bold"><Icon name={k.icon} size={16} />{kindName}</span>
+          <span className="self-start text-[14px] font-bold text-[#ffb4a8]">{kindName}</span>
           <h1 className="m-0 text-[25px] leading-[1.35] font-extrabold tracking-[-0.5px] sm:text-[32px]">{x.title}</h1>
           <p className="m-0 text-[15px] text-white/85">{x.source} · {fmtDate(x.date)} 보도</p>
           {x.tags && x.tags.length > 0 && (
@@ -65,7 +62,7 @@ export default async function Page({ params }: P) {
 
       <div className="relative mx-auto -mt-8 flex max-w-[860px] flex-col gap-6 px-4 pb-12 sm:px-5">
         <section className="card flex flex-col gap-4 p-5 sm:p-7">
-          <h2 className="m-0 flex items-center gap-2 text-[18px] font-extrabold"><Icon name="doc" size={19} className="text-danger" />사고 개요</h2>
+          <h2 className="m-0 text-[18px] font-extrabold">사고 개요</h2>
           {x.summary ? (
             <p className="m-0 text-[17px] leading-[1.85]">{x.summary}</p>
           ) : (
@@ -81,18 +78,18 @@ export default async function Page({ params }: P) {
         </section>
 
         {libs.length > 0 && (
-          <section className="flex flex-col gap-3 rounded-2xl bg-[#eaf5ee] p-5 sm:p-6">
-            <h2 className="m-0 flex items-center gap-2 text-[19px] font-extrabold text-accent-dark"><Icon name="check" size={21} />관련 점검표</h2>
+          <section className="flex flex-col gap-3 rounded-md border border-line-soft bg-white p-5 sm:p-6">
+            <h2 className="m-0 text-[19px] font-extrabold text-accent-dark">관련 점검표</h2>
             <div className="grid gap-2.5" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
               {libs.map((l) => (
-                <Link key={l.id} href={`/library/${l.id}/`} className="lift flex items-start gap-3 rounded-xl bg-white p-3.5 text-ink shadow-sm hover:text-ink hover:no-underline">
+                <Link key={l.id} href={`/library/${l.id}/`} className="lift flex items-start gap-3 rounded-md bg-white p-3.5 text-ink hover:text-ink hover:no-underline">
                   <FormatTile format={l.format} size={42} />
                   <span className="text-[15px] leading-snug font-bold">{l.title}</span>
                 </Link>
               ))}
             </div>
             <Link href="/tools/tbm/" className="inline-flex items-center gap-1.5 self-start text-[15px] font-bold">
-              <Icon name="people" size={17} />오늘 작업 전 TBM 자료 만들기 →
+              오늘 작업 전 TBM 자료 만들기 →
             </Link>
           </section>
         )}
@@ -102,7 +99,7 @@ export default async function Page({ params }: P) {
         <div className="grid gap-4 sm:grid-cols-2">
           {same.length > 0 && (
             <section className="card flex flex-col p-5">
-              <h2 className="m-0 mb-1 flex items-center gap-2 text-[17px] font-extrabold"><Icon name={k.icon} size={18} className="text-danger" />{generic ? "그 밖의 산업재해 보도" : `같은 유형(${k.label}) 사고`}</h2>
+              <h2 className="m-0 mb-1 text-[17px] font-extrabold">{generic ? "그 밖의 산업재해 보도" : `같은 유형(${k.label}) 사고`}</h2>
               {same.map((o) => (
                 <Link key={o.id} href={`/accidents/${slugOf(o.id)}/`} className="flex flex-col gap-0.5 border-t border-line-soft py-3 text-ink first:border-t-0 hover:text-accent hover:no-underline">
                   <span className="text-[15px] leading-snug font-semibold">{o.title}</span>

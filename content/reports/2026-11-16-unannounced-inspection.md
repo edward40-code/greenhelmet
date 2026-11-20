@@ -1,9 +1,9 @@
 ---
-title: 예고 없이 환경 점검이 나왔다 — 첫 10분에 할 일 7가지
+title: 예고 없이 환경 점검이 나왔을 때 처음 10분
 date: 2026-11-16
 field: env
 summary: 지자체 환경 담당 공무원이 약속 없이 정문에 와 있다면? 예고 없는 점검이 가능한 근거부터 신분 확인, 서류 준비, 거부했을 때의 처벌, 시정 이후 대응까지 순서대로 정리했습니다.
-sources: EHS Deal Brief, 「A Regulator Just Showed Up at Your Plant. No Appointment. What Now?」(The Korea EHS Playbook #4, 2026-08-27) — 국내 실무자용으로 다시 씀 | 행정조사기본법 제11조(현장조사)·제17조(조사의 사전통지) | 대기환경보전법 제82조(보고와 검사 등) | 폐기물관리법 제39조, 제66조제19호
+sources: EHS Deal Brief, 「A Regulator Just Showed Up at Your Plant. No Appointment. What Now?」(The Korea EHS Playbook #4, 2026-08-27), 국내 실무자용으로 다시 씀 | 행정조사기본법 제11조(현장조사)·제17조(조사의 사전통지) | 대기환경보전법 제82조(보고와 검사 등) | 폐기물관리법 제39조, 제66조제19호
 reviewed: true
 ---
 

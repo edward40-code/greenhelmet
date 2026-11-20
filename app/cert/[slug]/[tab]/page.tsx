@@ -71,11 +71,11 @@ export default async function Page({ params }: P) {
 
           <nav aria-label="과목 바로가기" className="card flex flex-wrap gap-2 p-4">
             {types.written.map((s) => (
-              <a key={s.no} href={`#s${s.no}`} className="inline-flex min-h-[44px] items-center rounded-full border border-line px-3.5 text-[14px]">
+              <a key={s.no} href={`#s${s.no}`} className="inline-flex min-h-[44px] items-center rounded-md border border-line px-3.5 text-[14px]">
                 {s.no}과목
               </a>
             ))}
-            <a href="#practical" className="inline-flex min-h-[44px] items-center rounded-full border border-accent px-3.5 text-[14px] font-bold">실기</a>
+            <a href="#practical" className="inline-flex min-h-[44px] items-center rounded-md border border-accent px-3.5 text-[14px] font-bold">실기</a>
           </nav>
 
           <h2 id="written" className="m-0 scroll-mt-4 text-[22px] font-extrabold tracking-[-0.3px]">

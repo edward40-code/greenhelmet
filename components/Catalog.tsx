@@ -4,7 +4,7 @@ import { Icon } from "./icons";
 
 const TOOL_ICON: Record<string, string> = { "/tools/tbm/": "people", "/tools/calc/": "calc", "/tools/career/": "clock", "/tools/test/": "spark", "/tools/msds/": "chem", "/inventory/": "search", "/tools/diagnosis/": "check" };
 
-const cardCls = "flex flex-col gap-1.5 rounded-xl border border-line-soft bg-white p-4 text-ink";
+const cardCls = "flex flex-col gap-1.5 rounded-md border border-line-soft bg-white p-4 text-ink";
 
 export function ToolGrid() {
   // 아직 열지 않은 도구(open: false)는 목록에서 숨긴다. content/catalog.json 에서 open 을 true 로 바꾸면 나온다
@@ -20,7 +20,7 @@ export function ToolGrid() {
           <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(200px, 100%), 1fr))" }}>
             {g.tools.map((t) => (
               <Link key={t.href} href={t.href} className={`${cardCls} lift hover:border-[#cbb8f0] hover:text-ink hover:no-underline`}>
-                <span className="mb-1 grid h-10 w-10 place-items-center rounded-xl bg-[#f0eafc] text-[#6d3fc4]"><Icon name={TOOL_ICON[t.href] ?? "tool"} size={20} /></span>
+                <span className="mb-1 grid h-10 w-10 place-items-center rounded-md bg-[#f0eafc] text-[#6d3fc4]"><Icon name={TOOL_ICON[t.href] ?? "tool"} size={20} /></span>
                 <span className="text-[16px] font-bold text-ink">{t.name}</span>
                 <span className="text-[14px] leading-normal text-muted">{t.desc}</span>
               </Link>

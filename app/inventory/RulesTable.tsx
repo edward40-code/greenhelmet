@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Rule } from "@/lib/inventory";
 
 const chip = (on: boolean) =>
-  `inline-flex min-h-[38px] shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[14px] whitespace-nowrap cursor-pointer ${on ? "border-accent bg-accent font-bold text-white" : "border-line bg-white text-ink hover:border-ink"}`;
+  `inline-flex min-h-[38px] shrink-0 items-center gap-1.5 rounded-md border px-3.5 text-[14px] whitespace-nowrap cursor-pointer ${on ? "border-accent bg-accent font-bold text-white" : "border-line bg-white text-ink hover:border-ink"}`;
 
 /** 고용노동부 산업안전보건 고시·예규·훈령 전체 목록. 찾기 + 분류 + 최근 개정순 */
 export default function RulesTable({ rules, recentFrom }: { rules: Rule[]; recentFrom: string }) {

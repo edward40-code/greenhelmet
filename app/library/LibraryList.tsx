@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FilterLayout, Group, Opt, ResultHead } from "@/components/SideFilter";
-import { FIELDS, fieldName, fieldStyle } from "@/lib/fields";
+import { FIELDS, fieldName } from "@/lib/fields";
 import { FieldChip, FormatTile } from "@/components/visual";
-import { Icon } from "@/components/icons";
 import type { LibItem } from "@/lib/library";
 
 export function FormatBadge({ format }: { format: string }) {
@@ -55,7 +54,7 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
           <Group title="분야">
             <Opt on={field === "all"} onClick={() => setField("all")} label="전체" n={items.length} tone="accent" />
             {FIELDS.map((f) => (
-              <Opt key={f.key} on={field === f.key} dim={!counts[f.key]} onClick={() => setField(f.key)} label={f.name} n={counts[f.key] ?? 0} dot={fieldStyle(f.key).c} tone="accent" />
+              <Opt key={f.key} on={field === f.key} dim={!counts[f.key]} onClick={() => setField(f.key)} label={f.name} n={counts[f.key] ?? 0} tone="accent" />
             ))}
           </Group>
           <Group title="종류">
@@ -76,13 +75,12 @@ export default function LibraryList({ items }: { items: LibItem[] }) {
             <span className="flex min-w-0 flex-1 flex-col gap-1.5">
               <span className="flex flex-wrap items-center gap-2 text-[13px]">
                 <FieldChip field={x.field} />
-                <span className={x.category === "법정 점검표" ? "rounded bg-[#fff4d6] px-1.5 py-px font-bold text-[#8a5a00]" : x.category === "교육자료" ? "rounded bg-[#fdeee4] px-1.5 py-px font-bold text-[#9a3d12]" : "text-muted"}>{x.category}</span>
+                <span className="text-muted">{x.category}</span>
               </span>
               <span className="text-[16px] leading-snug font-bold">{x.title}</span>
               <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{x.desc}</span>
               <span className="mt-auto inline-flex items-center gap-1 pt-1 text-[14px] font-bold text-accent">
-                <Icon name={x.type === "file" ? "download" : "link"} size={15} />
-                {x.type === "file" ? "무료 내려받기" : "자료 위치 보기"}
+                {x.type === "file" ? "내려받기" : "자료 위치 보기 ↗"}
               </span>
             </span>
           </Link>
