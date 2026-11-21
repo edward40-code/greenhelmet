@@ -2,7 +2,8 @@
 # 실행: python scripts/accident_add.py <요약 JSON 파일>
 #   입력 형식(UTF-8): {"acc-...": {"summary": "요약", "url": "언론사 기사 주소", "tags": ["사다리", "건설"], "kind": "fall"}, ...}
 #   (예전 형식 {"acc-...": "요약"} 도 받는다. kind 는 제목만으로 유형이 틀릴 때만 넣는다:
-#    fall 추락, caught 끼임, crush 깔림·붕괴, gas 질식·중독, shock 감전, explosion 폭발, fire 화재, leak 누출, struck 맞음·낙하물, vehicle 차량 충돌)
+#    fall 추락, caught 끼임, crush 깔림·붕괴, gas 질식·중독, shock 감전, explosion 폭발, fire 화재, leak 누출, struck 맞음·낙하물, vehicle 차량 충돌, alert 유형 표시 없음)
+#   일터 사고가 아니면 "hide": true 를 넣어 사이트에 보이지 않게 한다
 import json, sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -15,7 +16,7 @@ notes = json.loads(notes_path.read_text(encoding="utf-8")) if notes_path.exists(
 new = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
 today = (datetime.now(timezone.utc) + timedelta(hours=9)).strftime("%Y-%m-%d")
 added = 0
-KINDS = {"fall", "caught", "crush", "gas", "shock", "explosion", "fire", "leak", "struck", "vehicle"}
+KINDS = {"fall", "caught", "crush", "gas", "shock", "explosion", "fire", "leak", "struck", "vehicle", "alert"}
 for k, v in new.items():
     if k not in feed_ids:
         print("건너뜀(피드에 없는 id):", k)
@@ -35,6 +36,8 @@ for k, v in new.items():
         entry["tags"] = tags
     if v.get("kind") in KINDS:
         entry["kind"] = v["kind"]
+    if v.get("hide") is True:
+        entry["hide"] = True
     notes[k] = entry
     added += 1
 notes_path.write_text(json.dumps(notes, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

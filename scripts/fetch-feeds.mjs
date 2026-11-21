@@ -99,6 +99,12 @@ const ACC_EXCL = /훈련|교육|캠페인|선언|예방|세미나|판결|무죄|
 // 해외 사고: 국내 현장 속보만 싣는다
 const ACC_FOREIGN = /미국|워싱턴주|캘리포니아|텍사스|뉴욕주|영국|독일|프랑스|호주|캐나다|해외/;
 const ACC_SRC_EXCL = /코리안|미주|시애틀|애틀랜타|뉴욕|USA/i;
+// 집(주택·자택)에서 난 사고는 일터 사고가 아니므로 뺀다. 주택 공사현장 사고는 남긴다
+const ACC_HOME = /주택|자택|가정집|빌라|거주자/;
+const ACC_HOME_WORK = /공사|현장|근로자|노동자|작업자|인부|하청/;
+// 구글 뉴스가 언론사 이름 대신 주소를 줄 때 이름으로 바꾼다
+const SRC_NAME = { "news.sbs.co.kr": "SBS", "news.kbs.co.kr": "KBS", "imnews.imbc.com": "MBC", "www.ytn.co.kr": "YTN", "news.jtbc.co.kr": "JTBC", "www.yna.co.kr": "연합뉴스", "www.chosun.com": "조선일보", "www.donga.com": "동아일보", "www.hani.co.kr": "한겨레", "www.khan.co.kr": "경향신문", "news.mt.co.kr": "머니투데이", "www.mk.co.kr": "매일경제", "www.hankyung.com": "한국경제" };
+const srcName = (s) => SRC_NAME[s] ?? SRC_NAME["www." + s] ?? s;
 
 // 같은 사고 판정용: 일반 단어를 뺀 핵심 낱말(지명·회사명·장비명 등)
 const ACC_STOP = new Set("근로자 노동자 작업자 작업 작업중 현장 현장서 공사장서 공사현장서 공장서 사망 사망사고 숨져 숨진 숨지 사고 사고로 끼임 추락 추락사 추락해 부상 중상 이송 병원 1명 2명 3명 만에 나흘 이달 또 이번엔 사회 공사 공사장 하청 하청노동자 협력사 청년노동자 발생 치료 대표 노동자들".split(" "));
@@ -157,7 +163,8 @@ for (const q of ACC_QUERIES) {
       const date = toDate(tag(b, "pubDate"));
       if (!title || !link || !date) continue;
       if (!ACC_HIT.test(title) || !ACC_WORK.test(title) || ACC_EXCL.test(title) || ACC_FOREIGN.test(title) || ACC_SRC_EXCL.test(source)) continue;
-      accFresh.push({ id: "acc-" + title.replace(/[^가-힣A-Za-z0-9]/g, "").slice(0, 40), title, url: link, source: source || "언론 보도", date, kind: "사고속보", field: accField(title) });
+      if (ACC_HOME.test(title) && !ACC_HOME_WORK.test(title)) continue;
+      accFresh.push({ id: "acc-" + title.replace(/[^가-힣A-Za-z0-9]/g, "").slice(0, 40), title, url: link, source: srcName(source) || "언론 보도", date, kind: "사고속보", field: accField(title) });
     }
     accOk++;
   } catch (e) {

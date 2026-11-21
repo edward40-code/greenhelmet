@@ -20,7 +20,7 @@ const KIND_LABEL: Record<string, string> = {
 };
 /** 운영자가 정한 유형(accType)이 있으면 그것을, 없으면 제목으로 짐작한 유형 */
 export function accKindOf(x: { title: string; accType?: string }): { icon: string; label: string } {
-  if (x.accType && KIND_LABEL[x.accType]) return { icon: x.accType, label: KIND_LABEL[x.accType] };
+  if (x.accType && x.accType in KIND_LABEL) return { icon: x.accType, label: KIND_LABEL[x.accType] };
   return accKind(x.title);
 }
 export function accKind(title: string): { icon: string; label: string } {
