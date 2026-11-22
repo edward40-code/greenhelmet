@@ -47,11 +47,11 @@ function build(deck) {
     slideNumber: { x: 9.0, y: 5.18, w: 0.5, h: 0.28, fontSize: 10, color: MUTED, align: "right" },
   });
   pres.defineSlideMaster({
-    title: "DARK",
-    background: { color: INK },
+    title: "CLOSING",
+    background: { color: WHITE }, // 마무리 장도 밝은색 (2026-11-22 결정)
     objects: [
-      { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 0.4, w: 8.8, h: 0.75, fontSize: 28, bold: true, color: WHITE, align: "left", valign: "middle", margin: 0 }, text: "" } },
-      { text: { text: `그린헬멧기사 교육자료 · ${deck.short}`, options: { x: 0.6, y: 5.18, w: 6.5, h: 0.28, fontSize: 10, color: TINT, margin: 0 } } },
+      { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 0.4, w: 8.8, h: 0.75, fontSize: 28, bold: true, color: INK, align: "left", valign: "middle", margin: 0 }, text: "" } },
+      { text: { text: `그린헬멧기사 교육자료 · ${deck.short}`, options: { x: 0.6, y: 5.18, w: 6.5, h: 0.28, fontSize: 10, color: MUTED, margin: 0 } } },
     ],
   });
 
@@ -183,17 +183,17 @@ function build(deck) {
     },
     // 마무리: 약속 + 함께 확인하기
     closing(sl) {
-      const s = pres.addSlide({ masterName: "DARK" });
+      const s = pres.addSlide({ masterName: "CLOSING" });
       s.addText(sl.title, { placeholder: "title" });
       sl.promises.forEach((p, i) => {
         const y = 1.45 + i * 1.05;
         badge(s, 0.6, y + 0.12, 0.56, i + 1, ACC, 18);
-        T(s, p, { x: 1.4, y, w: 3.6, h: 0.8, fontSize: 18, bold: true, color: WHITE, valign: "middle" });
+        T(s, p, { x: 1.4, y, w: 3.6, h: 0.8, fontSize: 18, bold: true, color: INK, valign: "middle" });
       });
-      box(s, 5.3, 1.4, 4.2, 3.4, MUTED, { transparency: 45 });
-      T(s, "함께 확인하기", { x: 5.6, y: 1.58, w: 3.6, h: 0.36, fontSize: 14, bold: true, color: MINT, valign: "middle" });
+      box(s, 5.3, 1.4, 4.2, 3.4, ACC_SOFT);
+      T(s, "함께 확인하기", { x: 5.6, y: 1.58, w: 3.6, h: 0.36, fontSize: 14, bold: true, color: ACC, valign: "middle" });
       T(s, sl.questions.map((q, i) => ({ text: q, options: { bullet: true, breakLine: i < sl.questions.length - 1 } })),
-        { x: 5.6, y: 2.1, w: 3.6, h: 2.55, fontSize: 16, color: WHITE, paraSpaceAfter: 14 });
+        { x: 5.6, y: 2.1, w: 3.6, h: 2.55, fontSize: 16, color: INK, paraSpaceAfter: 14 });
       s.addNotes(sl.notes);
     },
     // 근거와 함께 쓰는 자료
