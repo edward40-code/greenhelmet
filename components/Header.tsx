@@ -24,21 +24,20 @@ const NAV: { key: Exclude<Active, null>; href: string; label: string }[] = [
 
 export default function Header({ active = null }: { active?: Active }) {
   return (
-    <header className="no-print sticky top-0 z-40 bg-ink">
-      <div className="mx-auto flex max-w-[1240px] items-center gap-x-6 px-4 sm:px-5">
-        <Link href="/" className="flex min-h-[56px] shrink-0 items-center gap-2 text-[21px] font-extrabold tracking-[-0.5px] text-white hover:text-white hover:no-underline">
+    <header className="no-print z-40 bg-ink sm:sticky sm:top-0">
+      <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-x-6 px-4 sm:flex-nowrap sm:px-5">
+        <Link href="/" className="flex min-h-[52px] shrink-0 sm:min-h-[56px] items-center gap-2 text-[21px] font-extrabold tracking-[-0.5px] text-white hover:text-white hover:no-underline">
           <HelmetLogo />
           그린헬멧기사
         </Link>
-        <nav aria-label="주 메뉴" className="no-scrollbar -mr-4 flex min-w-0 flex-1 gap-x-1 overflow-x-auto pr-4 text-[15px] [mask-image:linear-gradient(to_right,#000_82%,transparent)] sm:mr-0 sm:pr-0 sm:[mask-image:none]">
+        <nav aria-label="주 메뉴" className="grid w-full grid-cols-4 gap-1 pb-2.5 text-[14px] sm:flex sm:w-auto sm:min-w-0 sm:flex-1 sm:gap-x-1 sm:overflow-x-auto sm:pb-0 sm:text-[15px] no-scrollbar">
           {NAV.map((n) =>
             n.key === active ? (
-              <Link key={n.key} href={n.href} aria-current="page" className="shrink-0 rounded-md bg-white/12 px-3.5 py-2 font-extrabold whitespace-nowrap text-white hover:text-white hover:no-underline">
+              <Link key={n.key} href={n.href} aria-current="page" className="shrink-0 rounded-md bg-white/12 px-1 py-1.5 text-center font-extrabold sm:px-3.5 sm:py-2 whitespace-nowrap text-white hover:text-white hover:no-underline">
                 {n.label}
               </Link>
             ) : (
-              <Link key={n.key} href={n.href} className="shrink-0 rounded-md px-3.5 py-2 whitespace-nowrap text-[#cfd8dc] hover:bg-white/8 hover:text-white hover:no-underline">
-                
+              <Link key={n.key} href={n.href} className="shrink-0 rounded-md px-1 py-1.5 text-center whitespace-nowrap text-[#cfd8dc] sm:px-3.5 sm:py-2 hover:bg-white/8 hover:text-white hover:no-underline">
                 {n.label}
               </Link>
             )
