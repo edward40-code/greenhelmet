@@ -73,7 +73,10 @@ export default function Home() {
             <div className="flex min-w-0 flex-col overflow-hidden rounded-md bg-white text-ink">
               <div className="flex items-center justify-between gap-2 bg-[#b42318] px-5 py-3 text-white">
                 <h2 className="m-0 text-[18px] font-extrabold">사고속보</h2>
-                <Link href="/accidents/" className="text-[14px] font-bold text-white/90 hover:text-white">전체 보기 →</Link>
+                <span className="flex gap-4">
+                  <Link href="/accidents/week/" className="text-[14px] font-bold text-white/90 hover:text-white">이번 주</Link>
+                  <Link href="/accidents/" className="text-[14px] font-bold text-white/90 hover:text-white">전체 보기 →</Link>
+                </span>
               </div>
               <ul className="m-0 flex list-none flex-col p-0">
                 {accidents.slice(0, 5).map((x) => {

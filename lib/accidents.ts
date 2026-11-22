@@ -13,7 +13,24 @@ const NOTES = notes as Record<string, Note>;
 export function cleanAccTitle(t: string) {
   let s = t.trim();
   for (let i = 0; i < 3; i++) s = s.replace(/^(\[[^\]]{1,12}\]|【[^】]{1,10}】)\s*/, "");
-  return s.replace(/\s+:\s+[가-힣A-Za-z·]{1,8}$/, "").trim();
+  return s.replace(/\s+:\s+[가-힣A-Za-z·]{1,8}$/, "").replace(/\s+>\s+[^>]{1,20}$/, "").trim();
+}
+
+/** 한국 날짜(YYYY-MM-DD)에서 n일 더하거나 뺀 날짜 */
+const shiftDay = (d: string, n: number) => new Date(Date.parse(d + "T00:00:00Z") + n * 86400000).toISOString().slice(0, 10);
+
+/** 빌드 시점 기준 최근 7일(오늘 포함)과 그 전 7일의 사고 보도 */
+export function weekAccidents() {
+  const end = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+  const start = shiftDay(end, -6);
+  const prevStart = shiftDay(end, -13);
+  const all = allAccidents();
+  return {
+    start,
+    end,
+    items: all.filter((x) => x.date >= start && x.date <= end),
+    prevCount: all.filter((x) => x.date >= prevStart && x.date < start).length,
+  };
 }
 
 export const allAccidents = (): AccItem[] =>
