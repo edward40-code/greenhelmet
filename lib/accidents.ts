@@ -50,8 +50,8 @@ export const getAccident = (slug: string) => allAccidents().find((x) => slugOf(x
 
 /** 사고 유형별로 함께 보여 줄 자료실 서식·교육자료 id */
 export const ACC_LIBRARY: Record<string, string[]> = {
-  fall: ["edu-fall", "checklist-aerial-work-platform", "checklist-work-start-all"],
-  caught: ["edu-caught-in", "checklist-loto", "checklist-conveyor"],
+  fall: ["edu-fall", "checklist-fall-protection", "checklist-aerial-work-platform"],
+  caught: ["edu-caught-in", "checklist-machine-guarding", "checklist-loto"],
   crush: ["checklist-crane", "checklist-mobile-crane", "checklist-forklift"],
   gas: ["checklist-confined-space", "edu-confined-space", "confined-space-program"],
   shock: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
@@ -68,16 +68,16 @@ export const TAG_LIBRARY: Record<string, string> = {
   지게차: "checklist-forklift",
   갈탄: "edu-winter",
   양생: "edu-winter",
-  사다리: "edu-fall",
-  개구부: "edu-fall",
-  지붕: "edu-fall",
+  사다리: "checklist-fall-protection",
+  개구부: "checklist-fall-protection",
+  지붕: "checklist-fall-protection",
   비계: "edu-fall",
   크레인: "checklist-crane",
   밀폐공간: "checklist-confined-space",
   "차량 적재함": "checklist-truck",
   차량: "checklist-truck",
   건설기계: "checklist-work-start-all",
-  "기계 말림": "checklist-conveyor",
+  "기계 말림": "checklist-machine-guarding",
   화학물질: "risk-assessment-form",
   "설비 폭발": "checklist-hot-work",
 };
