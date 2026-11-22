@@ -29,7 +29,7 @@ export default function Footer() {
       </div>
       <div className="border-t border-white/10">
         <p className="mx-auto m-0 max-w-[1240px] px-4 py-4 text-[13px] text-[#8b9aa2] sm:px-5">
-          © {new Date().getFullYear()} {SITE.operator ? `${SITE.name} · ${SITE.operator}` : SITE.name}. 법령은 국가법령정보센터 현행 원문으로 확인해 주세요.
+          © {new Date().getFullYear()} {!SITE.operator ? SITE.name : SITE.operator.startsWith(SITE.name) ? SITE.operator : `${SITE.name} · ${SITE.operator}`}. 법령은 국가법령정보센터 현행 원문으로 확인해 주세요.
         </p>
       </div>
     </footer>
