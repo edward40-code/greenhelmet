@@ -1,8 +1,11 @@
 {
-  "updated": "2026-11-22T12:37:27.827Z",
+  "updated": "2026-11-22T17:15:20.581Z",
   "pages": {
-    "/": 1,
-    "/library/": 1
+    "/": 4,
+    "/reports/2026-11-22-loto-why-now/": 2,
+    "/library/": 1,
+    "/library/checklist-loto/": 1,
+    "/reports/2026-11-22-fall-protection/": 1
   },
   "downloads": {}
 }
