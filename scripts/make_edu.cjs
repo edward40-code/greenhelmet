@@ -31,10 +31,10 @@ function build(deck) {
 
   pres.defineSlideMaster({
     title: "COVER",
-    background: { color: INK },
+    background: { color: WHITE }, // 표지는 밝은색 (2026-11-22 결정)
     objects: [
-      { placeholder: { options: { name: "title", type: "title", x: 0.7, y: 1.55, w: 6.3, h: 1.6, fontSize: 36, bold: true, color: WHITE, align: "left", valign: "bottom", margin: 0 }, text: "" } },
-      { placeholder: { options: { name: "body", type: "body", x: 0.7, y: 3.35, w: 6.0, h: 0.9, fontSize: 18, color: MINT, align: "left", valign: "top", margin: 0 }, text: "" } },
+      { placeholder: { options: { name: "title", type: "title", x: 0.7, y: 1.55, w: 6.3, h: 1.6, fontSize: 36, bold: true, color: INK, align: "left", valign: "bottom", margin: 0 }, text: "" } },
+      { placeholder: { options: { name: "body", type: "body", x: 0.7, y: 3.35, w: 6.0, h: 0.9, fontSize: 18, color: ACC, align: "left", valign: "top", margin: 0 }, text: "" } },
     ],
   });
   pres.defineSlideMaster({
@@ -72,12 +72,12 @@ function build(deck) {
   const kinds = {
     cover(sl) {
       const s = pres.addSlide({ masterName: "COVER" });
-      s.addShape(pres.ShapeType.ellipse, { x: 6.55, y: -0.9, w: 5.4, h: 5.4, fill: { color: ACC }, line: { type: "none" }, objectName: nm("원") });
-      s.addShape(pres.ShapeType.ellipse, { x: 5.9, y: 3.5, w: 2.6, h: 2.6, fill: { color: MINT, transparency: 25 }, line: { type: "none" }, objectName: nm("원") });
-      s.addText("그린헬멧기사 교육자료", { shape: pres.ShapeType.roundRect, rectRadius: 0.16, x: 0.7, y: 0.6, w: 2.35, h: 0.36, fill: { color: MUTED }, line: { type: "none" }, color: WHITE, fontSize: 11, bold: true, align: "center", valign: "middle", margin: 0, objectName: nm("꼬리표") });
+      s.addShape(pres.ShapeType.ellipse, { x: 6.55, y: -0.9, w: 5.4, h: 5.4, fill: { color: ACC_SOFT }, line: { type: "none" }, objectName: nm("원") });
+      s.addShape(pres.ShapeType.ellipse, { x: 7.4, y: 3.75, w: 2.3, h: 2.3, fill: { color: ACC, transparency: 20 }, line: { type: "none" }, objectName: nm("원") });
+      s.addText("그린헬멧기사 교육자료", { shape: pres.ShapeType.roundRect, rectRadius: 0.16, x: 0.7, y: 0.6, w: 2.35, h: 0.36, fill: { color: ACC_SOFT }, line: { type: "none" }, color: ACC, fontSize: 11, bold: true, align: "center", valign: "middle", margin: 0, objectName: nm("꼬리표") });
       s.addText(sl.title, { placeholder: "title" });
       s.addText(sl.sub, { placeholder: "body" });
-      T(s, sl.meta, { x: 0.7, y: 4.75, w: 5.5, h: 0.3, fontSize: 12, color: TINT });
+      T(s, sl.meta, { x: 0.7, y: 4.75, w: 5.5, h: 0.3, fontSize: 12, color: MUTED });
       s.addNotes(sl.notes);
     },
     // 번호(또는 점)가 붙은 가로 줄
