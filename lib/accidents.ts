@@ -48,24 +48,30 @@ export const sourceUrl = (x: AccItem) => x.srcUrl ?? x.url;
 
 export const getAccident = (slug: string) => allAccidents().find((x) => slugOf(x.id) === slug);
 
-/** 사고 유형별로 함께 보여 줄 자료실 서식 id (예방 점검에 쓰는 서식) */
+/** 사고 유형별로 함께 보여 줄 자료실 서식·교육자료 id */
 export const ACC_LIBRARY: Record<string, string[]> = {
-  fall: ["checklist-aerial-work-platform", "checklist-work-start-all", "daily-safety-checklist"],
-  caught: ["checklist-conveyor", "checklist-press", "checklist-work-start-all"],
+  fall: ["edu-fall", "checklist-aerial-work-platform", "checklist-work-start-all"],
+  caught: ["edu-caught-in", "checklist-conveyor", "checklist-press"],
   crush: ["checklist-crane", "checklist-mobile-crane", "checklist-forklift"],
-  gas: ["checklist-confined-space", "confined-space-program", "risk-assessment-form"],
+  gas: ["checklist-confined-space", "edu-confined-space", "confined-space-program"],
   shock: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
   explosion: ["checklist-hot-work", "checklist-fire-extinguisher", "risk-assessment-form"],
   fire: ["checklist-hot-work", "checklist-fire-extinguisher", "checklist-fire-monthly"],
   leak: ["risk-assessment-form", "checklist-confined-space", "daily-safety-checklist"],
   struck: ["checklist-crane", "checklist-mobile-crane", "daily-safety-checklist"],
-  vehicle: ["checklist-truck", "checklist-work-start-all", "tbm-log"],
+  vehicle: ["checklist-truck", "edu-forklift", "checklist-work-start-all"],
   alert: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
 };
 
 /** 세부 태그에 딱 맞는 서식이 있으면 맨 앞에 둔다 */
 export const TAG_LIBRARY: Record<string, string> = {
   지게차: "checklist-forklift",
+  갈탄: "edu-winter",
+  양생: "edu-winter",
+  사다리: "edu-fall",
+  개구부: "edu-fall",
+  지붕: "edu-fall",
+  비계: "edu-fall",
   크레인: "checklist-crane",
   밀폐공간: "checklist-confined-space",
   "차량 적재함": "checklist-truck",

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   if (!x) return {};
   return {
     title: `${x.title} · 사고속보`,
-    description: x.summary ?? `${x.source} ${fmtDate(x.date)} 보도. 같은 유형 사고와 예방에 쓰는 점검표를 함께 봅니다.`,
+    description: x.summary ?? `${x.source} ${fmtDate(x.date)} 보도. 같은 유형 사고와 예방에 쓰는 점검표·교육자료를 함께 봅니다.`,
     // 보도 제목만 담은 짧은 페이지라 검색 색인에서는 뺀다 (링크는 따라감)
     robots: { index: false, follow: true },
   };
@@ -80,7 +80,7 @@ export default async function Page({ params }: P) {
 
         {libs.length > 0 && (
           <section className="flex flex-col gap-3 rounded-md border border-line-soft bg-white p-5 sm:p-6">
-            <h2 className="m-0 text-[19px] font-extrabold text-accent-dark">관련 점검표</h2>
+            <h2 className="m-0 text-[19px] font-extrabold text-accent-dark">관련 자료</h2>
             <div className="grid gap-2.5" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
               {libs.map((l) => (
                 <Link key={l.id} href={`/library/${l.id}/`} className="lift flex items-start gap-3 rounded-md bg-white p-3.5 text-ink hover:text-ink hover:no-underline">

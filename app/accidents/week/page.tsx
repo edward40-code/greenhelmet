@@ -106,7 +106,7 @@ export default function Page() {
 
       {libs.length > 0 && (
         <section className="flex flex-col gap-3 rounded-md border border-line-soft bg-white p-5 sm:p-6">
-          <h2 className="m-0 text-[17px] font-extrabold">{top ? `${kinds[top].label} 예방 점검표` : "점검표"}</h2>
+          <h2 className="m-0 text-[17px] font-extrabold">{top ? `${kinds[top].label} 예방 자료` : "예방 자료"}</h2>
           <div className="grid gap-2.5" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))" }}>
             {libs.map((l) => (
               <Link key={l.id} href={`/library/${l.id}/`} className="lift flex items-start gap-3 rounded-md bg-white p-3.5 text-ink hover:text-ink hover:no-underline">
