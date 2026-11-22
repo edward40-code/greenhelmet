@@ -5,6 +5,7 @@ field: env
 summary: 지자체 환경 담당 공무원이 약속 없이 정문에 와 있다면? 예고 없는 점검이 가능한 근거부터 신분 확인, 서류 준비, 거부했을 때의 처벌, 시정 이후 대응까지 순서대로 정리했습니다.
 sources: EHS Deal Brief, 「A Regulator Just Showed Up at Your Plant. No Appointment. What Now?」(The Korea EHS Playbook #4, 2026-08-27), 국내 실무자용으로 다시 씀 | 행정조사기본법 제11조(현장조사)·제17조(조사의 사전통지) | 대기환경보전법 제82조(보고와 검사 등) | 폐기물관리법 제39조, 제66조제19호
 reviewed: true
+related: env-permit-ledger | env-records-calendar | env-daily-patrol
 ---
 
 > 화요일 오전, 정문에서 연락이 옵니다. 구청 환경과 직원 두 명이 약속 없이 와서 폐수처리시설을 보자고 합니다. 공장장은 외근 중이고, 전화를 받은 사람은 "안 된다고 해도 되나"부터 고민합니다. 지금부터 10분 동안 할 일은 분명합니다.

@@ -12,6 +12,7 @@ export type Report = {
   summary: string;
   sources: string[];
   reviewed: boolean;
+  related: string[]; // 함께 받을 자료 id: 머리말 related(" | "로 나눔, "없음"이면 안 보임), 없으면 본문에 건 /library/{id}/ 링크 순서대로
   html: string;
 };
 
@@ -36,6 +37,9 @@ function parse(file: string): Report {
     summary: meta.summary ?? "",
     sources: meta.sources ? meta.sources.split(" | ") : [],
     reviewed: meta.reviewed === "true",
+    related: meta.related
+      ? meta.related === "없음" ? ["-"] : meta.related.split(" | ").map((s) => s.trim()).filter(Boolean)
+      : [...new Set([...m[2].matchAll(/\]\(\/library\/([a-z0-9-]+)\/?\)/g)].map((x) => x[1]))],
     html: (marked.parse(m[2], { async: false }) as string)
       // 사이트 안 링크(/tools/...)에 배포 하위 경로를 붙이고, 바깥 링크는 새 창으로
       .replace(/href="\/(?!\/)/g, `href="${BASE_PATH}/`)

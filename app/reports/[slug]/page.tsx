@@ -35,7 +35,9 @@ export default async function Page({ params }: P) {
   const idx = all.findIndex((x) => x.slug === r.slug);
   const others = all.filter((x) => x.slug !== r.slug).sort((a, b) => Number(b.field === r.field) - Number(a.field === r.field)).slice(0, 3);
   const files = allLibrary().filter((x) => x.type === "file");
-  const related = [...files.filter((x) => x.field === r.field), ...files.filter((x) => x.field !== r.field)].slice(0, 3);
+  // 글이 고른 자료(머리말 related 또는 본문 속 자료실 링크)가 있으면 그것만, 없으면 같은 분야 자료
+  const picked = r.related.map((id) => files.find((x) => x.id === id)).filter((x) => x !== undefined);
+  const related = (r.related.length > 0 ? picked : files.filter((x) => x.field === r.field)).slice(0, 3);
   const newer = idx > 0 ? all[idx - 1] : null;
   const older = idx < all.length - 1 ? all[idx + 1] : null;
 

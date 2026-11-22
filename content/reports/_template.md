@@ -13,4 +13,5 @@ reviewed: false
 
 - field: safety(산업안전), health(보건), env(환경), chem(화학물질), fire(소방·위험물), const(건설안전), common(공통)
 - reviewed: 운영자가 검수를 마치면 true로 바꿉니다. false면 화면에 '검수 전'이 붙습니다.
+- related(선택): 글 아래 '함께 받아 가면 좋은 서식'에 보일 자료 id를 " | "로 나눠 적습니다. 맞는 자료가 없으면 "없음". 안 적으면 본문에 건 /library/... 링크를 쓰고, 그것도 없으면 같은 분야 자료를 보여 줍니다.
 - 사이트 안 링크는 [TBM 생성기](/tools/tbm/)처럼 /로 시작하게 씁니다.

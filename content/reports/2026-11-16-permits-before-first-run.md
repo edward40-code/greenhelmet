@@ -5,6 +5,7 @@ field: env
 summary: 임대차 계약은 건물을 줄 뿐, 그 안의 설비를 돌릴 권리까지 주지 않습니다. 배출시설 설치 허가·신고, 가동개시 신고, 권리·의무 승계, 폐기물 배출자 신고, 유해화학물질 취급시설 설치검사, 무허가 가동 시 처분까지 첫 가동 전에 확인할 순서입니다.
 sources: EHS Deal Brief, 「Your Plant Is Ready for Its First Production Run. Is It Actually Allowed to Run?」(The Korea EHS Playbook #3, 2026-08-27), 국내 실무자용으로 다시 씀 | 대기환경보전법 제23조, 제27조, 제30조, 제38조 | 물환경보전법 제33조, 제37조 | 폐기물관리법 제17조제2항, 같은 법 시행규칙 제18조 | 화학물질관리법 제24조, 제28조
 reviewed: true
+related: env-permit-ledger | env-records-calendar
 ---
 
 > 임대차 계약을 끝냈고, 설비도 들어왔고, 생산 일정표에 첫 가동일이 동그라미 쳐져 있습니다. 건물주는 "전 임차인이 다 해 놨다"고 했고, 다시 확인하는 것은 누구의 업무 분장에도 없습니다. 문제는 이것입니다. **임대차는 건물을 줍니다. 그 안의 설비를 돌릴 자격은 주지 않습니다.**
