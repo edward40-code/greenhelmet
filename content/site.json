@@ -5,6 +5,6 @@
   "operator": null,
   "contactEmail": "greenhelmet.korea@gmail.com",
   "policyEffectiveDate": "2026-11-20",
-  "verification": { "google": null, "naver": null },
+  "verification": { "google": null, "naver": "27c6bbed37d9dfd71fe97b70f5a465fb6a35e0a7" },
   "analytics": { "gaId": null, "gaProperty": null, "since": "2026-11-20" }
 }
