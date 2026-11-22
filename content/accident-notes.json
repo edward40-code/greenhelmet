@@ -386,6 +386,7 @@
       "지게차",
       "제조"
     ],
-    "kind": "caught"
+    "kind": "caught",
+    "hide": true
   }
 }
