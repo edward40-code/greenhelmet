@@ -51,7 +51,7 @@ export const getAccident = (slug: string) => allAccidents().find((x) => slugOf(x
 /** 사고 유형별로 함께 보여 줄 자료실 서식·교육자료 id */
 export const ACC_LIBRARY: Record<string, string[]> = {
   fall: ["edu-fall", "checklist-aerial-work-platform", "checklist-work-start-all"],
-  caught: ["edu-caught-in", "checklist-conveyor", "checklist-press"],
+  caught: ["edu-caught-in", "checklist-loto", "checklist-conveyor"],
   crush: ["checklist-crane", "checklist-mobile-crane", "checklist-forklift"],
   gas: ["checklist-confined-space", "edu-confined-space", "confined-space-program"],
   shock: ["daily-safety-checklist", "risk-assessment-form", "tbm-log"],
