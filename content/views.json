@@ -1,11 +1,14 @@
 {
-  "updated": "2026-11-23T01:50:24.250Z",
+  "updated": "2026-11-23T07:14:22.796Z",
   "pages": {
-    "/": 10,
+    "/": 12,
     "/reports/2026-11-22-loto-why-now/": 2,
     "/library/": 1,
     "/library/checklist-loto/": 1,
+    "/library/edu-waste-handling/": 1,
     "/reports/2026-11-22-fall-protection/": 1
   },
-  "downloads": {}
+  "downloads": {
+    "edu-waste-handling": 1
+  }
 }
