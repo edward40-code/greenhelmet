@@ -1,0 +1,549 @@
+<title>힉스필드 커버 프롬프트 사전</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 레이아웃: 위는 쓰는 순서(이미지 → 루프 영상)와 공통 설정, 그 아래 탭(사전 · 조합기 · 내 프롬프트). 카드마다 IMAGE와 MOTION 두 칸. 크리에이터 도구 공통 색·글꼴 */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --ink: #161a21;
+  --muted: #5b6473;
+  --line: #dce1e9;
+  --accent: #e09a17;
+  --accent-ink: #8a5600;
+  --on-accent: #1b1300;
+  --motion: #2f6fb0;
+  --focus: #2f6fdd;
+  --c-room: #8a5a2b; --c-retro: #b0307a; --c-land: #3d5fb0; --c-sleep: #5b4bb0; --c-work: #1f7a6a; --c-cafe: #9a4b2b; --c-season: #2b7a9a;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3;
+    --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --on-accent: #1b1300; --motion: #7ab4f0; --focus: #7aa7ff;
+    --c-room: #e0a96b; --c-retro: #f07dbb; --c-land: #8fb0ff; --c-sleep: #b3a6ff; --c-work: #5fd0bc; --c-cafe: #f0a07a; --c-season: #6fc7ea; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3;
+  --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --on-accent: #1b1300; --motion: #7ab4f0; --focus: #7aa7ff;
+  --c-room: #e0a96b; --c-retro: #f07dbb; --c-land: #8fb0ff; --c-sleep: #b3a6ff; --c-work: #5fd0bc; --c-cafe: #f0a07a; --c-season: #6fc7ea; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header.top { display: flex; flex-direction: column; gap: 4px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--accent-ink); }
+h1 { margin: 2px 0 2px; font-size: clamp(26px, 4vw, 34px); line-height: 1.2; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 66ch; }
+
+/* 쓰는 순서 */
+.steps { display: grid; gap: 1px; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.step { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.step .k { font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+.step .k.img { color: var(--accent-ink); } .step .k.mot { color: var(--motion); } .step .k.ed { color: var(--muted); }
+.step b { font-size: 15px; }
+.step p { margin: 0; font-size: 13px; color: var(--muted); }
+
+.params { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; }
+.params .lbl { font-size: 13px; font-weight: 700; color: var(--muted); }
+.ratios { display: flex; gap: 6px; flex-wrap: wrap; }
+.ratio { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; }
+.ratio i { display: inline-block; border: 2px solid currentColor; border-radius: 2px; opacity: .7; }
+.ratio[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); border-color: var(--accent); font-weight: 700; }
+.chk { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; min-height: 36px; }
+.chk input { width: 16px; height: 16px; accent-color: var(--accent); }
+.pgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs a { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; color: var(--muted); text-decoration: none; font-weight: 500; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); font-weight: 700; border-bottom-color: var(--accent); }
+.tabs .n { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 11px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn.motion { border-color: var(--motion); color: var(--motion); font-weight: 700; }
+.btn.star { width: 32px; padding: 0; font-size: 16px; color: var(--muted); }
+.btn.star[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+
+.filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.search { flex: 1 1 240px; min-width: 0; height: 38px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.fchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fchip { min-height: 32px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; }
+.fchip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 700; }
+.result-n { font-size: 13px; color: var(--muted); }
+
+.cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.swatch { height: 46px; display: flex; align-items: flex-end; justify-content: space-between; padding: 6px 10px; }
+.swatch span { font-size: 11px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.55); letter-spacing: .03em; }
+.card-top { padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 6px; }
+.card-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.cat { font-size: 12px; font-weight: 700; color: var(--cat); letter-spacing: .02em; }
+.card h3 { margin: 0; font-size: 17px; line-height: 1.3; font-weight: 700; }
+.card .desc { margin: 0; font-size: 14px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.meta span { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); }
+.slot { border-top: 1px solid var(--line); padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.slot-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.slot-head b { font-size: 12px; letter-spacing: .03em; }
+.slot-head b.img { color: var(--accent-ink); } .slot-head b.mot { color: var(--motion); }
+.slot-head small { font-weight: 400; color: var(--muted); margin-left: 6px; letter-spacing: 0; }
+.prompt { margin: 0; font-family: var(--mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; background: var(--surface-2); border-radius: 6px; padding: 9px 10px; }
+.prompt.mot { background: color-mix(in srgb, var(--motion) 8%, var(--surface)); }
+.prompt .add { color: var(--muted); }
+.empty { padding: 40px 10px; text-align: center; color: var(--muted); }
+
+.builder { display: grid; gap: 20px; align-items: start; }
+@media (min-width: 960px) { .builder { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.panel-body { padding: 16px; display: flex; flex-direction: column; gap: 18px; }
+.sub { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .04em; padding-top: 4px; }
+.sub.img { color: var(--accent-ink); } .sub.mot { color: var(--motion); border-top: 1px solid var(--line); padding-top: 14px; }
+.group { display: flex; flex-direction: column; gap: 8px; }
+.group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.group-head b { font-size: 13px; color: var(--muted); }
+.group-head small { font-size: 12px; color: var(--muted); }
+.ichips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ichip { display: inline-flex; flex-direction: column; align-items: flex-start; padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; text-align: left; line-height: 1.25; max-width: 100%; }
+.ichip:hover { border-color: var(--muted); }
+.ichip span { font-size: 14px; }
+.ichip small { font-size: 11px; color: var(--muted); font-family: var(--mono); overflow-wrap: anywhere; }
+.ichip[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); border-color: var(--accent); }
+.ichip.m[aria-pressed="true"] { background: color-mix(in srgb, var(--motion) 14%, var(--surface)); border-color: var(--motion); }
+.ichip[aria-pressed="true"] span { font-weight: 700; }
+.out-box { width: 100%; font-family: var(--mono); font-size: 13px; line-height: 1.6; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-2); padding: 10px 12px; resize: vertical; }
+.out-box.mot { background: color-mix(in srgb, var(--motion) 8%, var(--surface)); }
+.save-row { display: flex; gap: 8px; }
+.save-row input { flex: 1; min-width: 0; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); }
+.note { font-size: 12px; color: var(--muted); margin: 0; }
+
+details.tips { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+details.tips summary { cursor: pointer; padding: 12px 16px; font-weight: 700; font-size: 14px; }
+details.tips ul { margin: 0; padding: 0 16px 14px 34px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; max-width: 80ch; }
+
+.status { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); }
+footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">음악 재생 영상 커버용 · Higgsfield</p>
+    <h1>힉스필드 커버 프롬프트 사전</h1>
+    <p class="lede">커버 이미지 프롬프트와, 그 이미지를 잔잔하게 움직이는 루프 영상 프롬프트를 한 카드에 짝지어 두었어요. 이미지를 만들고 그대로 움직이면 음악 재생 영상 배경이 끝나요.</p>
+  </header>
+
+  <section class="steps" aria-label="쓰는 순서">
+    <div class="step"><span class="k img">1 · IMAGE</span><b>커버 이미지 만들기</b><p>이미지 생성에 IMAGE 칸을 붙여넣고, 아래에서 고른 것과 같은 비율로 만들어요.</p></div>
+    <div class="step"><span class="k mot">2 · MOTION</span><b>루프 영상으로 움직이기</b><p>Kling 3.0에서 만든 이미지를 시작 프레임과 끝 프레임에 둘 다 넣고 MOTION 칸을 붙여넣어요. 처음과 끝이 같아서 반복이 자연스러워요. 소리는 꺼요.</p></div>
+    <div class="step"><span class="k ed">3 · EDIT</span><b>음악 길이만큼 반복</b><p>5~10초 영상을 편집 프로그램에서 반복 배치해 1시간 음악에 맞춰요.</p></div>
+  </section>
+
+  <section class="params" aria-label="공통 설정">
+    <div class="pgroup">
+      <span class="lbl">어디에 쓸 이미지인가요</span>
+      <div class="ratios" id="ratios" role="group" aria-label="화면 비율"></div>
+    </div>
+    <div class="pgroup">
+      <label class="chk" for="noText"><input type="checkbox" id="noText"> 이미지에 글자 넣지 않기</label>
+      <label class="chk" for="loop"><input type="checkbox" id="loop"> 움직임은 루프용으로</label>
+    </div>
+  </section>
+
+  <nav class="tabs" aria-label="보기">
+    <a href="#dict" id="tab-dict">프롬프트 사전 <span class="n" id="nDict"></span></a>
+    <a href="#build" id="tab-build">조합기</a>
+    <a href="#mine" id="tab-mine">내 프롬프트 <span class="n" id="nMine"></span></a>
+  </nav>
+
+  <section id="view-dict" aria-label="프롬프트 사전">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="filters">
+        <label for="q" class="sr">검색</label>
+        <input class="search" type="search" id="q" placeholder="검색: 비, 고양이, 눈, neon…">
+        <span class="result-n" id="resultN"></span>
+      </div>
+      <div class="fchips" id="catChips" role="group" aria-label="장면 종류"></div>
+      <div class="fchips" id="genreChips" role="group" aria-label="어울리는 음악"></div>
+      <div class="cards" id="cards"></div>
+      <p class="empty" id="noResult" hidden>찾는 프롬프트가 없어요. 다른 단어로 찾거나 조합기에서 직접 만들어 보세요.</p>
+    </div>
+  </section>
+
+  <section id="view-build" aria-label="조합기" hidden>
+    <div class="builder">
+      <div class="panel">
+        <div class="panel-head"><h2>재료 고르기</h2><button class="btn" type="button" id="resetBuild">처음부터</button></div>
+        <div class="panel-body" id="groups"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>완성된 프롬프트</h2></div>
+        <div class="panel-body">
+          <div class="group">
+            <div class="group-head"><b style="color:var(--accent-ink)">IMAGE · 이미지 생성 칸</b></div>
+            <textarea class="out-box" id="imgOut" rows="6" spellcheck="false" aria-label="이미지 프롬프트"></textarea>
+            <div><button class="btn primary" type="button" id="copyImg">이미지 프롬프트 복사</button></div>
+          </div>
+          <div class="group">
+            <div class="group-head"><b style="color:var(--motion)">MOTION · 영상 생성 칸</b></div>
+            <textarea class="out-box mot" id="motOut" rows="4" spellcheck="false" aria-label="움직임 프롬프트"></textarea>
+            <div><button class="btn motion" type="button" id="copyMot">움직임 프롬프트 복사</button></div>
+          </div>
+          <p class="note">직접 고쳐도 돼요. 재료를 다시 누르면 고른 재료 기준으로 새로 만들어져요.</p>
+          <div class="group">
+            <div class="group-head"><b>내 프롬프트로 저장</b></div>
+            <div class="save-row">
+              <input type="text" id="saveName" placeholder="이름 (예: 채널 메인 커버 v3)" aria-label="저장할 이름">
+              <button class="btn primary" type="button" id="saveBtn">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-mine" aria-label="내 프롬프트" hidden>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <p class="note" style="font-size:14px">사전에서 ☆를 누른 카드와 조합기에서 저장한 프롬프트가 여기에 모여요. 이 브라우저에만 저장돼요.</p>
+      <div class="cards" id="mineCards"></div>
+      <p class="empty" id="mineEmpty" hidden>아직 없어요. 사전에서 ☆를 누르거나 조합기에서 저장해 보세요.</p>
+    </div>
+  </section>
+
+  <details class="tips">
+    <summary>음악 채널 배경 영상 잘 만드는 법</summary>
+    <ul>
+      <li><b>움직임은 작게:</b> 카메라는 고정하고 비, 눈, 김, 불빛처럼 작은 것만 움직이세요. 크게 움직일수록 반복할 때 끊김이 티 나요.</li>
+      <li><b>시작과 끝을 같은 이미지로:</b> 시작 프레임과 끝 프레임에 같은 이미지를 넣으면 영상이 제자리로 돌아와서 반복이 매끄러워요.</li>
+      <li><b>소리는 끄기:</b> 음악은 따로 넣으니까 영상 생성의 소리 옵션은 꺼두세요.</li>
+      <li><b>쇼츠·릴스는 다시 만들기:</b> 16:9를 잘라 쓰면 주인공이 잘려요. 9:16을 골라 이미지부터 다시 만드세요.</li>
+      <li><b>채널 통일감:</b> 마음에 드는 커버를 참조 이미지로 넣고 새 장면을 만들면 그림체와 색감이 이어져요.</li>
+      <li><b>이름은 빼기:</b> 유명 작가, 애니메이션 스튜디오, 캐릭터 이름 대신 그림체를 묘사하세요.</li>
+    </ul>
+  </details>
+
+  <footer class="foot">프롬프트는 시작점이에요. 결과는 고른 모델과 설정에 따라 달라요.</footer>
+</div>
+<div class="status" id="status" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  // 비율은 힉스필드 화면에서 고르는 값이라 프롬프트에는 구도 설명만 붙인다
+  const RATIOS = [
+    { v: "16:9", name: "유튜브 영상", w: 22, h: 12, hint: "wide horizontal composition" },
+    { v: "9:16", name: "쇼츠 · 릴스 · 틱톡", w: 10, h: 18, hint: "vertical composition with the main subject in the center" },
+    { v: "1:1", name: "앨범 커버", w: 15, h: 15, hint: "square composition" },
+  ];
+  const G = Object.assign({ ar: "16:9", noText: true, loop: true }, store.get("hfd.params", {}));
+
+  const CATS = {
+    room: { name: "아늑한 방 · 거리", color: "var(--c-room)" },
+    retro: { name: "레트로 · 네온", color: "var(--c-retro)" },
+    land: { name: "새벽 풍경", color: "var(--c-land)" },
+    sleep: { name: "수면 · 밤하늘", color: "var(--c-sleep)" },
+    work: { name: "작업 · 공부", color: "var(--c-work)" },
+    cafe: { name: "카페", color: "var(--c-cafe)" },
+    season: { name: "계절", color: "var(--c-season)" },
+  };
+  const GENRES = ["재즈힙합", "로파이", "누디스코", "앰비언트", "수면", "작업용", "카페 재즈"];
+
+  const P = [
+    { id: "rm-rain", cat: "room", title: "비 오는 밤 창가 책상", desc: "스탠드 불빛, 김 오르는 커피, 창턱에서 자는 고양이. 재즈힙합 채널의 정석.", genres: ["재즈힙합", "로파이"], pal: ["#1d2540", "#c98a3c"],
+      image: "cozy anime-style illustration of a desk by a rain-streaked window at night, warm desk lamp glow, steaming coffee mug, stacked books, a sleeping cat on the windowsill, blurred city lights outside, lofi aesthetic, muted warm palette, gentle film grain",
+      motion: "static camera, rain streaks slowly slide down the window, steam rises gently from the coffee mug, the cat breathes softly, distant city lights twinkle, calm subtle motion" },
+    { id: "rm-record", cat: "room", title: "해 질 녘 레코드 가게", desc: "LP가 꽂힌 선반과 돌아가는 턴테이블. 따뜻한 텅스텐 조명.", genres: ["재즈힙합", "카페 재즈"], pal: ["#3a2418", "#e0a050"],
+      image: "anime-style illustration of a small vintage record shop at dusk, shelves full of vinyl records, warm tungsten light, a turntable on the counter, potted plants in the corner, nostalgic 90s anime aesthetic, soft colors",
+      motion: "static camera, the vinyl record spins slowly on the turntable, dust particles float in the warm light, plant leaves sway very slightly, calm subtle motion" },
+    { id: "rm-roof", cat: "room", title: "노을 지는 옥상", desc: "헤드폰 낀 사람의 뒷모습, 빨래줄, 물탱크. 주황과 보라 하늘.", genres: ["로파이", "재즈힙합"], pal: ["#4b2a5c", "#f08a4b"],
+      image: "anime-style illustration of a rooftop in a dense city at sunset, a person wearing headphones sitting on the ledge seen from behind, laundry lines, water tanks, orange and purple sky, relaxed mood, lofi aesthetic",
+      motion: "static camera, hair and hanging laundry sway gently in the breeze, clouds drift slowly across the sunset sky, the person stays still, calm subtle motion" },
+    { id: "rm-store", cat: "room", title: "새벽 3시 편의점", desc: "텅 빈 거리의 형광등 불빛과 젖은 아스팔트. 외롭지만 편안한.", genres: ["로파이", "앰비언트"], pal: ["#0f2a2e", "#e08a3a"],
+      image: "anime-style illustration of a quiet convenience store on an empty street at 3am, glowing fluorescent light, reflections on wet asphalt, vending machines, lonely but calm mood, teal and orange palette",
+      motion: "static camera, the store sign flickers softly, light rain falls, reflections shimmer on the wet asphalt, calm subtle motion" },
+
+    { id: "rt-drive", cat: "retro", title: "네온 도시 드라이브", desc: "야자수와 분홍·청록 네온, 젖은 도로의 반사. 시티팝 감성.", genres: ["누디스코"], pal: ["#2a0f45", "#ff4fa8"],
+      image: "retro 80s illustration of a convertible on a neon-lit city street at night, palm trees, glowing pink and cyan signs, reflections on the wet road, city pop aesthetic, glossy airbrush style",
+      motion: "static camera, neon signs pulse and flicker, palm leaves sway, reflections ripple on the wet road, subtle motion" },
+    { id: "rt-mirror", cat: "retro", title: "미러볼 라운지", desc: "반짝이는 미러볼과 벨벳 소파. 70년대 디스코 라운지.", genres: ["누디스코"], pal: ["#3a1030", "#f0b040"],
+      image: "stylish 70s disco lounge with a glowing mirror ball, warm amber and magenta lights, velvet sofas, a vinyl turntable, light sparkles across the walls, soft haze, retro film photography",
+      motion: "static camera, the mirror ball rotates slowly, light sparkles sweep across the walls, haze drifts gently, subtle motion" },
+    { id: "rt-beach", cat: "retro", title: "여름 해변 도로", desc: "파스텔 하늘과 해변에 세운 빈티지 자동차. 80년대 앨범 커버 느낌.", genres: ["누디스코"], pal: ["#f2a7b8", "#5fc3d8"],
+      image: "retro city pop illustration of a seaside road at golden hour, pastel sky, palm trees, a vintage car parked by the beach, glossy airbrush style, 80s album cover aesthetic",
+      motion: "static camera, gentle waves roll onto the shore, palm leaves sway in the breeze, the sky glows softly, subtle motion" },
+    { id: "rt-rink", cat: "retro", title: "네온 롤러장", desc: "반짝이는 바닥에 비친 색색 조명, 흐릿하게 지나가는 사람들.", genres: ["누디스코"], pal: ["#1a1060", "#e040c0"],
+      image: "neon roller rink at night, colorful lights reflecting on the glossy floor, retro 80s atmosphere, blurred skaters in the background, vibrant magenta and blue, cinematic photography, film grain",
+      motion: "static camera, colored lights pulse slowly, blurred skaters glide past in the background, reflections shimmer on the floor" },
+
+    { id: "ld-city", cat: "land", title: "블루아워 도시", desc: "높은 창에서 내려다본 잠든 도시. 건물 사이 옅은 안개.", genres: ["앰비언트", "로파이"], pal: ["#1a2a4a", "#6f8fb8"],
+      image: "cinematic photo of a sleeping city at blue hour seen from a high window, scattered warm lights, thin fog between buildings, calm and lonely atmosphere, muted blue palette, soft film grain, minimal",
+      motion: "static camera, thin fog drifts slowly between buildings, scattered window lights flicker on and off, very subtle motion" },
+    { id: "ld-lake", cat: "land", title: "안개 낀 새벽 호수", desc: "분홍빛 하늘이 비치는 잔잔한 물과 작은 나무 선착장.", genres: ["앰비언트", "수면"], pal: ["#c9b3c8", "#7d93a8"],
+      image: "misty lake at dawn, still water reflecting a pale pink sky, distant pine forest silhouettes, a small wooden pier, ethereal and calm, soft pastel tones, minimalist landscape photography",
+      motion: "static camera, mist drifts slowly over the water, gentle ripples spread across the lake surface, very subtle motion" },
+    { id: "ld-aurora", cat: "land", title: "오로라 설원", desc: "멀리 불 켜진 작은 오두막과 하늘을 덮은 초록빛 오로라.", genres: ["앰비언트", "수면"], pal: ["#0a1f2a", "#3fd0a0"],
+      image: "aurora borealis over a snowy plain at night, a tiny lit cabin in the distance, stars, deep teal and green glow, serene and vast, cinematic landscape photography",
+      motion: "static camera, the aurora waves and shimmers slowly across the sky, stars twinkle, thin smoke rises from the cabin chimney, subtle motion" },
+
+    { id: "sl-room", cat: "sleep", title: "별이 보이는 침실", desc: "큰 창 너머 별하늘과 하얀 이불 위 달빛. 라벤더 색감.", genres: ["수면"], pal: ["#1f2350", "#a99be0"],
+      image: "cozy bedroom at night with a large window showing a starry sky, soft moonlight on white sheets, a small night lamp, plants, dreamy and peaceful, soft blue and lavender palette, gentle illustration style",
+      motion: "static camera, stars twinkle softly, the curtain sways gently, the night lamp glows steadily, very slow and calm motion" },
+    { id: "sl-moon", cat: "sleep", title: "구름 바다 위 보름달", desc: "부드러운 구름 위로 뜬 보름달. 아무것도 없는 고요함.", genres: ["수면", "앰비언트"], pal: ["#2a3060", "#e8e0f0"],
+      image: "full moon above a sea of soft clouds, gentle glow, dreamy pastel night sky, tranquil and quiet, minimal, soft gradient, ethereal digital painting",
+      motion: "static camera, clouds drift very slowly beneath the moon, the moonlight glows softly, extremely calm motion" },
+    { id: "sl-cabin", cat: "sleep", title: "비 내리는 숲속 오두막", desc: "창문에 따뜻한 불빛, 나뭇잎 위 빗방울. 안전하고 포근한.", genres: ["수면", "앰비언트"], pal: ["#16301f", "#d99a45"],
+      image: "small wooden cabin in a forest during gentle rain at night, warm light in the window, raindrops on leaves, cozy and safe feeling, deep green and amber tones, soft painterly style",
+      motion: "static camera, gentle rain falls, raindrops drip from the leaves, the window light glows warmly, calm subtle motion" },
+
+    { id: "wk-desk", cat: "work", title: "미니멀 아침 책상", desc: "큰 창의 아침 햇살, 노트북과 커피. 깔끔한 작업 분위기.", genres: ["작업용"], pal: ["#e8e2d8", "#9aa89a"],
+      image: "minimal modern workspace by a large window, soft morning daylight, laptop, notebook, coffee, a small plant, clean neutral tones, calm productive mood, editorial photography, shallow depth of field",
+      motion: "static camera, soft sunlight shifts slightly, steam rises from the coffee, plant leaves move gently, calm subtle motion" },
+    { id: "wk-library", cat: "work", title: "오래된 도서관", desc: "높은 나무 책장과 햇살 속 먼지. 차분한 금빛 갈색.", genres: ["작업용", "카페 재즈"], pal: ["#3a2614", "#d8a85a"],
+      image: "grand old library with tall wooden bookshelves, warm lamp light, a reading table with open books, dust floating in sunbeams, quiet scholarly atmosphere, cinematic photography, warm brown and gold palette",
+      motion: "static camera, dust particles float slowly in the sunbeams, lamp light glows warmly, very subtle motion" },
+
+    { id: "cf-rain", cat: "cafe", title: "비 오는 카페 창가", desc: "라테와 크루아상, 유리창의 빗방울. 따뜻한 나무 톤.", genres: ["카페 재즈", "재즈힙합"], pal: ["#4a3324", "#b8a080"],
+      image: "cozy cafe interior on a rainy afternoon, window seat with a latte and a croissant, raindrops on the glass, warm wooden tones, soft bokeh street outside, film photography, calm mood",
+      motion: "static camera, raindrops trickle down the glass, steam rises from the latte, blurred people pass outside, calm subtle motion" },
+    { id: "cf-alley", cat: "cafe", title: "유럽 골목 카페", desc: "줄 전구와 돌바닥, 빈 의자 몇 개. 저녁의 로맨틱한 골목.", genres: ["카페 재즈"], pal: ["#2a2030", "#f0c070"],
+      image: "small street cafe in a european alley in the evening, string lights, cobblestones, a few empty chairs, warm glow, romantic and relaxed, painterly illustration",
+      motion: "static camera, string lights twinkle softly, a light breeze moves the leaves, the warm glow flickers, calm subtle motion" },
+
+    { id: "ss-snow", cat: "season", title: "첫눈 오는 거리", desc: "가로등 아래 내리는 눈, 따뜻한 가게 창, 우산 쓴 사람 하나.", genres: ["재즈힙합", "로파이"], pal: ["#1f2a44", "#e8b060"],
+      image: "quiet city street during the first snow at night, warm shop windows, snow falling softly under streetlights, a lone figure with an umbrella, nostalgic winter mood, anime-style illustration, soft blue and amber palette",
+      motion: "static camera, snow falls softly under the streetlights, shop window lights glow, the figure stands still, calm subtle motion" },
+    { id: "ss-blossom", cat: "season", title: "벚꽃 강변길", desc: "흩날리는 꽃잎과 난간에 세운 자전거. 봄 아침 파스텔.", genres: ["로파이", "작업용"], pal: ["#f5c6d6", "#9cc3e0"],
+      image: "riverside path lined with cherry blossom trees in spring, petals drifting in the air, soft morning light, a bicycle parked by the railing, gentle pastel pink palette, anime-style illustration",
+      motion: "static camera, cherry blossom petals drift through the air, the river ripples gently, branches sway, calm subtle motion" },
+    { id: "ss-firefly", cat: "season", title: "반딧불 여름밤", desc: "키 큰 풀숲에 반딧불, 멀리 산과 별하늘.", genres: ["앰비언트", "수면"], pal: ["#0f2030", "#e0e070"],
+      image: "summer night field with glowing fireflies, tall grass, distant mountains, starry sky, warm humid atmosphere, magical and calm, anime-style illustration",
+      motion: "static camera, fireflies drift and blink slowly, tall grass sways in the breeze, stars twinkle, calm subtle motion" },
+    { id: "ss-train", cat: "season", title: "가을 기차 창밖", desc: "황금 들판과 단풍이 지나가는 창, 창가 테이블의 찻잔.", genres: ["카페 재즈", "재즈힙합"], pal: ["#6a3a1a", "#e8b048"],
+      image: "view from a train window in autumn, golden fields and red maple trees outside, warm afternoon light, a cup of tea on the window table, nostalgic travel mood, cinematic photography, soft film grain",
+      motion: "static camera inside the train, scenery glides past the window, the tea surface trembles slightly, warm light flickers through the trees" },
+  ];
+
+  // ---------- 조합기 재료 ----------
+  const GROUPS = [
+    { part: "img", key: "style", name: "화풍", hint: "1개만", single: true, items: [["anime-style illustration", "애니 일러스트"], ["90s anime aesthetic illustration", "90년대 애니"], ["retro 80s airbrush illustration", "80년대 에어브러시"], ["soft watercolor painting", "수채화"], ["cinematic photo", "영화 같은 사진"], ["film photography", "필름 사진"], ["dreamy digital painting", "몽환적 디지털 페인팅"], ["cozy pixel art", "픽셀 아트"], ["minimal flat illustration", "미니멀 플랫"]] },
+    { part: "img", key: "scene", name: "장소", hint: "1개만", single: true, items: [["a desk by the window", "창가 책상"], ["a cozy bedroom", "아늑한 침실"], ["a city rooftop", "도시 옥상"], ["a quiet city street", "조용한 거리"], ["a small cafe", "작은 카페"], ["a vintage record shop", "레코드 가게"], ["a wooden cabin in the forest", "숲속 오두막"], ["a seaside road", "해변 도로"], ["a misty lake", "안개 낀 호수"], ["a snowy plain", "눈 덮인 들판"], ["a train window seat", "기차 창가"], ["an empty night bus", "텅 빈 밤 버스"]] },
+    { part: "img", key: "time", name: "시간", hint: "1개만", single: true, items: [["at night", "밤"], ["late at night", "새벽"], ["at dawn", "동틀 녘"], ["in the morning", "아침"], ["at golden hour", "노을 직전"], ["at sunset", "해 질 녘"], ["at blue hour", "블루아워"]] },
+    { part: "img", key: "weather", name: "날씨 · 빛", hint: "1~2개", items: [["gentle rain", "부슬비"], ["falling snow", "내리는 눈"], ["thin fog", "옅은 안개"], ["starry sky", "별하늘"], ["full moon", "보름달"], ["warm sunlight", "따뜻한 햇살"], ["neon lights", "네온 불빛"], ["warm lamp glow", "스탠드 불빛"]] },
+    { part: "img", key: "detail", name: "소품 · 인물", hint: "2~3개", items: [["a sleeping cat", "자는 고양이"], ["a steaming coffee mug", "김 나는 커피"], ["a person with headphones seen from behind", "헤드폰 낀 뒷모습"], ["a turntable with a vinyl record", "턴테이블"], ["stacked books", "쌓인 책"], ["potted plants", "화분"], ["raindrops on the glass", "창문 빗방울"], ["string lights", "줄 전구"], ["a vintage car", "빈티지 자동차"], ["a bicycle", "자전거"]] },
+    { part: "img", key: "mood", name: "분위기", hint: "1~2개", items: [["cozy", "포근한"], ["nostalgic", "아련한"], ["calm", "고요한"], ["lonely but peaceful", "외롭지만 편안한"], ["dreamy", "몽환적인"], ["romantic", "로맨틱한"], ["energetic", "활기찬"]] },
+    { part: "img", key: "palette", name: "색감", hint: "1개만", single: true, items: [["muted warm palette", "차분한 웜톤"], ["teal and orange palette", "청록과 주황"], ["soft pastel palette", "파스텔"], ["neon pink and cyan palette", "네온 분홍·청록"], ["muted blue palette", "차분한 블루"], ["deep green and amber palette", "짙은 초록과 호박색"], ["black and white", "흑백"]] },
+    { part: "mot", key: "camera", name: "카메라", hint: "1개만", single: true, items: [["static camera", "고정"], ["very slow push-in", "아주 천천히 다가가기"], ["very slow pan to the right", "아주 천천히 옆으로"]] },
+    { part: "mot", key: "move", name: "움직일 것", hint: "2~3개", items: [["rain falls gently", "비 내림"], ["rain streaks slide down the window", "창문 빗줄기"], ["snow falls softly", "눈 내림"], ["steam rises from the coffee", "커피 김"], ["lamp light flickers softly", "불빛 깜빡임"], ["neon signs pulse and flicker", "네온 깜빡임"], ["clouds drift slowly", "구름 흐름"], ["gentle ripples on the water", "물결"], ["leaves sway in the breeze", "나뭇잎 흔들림"], ["fireflies drift and blink", "반딧불"], ["the curtain sways gently", "커튼 흔들림"], ["the cat breathes softly", "고양이 숨쉬기"], ["the vinyl record spins slowly", "LP 회전"], ["stars twinkle", "별 반짝임"]] },
+    { part: "mot", key: "speed", name: "움직임 크기", hint: "1개만", single: true, items: [["very subtle motion", "아주 조금"], ["calm subtle motion", "잔잔하게"], ["gentle lively motion", "조금 활발하게"]] },
+  ];
+  const DEFAULT_BUILD = { style: ["anime-style illustration"], scene: ["a desk by the window"], time: ["at night"], weather: ["gentle rain", "warm lamp glow"], detail: ["a sleeping cat", "a steaming coffee mug"], mood: ["cozy"], palette: ["muted warm palette"],
+    camera: ["static camera"], move: ["rain streaks slide down the window", "steam rises from the coffee", "the cat breathes softly"], speed: ["calm subtle motion"] };
+  let B = Object.assign(JSON.parse(JSON.stringify(DEFAULT_BUILD)), store.get("hfd.build", {}));
+  let favs = store.get("hfd.favs", []);
+  let mine = store.get("hfd.mine", []);
+
+  // ---------- 공통 덧붙임 ----------
+  const ratio = () => RATIOS.find((r) => r.v === G.ar) || RATIOS[0];
+  const imgAdd = () => [ratio().hint, G.noText ? "no text, no letters, no watermark" : ""].filter(Boolean).join(", ");
+  const motAdd = () => (G.loop ? "the last frame matches the first frame, seamless loop" : "");
+  const fullImg = (body) => [body.trim(), imgAdd()].filter(Boolean).join(", ");
+  const fullMot = (body) => [body.trim(), motAdd()].filter(Boolean).join(", ");
+
+  function renderParams() {
+    const r = $("#ratios"); r.textContent = "";
+    RATIOS.forEach((x) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ratio"; b.setAttribute("aria-pressed", String(G.ar === x.v));
+      const i = document.createElement("i"); i.style.width = x.w + "px"; i.style.height = x.h + "px";
+      b.append(i, document.createTextNode(`${x.name} ${x.v}`));
+      b.addEventListener("click", () => { G.ar = x.v; saveG(); renderParams(); renderAll(); });
+      r.appendChild(b);
+    });
+  }
+  function saveG() { store.set("hfd.params", G); }
+  ["noText", "loop"].forEach((id) => {
+    const el = $("#" + id); el.checked = !!G[id];
+    el.addEventListener("change", () => { G[id] = el.checked; saveG(); renderAll(); });
+  });
+
+  // ---------- 공통 ----------
+  let tmr;
+  function toast(msg) { const s = $("#status"); s.textContent = msg; s.hidden = false; clearTimeout(tmr); tmr = setTimeout(() => { s.hidden = true; }, 2000); }
+  function copy(text, msg) {
+    const fallback = () => {
+      const ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove(); toast(ok ? msg : "복사가 막혀 있어요. 글자를 길게 눌러 직접 복사해 주세요.");
+    };
+    try { navigator.clipboard.writeText(text).then(() => toast(msg), fallback); } catch (e) { fallback(); }
+  }
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const btn = (txt, cls, fn, label) => { const b = el("button", "btn" + (cls ? " " + cls : ""), txt); b.type = "button"; if (label) b.setAttribute("aria-label", label); b.addEventListener("click", fn); return b; };
+
+  function slot(kind, body, add, title) {
+    const s = el("div", "slot");
+    const h = el("div", "slot-head");
+    const b = el("b", kind, kind === "img" ? "IMAGE" : "MOTION");
+    b.appendChild(el("small", null, kind === "img" ? "이미지 생성 칸" : "영상 생성 칸 · 시작=끝 프레임"));
+    const text = [body.trim(), add].filter(Boolean).join(", ");
+    h.append(b, btn("복사", kind === "img" ? "primary" : "motion", () => copy(text, kind === "img" ? "이미지 프롬프트를 복사했어요." : "움직임 프롬프트를 복사했어요."), `${title} ${kind === "img" ? "이미지" : "움직임"} 프롬프트 복사`));
+    const pre = el("pre", "prompt" + (kind === "mot" ? " mot" : ""));
+    pre.append(document.createTextNode(body.trim()));
+    if (add) pre.appendChild(el("span", "add", ", " + add));
+    s.append(h, pre);
+    return s;
+  }
+
+  function card(p, opts = {}) {
+    const c = el("article", "card");
+    const cat = CATS[p.cat] || { name: "내 프롬프트", color: "var(--accent)" };
+    c.style.setProperty("--cat", cat.color);
+    const pal = p.pal || ["#3a3f4a", "#8a93a3"];
+    const sw = el("div", "swatch"); sw.style.background = `linear-gradient(110deg, ${pal[0]}, ${pal[1]})`;
+    sw.append(el("span", null, G.ar), el("span", null, "이미지 → 루프 영상"));
+    c.appendChild(sw);
+    const top = el("div", "card-top");
+    const row = el("div", "card-row");
+    const left = el("div"); left.style.minWidth = "0";
+    left.append(el("div", "cat", cat.name), el("h3", null, p.title));
+    row.appendChild(left);
+    if (opts.del) row.appendChild(btn("삭제", "", opts.del, `${p.title} 삭제`));
+    else {
+      const on = favs.includes(p.id);
+      const st = btn(on ? "★" : "☆", "star", () => toggleFav(p.id), `${p.title} 내 프롬프트에 담기`);
+      st.setAttribute("aria-pressed", String(on)); row.appendChild(st);
+    }
+    top.appendChild(row);
+    if (p.desc) top.appendChild(el("p", "desc", p.desc));
+    if (p.genres && p.genres.length) { const m = el("div", "meta"); p.genres.forEach((g) => m.appendChild(el("span", null, g))); top.appendChild(m); }
+    c.appendChild(top);
+    c.appendChild(slot("img", p.image, imgAdd(), p.title));
+    if (p.motion) c.appendChild(slot("mot", p.motion, motAdd(), p.title));
+    return c;
+  }
+
+  // ---------- 사전 ----------
+  let fCat = "all", fGenre = "all";
+  function filterChips() {
+    const cc = $("#catChips"); cc.textContent = "";
+    [["all", "전체"], ...Object.entries(CATS).map(([k, v]) => [k, v.name])].forEach(([k, n]) => {
+      const b = el("button", "fchip", k === "all" ? n : `${n} ${P.filter((p) => p.cat === k).length}`); b.type = "button";
+      b.setAttribute("aria-pressed", String(fCat === k)); b.addEventListener("click", () => { fCat = k; filterChips(); renderDict(); }); cc.appendChild(b);
+    });
+    const gc = $("#genreChips"); gc.textContent = "";
+    [["all", "모든 음악"], ...GENRES.map((g) => [g, g])].forEach(([k, n]) => {
+      const b = el("button", "fchip", n); b.type = "button";
+      b.setAttribute("aria-pressed", String(fGenre === k)); b.addEventListener("click", () => { fGenre = k; filterChips(); renderDict(); }); gc.appendChild(b);
+    });
+  }
+  function renderDict() {
+    const q = $("#q").value.trim().toLowerCase();
+    const list = P.filter((p) => (fCat === "all" || p.cat === fCat) && (fGenre === "all" || p.genres.includes(fGenre)) &&
+      (!q || [p.title, p.desc, p.image, p.motion, CATS[p.cat].name, p.genres.join(" ")].join(" ").toLowerCase().includes(q)));
+    const box = $("#cards"); box.textContent = "";
+    list.forEach((p) => box.appendChild(card(p)));
+    $("#noResult").hidden = list.length > 0;
+    $("#resultN").textContent = `${list.length}개`;
+  }
+  $("#q").addEventListener("input", renderDict);
+  function toggleFav(id) {
+    favs = favs.includes(id) ? favs.filter((x) => x !== id) : [...favs, id];
+    store.set("hfd.favs", favs);
+    toast(favs.includes(id) ? "내 프롬프트에 담았어요." : "내 프롬프트에서 뺐어요.");
+    renderDict(); renderMine();
+  }
+
+  // ---------- 조합기 ----------
+  function renderGroups() {
+    const box = $("#groups"); box.textContent = "";
+    let lastPart = "";
+    GROUPS.forEach((g) => {
+      if (g.part !== lastPart) { box.appendChild(el("p", "sub " + g.part, g.part === "img" ? "IMAGE · 이미지 재료" : "MOTION · 움직임 재료")); lastPart = g.part; }
+      const wrap = el("div", "group");
+      const h = el("div", "group-head"); h.append(el("b", null, g.name), el("small", null, g.hint));
+      const chips = el("div", "ichips");
+      g.items.forEach(([en, ko]) => {
+        const b = el("button", "ichip" + (g.part === "mot" ? " m" : "")); b.type = "button"; b.dataset.val = en;
+        b.append(el("span", null, ko), el("small", null, en));
+        b.setAttribute("aria-pressed", String((B[g.key] || []).includes(en)));
+        b.addEventListener("click", () => {
+          const cur = B[g.key] || [];
+          const on = cur.includes(en);
+          if (g.single) B[g.key] = on ? [] : [en];
+          else B[g.key] = on ? cur.filter((x) => x !== en) : [...cur, en];
+          chips.querySelectorAll(".ichip").forEach((c) => c.setAttribute("aria-pressed", String(B[g.key].includes(c.dataset.val))));
+          saveBuild(); buildOut();
+        });
+        chips.appendChild(b);
+      });
+      wrap.append(h, chips); box.appendChild(wrap);
+    });
+  }
+  function imgBody() {
+    let head = B.style[0] || "illustration";
+    if (B.scene[0]) head += ` of ${B.scene[0]}`;
+    if (B.time[0]) head += ` ${B.time[0]}`;
+    return [head, ...B.weather, ...B.detail, ...B.mood, ...B.palette].join(", ");
+  }
+  function motBody() { return [...(B.camera || []), ...(B.move || []), ...(B.speed || [])].join(", "); }
+  function buildOut() { $("#imgOut").value = fullImg(imgBody()); $("#motOut").value = fullMot(motBody()); }
+  function saveBuild() { store.set("hfd.build", B); }
+  $("#copyImg").addEventListener("click", () => copy($("#imgOut").value, "이미지 프롬프트를 복사했어요."));
+  $("#copyMot").addEventListener("click", () => copy($("#motOut").value, "움직임 프롬프트를 복사했어요."));
+  $("#resetBuild").addEventListener("click", () => { B = JSON.parse(JSON.stringify(DEFAULT_BUILD)); saveBuild(); renderGroups(); buildOut(); });
+  $("#saveBtn").addEventListener("click", () => {
+    const name = $("#saveName").value.trim() || `내 커버 ${mine.length + 1}`;
+    // 공통 덧붙임(구도·글자·루프)은 떼고 본문만 저장해서, 나중에 설정을 바꿔도 맞춰 붙게 한다
+    const strip = (txt, add) => { txt = txt.trim(); return add && txt.endsWith(", " + add) ? txt.slice(0, -(add.length + 2)) : txt; };
+    mine.unshift({ id: "m" + Date.now(), title: name, image: strip($("#imgOut").value, imgAdd()) || imgBody(), motion: strip($("#motOut").value, motAdd()) });
+    store.set("hfd.mine", mine); $("#saveName").value = "";
+    renderMine(); toast("내 프롬프트에 저장했어요.");
+  });
+
+  // ---------- 내 프롬프트 ----------
+  function renderMine() {
+    const box = $("#mineCards"); box.textContent = "";
+    mine.forEach((m) => box.appendChild(card({ id: m.id, cat: "mine", title: m.title, image: m.image, motion: m.motion, genres: [] }, { del: () => { mine = mine.filter((x) => x.id !== m.id); store.set("hfd.mine", mine); renderMine(); } })));
+    P.filter((p) => favs.includes(p.id)).forEach((p) => box.appendChild(card(p)));
+    const n = mine.length + favs.filter((id) => P.some((p) => p.id === id)).length;
+    $("#mineEmpty").hidden = n > 0;
+    $("#nMine").textContent = n ? String(n) : "";
+  }
+
+  function renderAll() { renderDict(); buildOut(); renderMine(); }
+
+  const VIEWS = ["dict", "build", "mine"];
+  function route() {
+    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "dict";
+    VIEWS.forEach((k) => { $("#view-" + k).hidden = k !== v; const t = $("#tab-" + k); if (k === v) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  }
+  window.addEventListener("hashchange", route);
+
+  $("#nDict").textContent = String(P.length);
+  renderParams(); filterChips(); renderGroups(); renderAll(); route();
+})();
+</script>
