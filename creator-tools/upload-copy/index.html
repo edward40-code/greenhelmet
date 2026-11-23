@@ -1,0 +1,507 @@
+<title>업로드 문구 생성기</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 레이아웃: 왼쪽은 고르는 곳(장르·장면·용도), 오른쪽은 채널별 완성 문구 카드. 좁은 화면에서는 위아래로 쌓인다. 타임스탬프 생성기와 같은 색·글꼴 */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --ink: #161a21;
+  --muted: #5b6473;
+  --line: #dce1e9;
+  --accent: #e09a17;
+  --accent-ink: #8a5600;
+  --on-accent: #1b1300;
+  --ok: #1d7a4b;
+  --warn: #9a5a00;
+  --focus: #2f6fdd;
+  --yt: #c4302b;
+  --tt: #0f8f8a;
+  --ig: #b5367d;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3;
+    --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --on-accent: #1b1300;
+    --ok: #4cc38a; --warn: #f0a73a; --focus: #7aa7ff; --yt: #ff6b63; --tt: #3fd0c9; --ig: #f07dbb; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3;
+  --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --on-accent: #1b1300;
+  --ok: #4cc38a; --warn: #f0a73a; --focus: #7aa7ff; --yt: #ff6b63; --tt: #3fd0c9; --ig: #f07dbb; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--accent-ink); }
+h1 { margin: 2px 0 4px; font-size: clamp(26px, 4vw, 34px); line-height: 1.2; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+.platforms { display: flex; gap: 6px; flex-wrap: wrap; }
+.pf { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.pf.yt { color: var(--yt); } .pf.tt { color: var(--tt); } .pf.ig { color: var(--ig); }
+
+.grid { display: grid; gap: 22px; align-items: start; }
+@media (min-width: 960px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); } }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.panel-body { padding: 16px; display: flex; flex-direction: column; gap: 18px; }
+
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+legend, .lbl { padding: 0; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip span { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; cursor: pointer; transition: border-color .12s, background .12s; }
+.chip input:hover + span { border-color: var(--muted); }
+.chip input:checked + span { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); border-color: var(--accent); font-weight: 700; }
+.chip input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 520px) { .row2 { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 13px; font-weight: 500; color: var(--muted); }
+.field input[type="text"], .field select { height: 36px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); width: 100%; min-width: 0; }
+.hint { font-size: 12px; color: var(--muted); margin: 0; }
+.hint a { color: var(--accent-ink); }
+textarea { width: 100%; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); padding: 10px 12px; resize: vertical; }
+.chk { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.chk input { width: 16px; height: 16px; accent-color: var(--accent); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; font-size: 14px; cursor: pointer; border-right: 1px solid var(--line); }
+.seg label:last-child span { border-right: 0; }
+.seg input:checked + span { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: -2px; }
+details.more { border: 1px solid var(--line); border-radius: 8px; }
+details.more summary { cursor: pointer; padding: 10px 14px; font-weight: 500; font-size: 14px; }
+details.more[open] summary { border-bottom: 1px solid var(--line); }
+.more-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 0 12px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn.small { min-height: 30px; padding: 0 10px; font-size: 13px; }
+
+/* 결과 카드 */
+.outs { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; overflow: hidden; }
+.card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.card-head h3 { margin: 0; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.tag { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; border: 1px solid currentColor; letter-spacing: .02em; }
+.tag.yt { color: var(--yt); } .tag.tt { color: var(--tt); } .tag.ig { color: var(--ig); }
+.card-tools { display: flex; align-items: center; gap: 8px; }
+.count { font-size: 12px; color: var(--muted); font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.count.over { color: var(--warn); font-weight: 600; }
+.card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.text { font-family: var(--sans); font-size: 14px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; margin: 0; max-height: 360px; overflow: auto; }
+.titles { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.titles li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.titles li:last-child { border-bottom: 0; }
+.titles .t { font-size: 15px; font-weight: 500; word-break: break-word; }
+.chips-out { display: flex; flex-wrap: wrap; gap: 5px; }
+.chips-out span { font-size: 13px; padding: 3px 8px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); }
+.note { font-size: 12px; color: var(--muted); margin: 0; }
+.status { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">음악 재생 영상용</p>
+      <h1>업로드 문구 생성기</h1>
+      <p class="lede">장르, 장면, 용도만 고르면 유튜브 제목·설명·태그와 틱톡, 인스타 캡션을 한 번에 만들어요. 고를 때마다 바로 바뀌고, 카드마다 복사 버튼이 있어요.</p>
+    </div>
+    <div class="platforms" aria-label="지원하는 곳"><span class="pf yt">YouTube</span><span class="pf tt">TikTok</span><span class="pf ig">Instagram</span></div>
+  </header>
+
+  <div class="grid">
+    <!-- 입력 -->
+    <section class="panel" aria-labelledby="inTitle">
+      <div class="panel-head"><h2 id="inTitle">영상 정보</h2>
+        <div class="seg" role="radiogroup" aria-label="문구 언어">
+          <label><input type="radio" name="lang" value="ko" id="lang-ko"><span>한국어</span></label>
+          <label><input type="radio" name="lang" value="en" id="lang-en"><span>English</span></label>
+          <label><input type="radio" name="lang" value="both" id="lang-both"><span>둘 다</span></label>
+        </div>
+      </div>
+      <div class="panel-body">
+        <fieldset><legend>장르</legend><div class="chips" id="genres"></div></fieldset>
+        <fieldset><legend>장면 · 분위기</legend><div class="chips" id="scenes"></div>
+          <div class="row2" id="customScene" hidden>
+            <div class="field"><label for="customKo">장면 (한국어)</label><input type="text" id="customKo" placeholder="예: 첫눈 오는 날"></div>
+            <div class="field"><label for="customEn">장면 (영어)</label><input type="text" id="customEn" placeholder="예: First Snow"></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>언제 듣는 음악인가요</legend><div class="chips" id="uses"></div></fieldset>
+
+        <div class="row2">
+          <div class="field">
+            <label for="len">영상 길이</label>
+            <select id="len">
+              <option value="">표시하지 않음</option>
+              <option value="30m">30분</option>
+              <option value="1h">1시간</option>
+              <option value="2h">2시간</option>
+              <option value="3h">3시간</option>
+              <option value="8h">8시간</option>
+              <option value="10h">10시간</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="extra">추가 키워드 (쉼표로 구분)</label>
+            <input type="text" id="extra" placeholder="예: 크리스마스, christmas jazz">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tracklist">트랙리스트 (선택)</label>
+          <textarea id="tracklist" rows="5" class="mono" placeholder="00:00 Midnight Coffee&#10;03:24 Slow Rain on Glass&#10;06:22 Neon Bus Stop"></textarea>
+          <p class="hint">타임스탬프 생성기에서 복사한 목록을 붙여넣으면 설명란에 들어가요. <a href="https://claude.ai/artifact/TvHju6QvduuRo5Hmtop5zK" target="_blank" rel="noopener">타임스탬프 생성기 열기</a></p>
+        </div>
+
+        <details class="more" id="moreBox">
+          <summary>채널 고정 문구</summary>
+          <div class="more-body">
+            <div class="field">
+              <label for="footer">설명란 끝에 늘 붙는 문구</label>
+              <textarea id="footer" rows="4"></textarea>
+              <p class="hint">구독 안내, 다른 채널 링크 등. 한 번 적어두면 이 브라우저에 저장돼요.</p>
+            </div>
+            <label class="chk" for="aiCredit"><input type="checkbox" id="aiCredit"> 설명란에 AI 제작 표기 넣기 (Suno, Midjourney)</label>
+            <label class="chk" for="emoji"><input type="checkbox" id="emoji"> 제목에 이모지 넣기</label>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 결과 -->
+    <section class="outs" aria-label="완성된 문구">
+      <article class="card">
+        <div class="card-head">
+          <h3><span class="tag yt">YouTube</span>제목 후보</h3>
+          <div class="card-tools"><button class="btn small" type="button" id="reroll">다른 제목 보기</button></div>
+        </div>
+        <div class="card-body">
+          <ul class="titles" id="titles"></ul>
+          <p class="note">100자까지 들어가지만 검색 결과와 추천에는 앞쪽 60자 정도만 보여요.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3><span class="tag yt">YouTube</span>설명</h3>
+          <div class="card-tools"><span class="count" id="descCount"></span><button class="btn small primary" type="button" data-copy="desc">복사</button></div>
+        </div>
+        <div class="card-body">
+          <pre class="text" id="desc"></pre>
+          <p class="note">맨 아래 해시태그 중 앞의 3개가 제목 위에 표시돼요.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3><span class="tag yt">YouTube</span>태그</h3>
+          <div class="card-tools"><span class="count" id="tagCount"></span><button class="btn small primary" type="button" data-copy="tags">복사</button></div>
+        </div>
+        <div class="card-body">
+          <div class="chips-out" id="tagChips"></div>
+          <p class="note">태그 칸은 500자까지예요. 넘치는 태그는 뒤에서부터 빼요.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3><span class="tag tt">TikTok</span>캡션</h3>
+          <div class="card-tools"><span class="count" id="ttCount"></span><button class="btn small primary" type="button" data-copy="tt">복사</button></div>
+        </div>
+        <div class="card-body"><pre class="text" id="tt"></pre></div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3><span class="tag ig">Instagram</span>릴스 캡션</h3>
+          <div class="card-tools"><span class="count" id="igCount"></span><button class="btn small primary" type="button" data-copy="ig">복사</button></div>
+        </div>
+        <div class="card-body"><pre class="text" id="ig"></pre></div>
+      </article>
+    </section>
+  </div>
+
+  <footer class="foot">입력한 내용은 이 브라우저에만 저장돼요. 문구는 정해진 틀로 만들어서 같은 선택이면 같은 결과가 나와요. ‘다른 제목 보기’로 바꿔 보세요.</footer>
+</div>
+<div class="status" id="status" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  // ---------- 사전 ----------
+  const GENRES = {
+    jazzhop: { ko: "재즈힙합", en: "Jazz Hip Hop", hash: ["#jazzhiphop", "#재즈힙합", "#jazzhop"], tags: ["jazz hip hop", "jazzhop", "lofi jazz", "jazzy beats", "chill beats", "lofi hip hop", "재즈힙합", "재즈 힙합 플레이리스트"] },
+    nudisco: { ko: "누디스코", en: "Nu Disco", hash: ["#nudisco", "#누디스코", "#discohouse"], tags: ["nu disco", "disco house", "funky house", "groovy music", "nu disco mix", "누디스코", "디스코 플레이리스트", "신나는 음악"] },
+    ambient: { ko: "새벽 앰비언트", en: "Late Night Ambient", hash: ["#ambient", "#앰비언트", "#latenight"], tags: ["ambient music", "late night ambient", "atmospheric music", "calm music", "ambient chill", "앰비언트", "새벽 음악", "잔잔한 음악"] },
+    sleep: { ko: "수면 음악", en: "Sleep Music", hash: ["#sleepmusic", "#수면음악", "#deepsleep"], tags: ["sleep music", "deep sleep", "relaxing music", "music for sleeping", "insomnia music", "수면음악", "잠잘때 듣는 음악", "숙면 음악"] },
+    focus: { ko: "작업용 음악", en: "Focus Music", hash: ["#focusmusic", "#작업용음악", "#studymusic"], tags: ["focus music", "study music", "work music", "concentration music", "deep focus", "작업용 음악", "공부 음악", "집중 음악"] },
+    lofi: { ko: "로파이", en: "Lofi", hash: ["#lofi", "#로파이", "#lofihiphop"], tags: ["lofi", "lofi hip hop", "lofi beats", "chill lofi", "lofi mix", "로파이", "로파이 플레이리스트", "감성 음악"] },
+  };
+  // when: "~에 듣는"처럼 뒤에 이어 붙이는 꼴, line: 문장에 쓰는 장면 묘사
+  const SCENES = {
+    rain: { ko: "비 오는 밤", when: "비 오는 밤에", line: "창밖에 빗소리가 들리는 밤", en: "Rainy Night", enLine: "rain on the window and nowhere to be", emoji: "🌧", tags: ["rainy night", "비 오는 날 음악"] },
+    dawn: { ko: "새벽 감성", when: "새벽에", line: "모두 잠든 조용한 새벽", en: "Late Night", enLine: "3AM and the city is finally quiet", emoji: "🌙", tags: ["late night vibes", "새벽 감성"] },
+    cafe: { ko: "카페", when: "카페에서", line: "따뜻한 커피 한 잔이 있는 오후", en: "Cozy Café", enLine: "a warm cup of coffee and a slow afternoon", emoji: "☕", tags: ["cafe music", "카페 음악"] },
+    drive: { ko: "밤 드라이브", when: "밤 드라이브에", line: "불빛이 흐르는 도시의 밤길", en: "City Night Drive", enLine: "city lights sliding past the window", emoji: "🌃", tags: ["night drive", "드라이브 음악"] },
+    morning: { ko: "상쾌한 아침", when: "아침에", line: "햇살이 들어오는 아침", en: "Morning", enLine: "sunlight, fresh coffee, a brand new day", emoji: "☀️", tags: ["morning music", "아침 음악"] },
+    winter: { ko: "겨울밤", when: "겨울밤에", line: "창밖에 눈이 내리는 겨울밤", en: "Winter Night", enLine: "snow falling outside and a warm room inside", emoji: "❄️", tags: ["winter vibes", "겨울 음악"] },
+    beach: { ko: "여름 바다", when: "여름 바닷가에서", line: "파도 소리가 들리는 여름 저녁", en: "Summer Beach", enLine: "golden hour by the sea", emoji: "🌊", tags: ["summer vibes", "여름 음악"] },
+    library: { ko: "조용한 서재", when: "서재에서", line: "책 넘기는 소리만 들리는 서재", en: "Quiet Library", enLine: "soft lamp light and a stack of books", emoji: "📚", tags: ["library ambience", "서재 음악"] },
+    custom: { ko: "", when: "", line: "", en: "", enLine: "", emoji: "🎧", tags: [] },
+  };
+  const USES = {
+    study: { ko: "공부", phrase: "공부할 때 듣기 좋은", whenKo: "공부할 때", en: "Study", enFor: "studying", enTo: "study to", hash: ["#공부음악", "#studywithme"], tags: ["study music", "공부할때 듣는 음악"] },
+    work: { ko: "작업", phrase: "작업할 때 틀어두는", whenKo: "작업할 때", en: "Work", enFor: "working", enTo: "work to", hash: ["#작업용", "#workmusic"], tags: ["work music", "작업할때 듣는 음악"] },
+    relax: { ko: "휴식", phrase: "쉬면서 듣기 좋은", whenKo: "쉴 때", en: "Chill", enFor: "relaxing", enTo: "relax to", hash: ["#힐링음악", "#relaxingmusic"], tags: ["relaxing music", "힐링 음악"] },
+    sleep: { ko: "수면", phrase: "잠들기 전에 듣는", whenKo: "잠들 때", en: "Sleep", enFor: "sleeping", enTo: "fall asleep to", hash: ["#잠잘때듣는음악", "#sleep"], tags: ["music for sleep", "잠잘때 듣는 음악"] },
+    read: { ko: "독서", phrase: "책 읽을 때 듣기 좋은", whenKo: "책 읽을 때", en: "Reading", enFor: "reading", enTo: "read to", hash: ["#독서음악", "#readingmusic"], tags: ["reading music", "독서 음악"] },
+    drive: { ko: "드라이브", phrase: "운전할 때 듣기 좋은", whenKo: "운전할 때", en: "Driving", enFor: "driving", enTo: "drive to", hash: ["#드라이브음악", "#drivingmusic"], tags: ["driving music", "드라이브 음악"] },
+  };
+  const LENS = { "30m": ["30분", "30 Min"], "1h": ["1시간", "1 Hour"], "2h": ["2시간", "2 Hours"], "3h": ["3시간", "3 Hours"], "8h": ["8시간", "8 Hours"], "10h": ["10시간", "10 Hours"] };
+
+  const DEFAULT_FOOTER = "🔔 구독하고 새 플레이리스트를 가장 먼저 들어보세요.\n💬 마음에 드는 곡이 있으면 댓글로 알려주세요.";
+  const S = Object.assign({ lang: "ko", genre: "jazzhop", scene: "rain", use: "study", len: "1h", extra: "", tracklist: "", customKo: "", customEn: "", footer: DEFAULT_FOOTER, aiCredit: false, emoji: true, variant: 0 }, store.get("ucg.settings", {}));
+
+  // ---------- 고르는 칩 ----------
+  function chips(el, name, dict, label) {
+    Object.entries(dict).forEach(([k, v]) => {
+      const lab = document.createElement("label"); lab.className = "chip";
+      const inp = document.createElement("input"); inp.type = "radio"; inp.name = name; inp.value = k; inp.id = `${name}-${k}`;
+      inp.checked = S[name] === k;
+      inp.addEventListener("change", () => { S[name] = k; S.variant = 0; save(); syncCustom(); render(); });
+      const sp = document.createElement("span"); sp.textContent = label(k, v);
+      lab.append(inp, sp); el.appendChild(lab);
+    });
+  }
+  chips($("#genres"), "genre", GENRES, (k, v) => v.ko);
+  chips($("#scenes"), "scene", SCENES, (k, v) => (k === "custom" ? "직접 적기" : `${v.emoji} ${v.ko}`));
+  chips($("#uses"), "use", USES, (k, v) => v.ko);
+  function syncCustom() { $("#customScene").hidden = S.scene !== "custom"; }
+
+  document.querySelectorAll('input[name="lang"]').forEach((r) => {
+    r.checked = r.value === S.lang;
+    r.addEventListener("change", () => { S.lang = r.value; S.variant = 0; save(); render(); });
+  });
+  const bind = (id, key, ev = "input") => {
+    const el = $("#" + id);
+    if (el.type === "checkbox") el.checked = !!S[key]; else el.value = S[key];
+    el.addEventListener(ev, () => { S[key] = el.type === "checkbox" ? el.checked : el.value; save(); render(); });
+  };
+  bind("len", "len", "change"); bind("extra", "extra"); bind("tracklist", "tracklist"); bind("customKo", "customKo"); bind("customEn", "customEn");
+  bind("footer", "footer"); bind("aiCredit", "aiCredit", "change"); bind("emoji", "emoji", "change");
+
+  function save() { store.set("ucg.settings", S); }
+
+  // ---------- 문구 재료 ----------
+  function ctx() {
+    const g = GENRES[S.genre], u = USES[S.use];
+    let s = SCENES[S.scene];
+    if (S.scene === "custom") {
+      const ko = S.customKo.trim() || "오늘 밤", en = S.customEn.trim() || "Tonight";
+      s = { ko, when: ko, line: ko, en, enLine: en.toLowerCase(), emoji: "🎧", tags: [S.customEn.trim(), S.customKo.trim()].filter(Boolean) };
+    }
+    const L = LENS[S.len] || ["", ""];
+    const em = S.emoji ? s.emoji : "";
+    return { g, s, u, lenKo: L[0], lenEn: L[1], em, emS: em ? " " + em : "", extras: S.extra.split(",").map((x) => x.trim()).filter(Boolean) };
+  }
+  const tidy = (str) => str.replace(/\s{2,}/g, " ").replace(/\s+([|,·])/g, " $1").replace(/\(\s*\)|\[\s*\]/g, "").replace(/\s+$/g, "").replace(/^\s+/g, "").replace(/\s\|\s*$/, "");
+
+  // ---------- 제목 ----------
+  function titleCandidates(c) {
+    const ko = [
+      () => `[Playlist] ${c.s.line}, ${c.u.phrase} ${c.g.ko}`,
+      () => `${c.s.ko}${c.emS} ${c.u.ko}용 ${c.g.ko}${c.lenKo ? " " + c.lenKo : ""} 플레이리스트`,
+      () => `𝐏𝐥𝐚𝐲𝐥𝐢𝐬𝐭 | ${c.s.when} 듣는 ${c.g.ko}${c.emS}`,
+      () => `${c.lenKo ? c.lenKo + " 연속 | " : ""}${c.s.when} 틀어두기 좋은 ${c.g.ko}${c.emS}`,
+      () => `${c.u.whenKo} 이거 하나면 충분해요${c.emS} ${c.g.ko} 플레이리스트`,
+      () => `${c.em ? c.em + " " : ""}${c.s.line} | ${c.g.ko}${c.lenKo ? " " + c.lenKo : ""}`,
+    ];
+    const en = [
+      () => `${c.em ? c.em + " " : ""}${c.s.en} ${c.g.en} | ${c.lenEn ? c.lenEn + " " : ""}${c.u.en} Playlist`,
+      () => `[Playlist] ${c.s.en} ${c.g.en} for ${c.u.enFor}${c.lenEn ? " · " + c.lenEn : ""}`,
+      () => `${c.lenEn ? c.lenEn + " of " : ""}${c.g.en} to ${c.u.enTo}${c.emS} ${c.s.en} Vibes`,
+      () => `${c.s.en}${c.emS} ${c.g.en} Mix${c.lenEn ? " [" + c.lenEn + "]" : ""}`,
+      () => `${c.g.en} for ${c.u.enFor} — ${c.s.enLine}${c.emS}`,
+    ];
+    const both = [
+      () => `${c.em ? c.em + " " : ""}${c.s.ko} ${c.g.ko} | ${c.s.en} ${c.g.en}${c.lenEn ? " (" + c.lenEn + ")" : ""}`,
+      () => `[Playlist] ${c.u.phrase} ${c.g.ko} | ${c.g.en} for ${c.u.enFor}`,
+      () => `${c.s.en} ${c.g.en}${c.emS} ${c.s.when} 듣는 ${c.g.ko}${c.lenKo ? " " + c.lenKo : ""}`,
+    ];
+    let pool = S.lang === "ko" ? ko : S.lang === "en" ? en : [...both, ko[0], en[0], ko[2], en[2]];
+    const all = [...new Set(pool.map((f) => tidy(f())))];
+    const n = all.length, start = (S.variant * 2) % n;
+    return Array.from({ length: Math.min(4, n) }, (_, i) => all[(start + i) % n]);
+  }
+
+  // ---------- 해시태그·태그 ----------
+  function hashtags(c, max) {
+    const h = [];
+    const add = (x) => { x = x.startsWith("#") ? x : "#" + x.replace(/\s+/g, ""); if (x.length > 1 && !h.some((y) => y.toLowerCase() === x.toLowerCase())) h.push(x); };
+    if (S.lang === "en") { add(c.g.hash[0]); add(c.u.hash[1]); add("#playlist"); add(c.g.hash[2]); add(c.s.en.toLowerCase()); }
+    else if (S.lang === "ko") { add(c.g.hash[1]); add(c.u.hash[0]); add("#플레이리스트"); add(c.g.hash[0]); add(c.u.hash[1]); add("#playlist"); }
+    else { add(c.g.hash[1]); add(c.g.hash[0]); add("#playlist"); add(c.u.hash[0]); add(c.u.hash[1]); add("#플레이리스트"); }
+    c.extras.forEach(add);
+    return h.slice(0, max);
+  }
+  function ytTags(c) {
+    const raw = [
+      ...c.extras,
+      `${c.s.en} ${c.g.en}`.toLowerCase(),
+      `${c.g.en} playlist`.toLowerCase(),
+      c.lenEn ? `${c.g.en} ${c.lenEn}`.toLowerCase() : "",
+      `${c.g.en} for ${c.u.enFor}`.toLowerCase(),
+      ...c.g.tags, ...c.u.tags, ...c.s.tags,
+      `${c.s.ko} ${c.g.ko}`, `${c.u.ko} 음악`, c.lenKo ? `${c.g.ko} ${c.lenKo}` : "", "플레이리스트", "playlist",
+    ].map((t) => (t || "").trim()).filter(Boolean);
+    const seen = new Set(), out = [];
+    let len = 0;
+    for (const t of raw) {
+      const k = t.toLowerCase(); if (seen.has(k)) continue; seen.add(k);
+      const cost = t.length + (/\s/.test(t) ? 2 : 0) + (out.length ? 1 : 0); // 띄어쓰기 있는 태그는 따옴표 2자를 더 센다
+      if (len + cost > 500) continue;
+      out.push(t); len += cost;
+    }
+    return { tags: out, len };
+  }
+
+  // ---------- 설명·캡션 ----------
+  function hookKo(c) {
+    const v = [
+      `${c.s.line}, ${c.u.phrase} ${c.g.ko} 플레이리스트예요.`,
+      `${c.u.whenKo} 틀어두기 좋은 ${c.g.ko}만 모았어요.`,
+      `오늘도 수고했어요. ${c.s.when} 어울리는 음악과 함께 잠시 쉬어가세요.`,
+    ];
+    return v[S.variant % v.length];
+  }
+  function hookEn(c) {
+    const v = [
+      `${cap(c.s.enLine)}. ${c.lenEn ? "A " + c.lenEn.toLowerCase() + " " : "A "}${c.g.en} playlist for ${c.u.enFor}.`,
+      `Press play and let the ${c.g.en} do the rest.`,
+      `${c.s.en}${c.emS} — ${c.g.en} to ${c.u.enTo}.`,
+    ];
+    return v[S.variant % v.length];
+  }
+  const cap = (x) => (x ? x[0].toUpperCase() + x.slice(1) : x);
+
+  function description(c) {
+    const parts = [];
+    if (S.lang !== "en") parts.push(hookKo(c));
+    if (S.lang !== "ko") parts.push(hookEn(c));
+    const blocks = [parts.join("\n")];
+    const tl = S.tracklist.trim();
+    if (tl) blocks.push(`🎧 ${S.lang === "ko" ? "트랙리스트" : "Tracklist"}\n${tl}`);
+    // 고정 문구를 손대지 않았으면 언어에 맞는 기본 문구를 쓴다
+    const EN_FOOTER = "🔔 Subscribe for new playlists every week.\n💬 Tell us your favorite track in the comments.";
+    const f = S.footer.trim();
+    if (f === DEFAULT_FOOTER) blocks.push(S.lang === "ko" ? DEFAULT_FOOTER : S.lang === "en" ? EN_FOOTER : DEFAULT_FOOTER + "\n" + EN_FOOTER);
+    else if (f) blocks.push(f);
+    if (S.aiCredit) {
+      const cr = [];
+      if (S.lang !== "en") cr.push("🎵 음악은 Suno AI, 이미지는 Midjourney로 제작했어요.");
+      if (S.lang !== "ko") cr.push("🎵 Music made with Suno AI · Visuals made with Midjourney");
+      blocks.push(cr.join("\n"));
+    }
+    blocks.push(hashtags(c, 6).join(" "));
+    return blocks.join("\n\n");
+  }
+  function tiktok(c) {
+    const hook = S.lang === "en"
+      ? `POV: ${c.s.enLine}${c.emS}`
+      : `${c.s.when} 이거 틀어두세요${c.emS}`;
+    const sub = S.lang === "en" ? `${c.g.en} for ${c.u.enFor}. Full ${c.lenEn ? c.lenEn.toLowerCase() + " " : ""}version on YouTube 🎧`
+      : S.lang === "ko" ? `${c.u.phrase} ${c.g.ko} · ${c.lenKo ? c.lenKo + " " : ""}풀버전은 유튜브에서 🎧`
+      : `${c.u.phrase} ${c.g.ko} · Full version on YouTube 🎧`;
+    const h = hashtags(c, 4); h.push(S.lang === "en" ? "#musicrecommendation" : "#음악추천");
+    return `${hook}\n${sub}\n\n${h.join(" ")}`;
+  }
+  function insta(c) {
+    const lines = [];
+    if (S.lang !== "en") lines.push(`${c.em ? c.em + " " : ""}${c.s.line}`, `${c.u.phrase} ${c.g.ko}`);
+    if (S.lang !== "ko") lines.push(S.lang === "both" ? `${c.s.en} · ${c.g.en} for ${c.u.enFor}` : `${c.em ? c.em + " " : ""}${cap(c.s.enLine)}`, ...(S.lang === "en" ? [`${c.g.en} for ${c.u.enFor}`] : []));
+    const cta = S.lang === "en" ? `🎧 Full ${c.lenEn ? c.lenEn.toLowerCase() + " " : ""}playlist: link in bio` : `🎧 ${c.lenKo ? c.lenKo + " " : ""}풀버전은 프로필 링크에서`;
+    const save = S.lang === "en" ? "Save this for your next session 🔖" : "나중에 들으려면 저장해두세요 🔖";
+    const h = hashtags(c, 8);
+    if (S.lang !== "en") h.push("#음악추천"); if (S.lang !== "ko") h.push("#musicreels");
+    return `${lines.join("\n")}\n\n${cta}\n${save}\n\n${[...new Set(h)].join(" ")}`;
+  }
+
+  // ---------- 화면 ----------
+  const OUT = {};
+  function setCount(id, n, max) { const el = $("#" + id); el.textContent = `${n.toLocaleString()} / ${max.toLocaleString()}자`; el.classList.toggle("over", n > max); }
+
+  function render() {
+    const c = ctx();
+    const ul = $("#titles"); ul.textContent = "";
+    titleCandidates(c).forEach((t, i) => {
+      const li = document.createElement("li");
+      const sp = document.createElement("span"); sp.className = "t"; sp.textContent = t;
+      const cnt = document.createElement("span"); cnt.className = "count" + (t.length > 100 ? " over" : ""); cnt.textContent = `${t.length}자`;
+      const b = document.createElement("button"); b.type = "button"; b.className = "btn small"; b.textContent = "복사"; b.setAttribute("aria-label", `제목 후보 ${i + 1} 복사`);
+      b.addEventListener("click", () => copy(t, "제목을 복사했어요."));
+      li.append(sp, cnt, b); ul.appendChild(li);
+    });
+
+    OUT.desc = description(c); $("#desc").textContent = OUT.desc; setCount("descCount", OUT.desc.length, 5000);
+    const tg = ytTags(c); OUT.tags = tg.tags.join(", ");
+    const chipsEl = $("#tagChips"); chipsEl.textContent = "";
+    tg.tags.forEach((t) => { const s = document.createElement("span"); s.textContent = t; chipsEl.appendChild(s); });
+    setCount("tagCount", tg.len, 500);
+    OUT.tt = tiktok(c); $("#tt").textContent = OUT.tt; setCount("ttCount", OUT.tt.length, 2200);
+    OUT.ig = insta(c); $("#ig").textContent = OUT.ig; setCount("igCount", OUT.ig.length, 2200);
+  }
+
+  let tmr;
+  function toast(msg) { const s = $("#status"); s.textContent = msg; s.hidden = false; clearTimeout(tmr); tmr = setTimeout(() => { s.hidden = true; }, 2200); }
+  function copy(text, msg) {
+    const fallback = () => {
+      const ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove(); toast(ok ? msg : "복사가 막혀 있어요. 글자를 길게 눌러 직접 복사해 주세요.");
+    };
+    try { navigator.clipboard.writeText(text).then(() => toast(msg), fallback); } catch (e) { fallback(); }
+  }
+  const LABEL = { desc: "설명을", tags: "태그를", tt: "틱톡 캡션을", ig: "인스타 캡션을" };
+  document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copy(OUT[b.dataset.copy], `${LABEL[b.dataset.copy]} 복사했어요.`)));
+  $("#reroll").addEventListener("click", () => { S.variant++; save(); render(); });
+
+  syncCustom();
+  render();
+})();
+</script>
