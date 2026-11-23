@@ -112,6 +112,8 @@ h1 { margin: 2px 0 2px; font-size: clamp(26px, 4vw, 34px); line-height: 1.2; fon
 .ichip small { font-size: 11px; color: var(--muted); font-family: var(--mono); }
 .ichip[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); border-color: var(--accent); }
 .ichip[aria-pressed="true"] span { font-weight: 700; }
+.ichip.rec span::after { content: " 추천"; font-size: 11px; font-weight: 700; color: var(--accent-ink); }
+.preset-note { margin: 0; padding: 10px 16px; font-size: 14px; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); border-bottom: 1px solid var(--line); }
 .ichip.neg[aria-pressed="true"] { background: color-mix(in srgb, var(--warn) 14%, var(--surface)); border-color: var(--warn); }
 .bpm-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .bpm-row input[type="range"] { flex: 1 1 200px; accent-color: var(--accent); }
@@ -168,7 +170,10 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
   <section id="view-build" aria-label="조합기" hidden>
     <div class="builder">
       <div class="panel">
-        <div class="panel-head"><h2>재료 고르기</h2><button class="btn" type="button" id="resetBuild">처음부터</button></div>
+        <div class="panel-head"><h2>재료 고르기</h2>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" id="reapplyBtn">추천 조합으로 되돌리기</button><button class="btn" type="button" id="resetBuild">처음부터</button></div>
+        </div>
+        <p class="preset-note" id="presetNote" role="status" hidden></p>
         <div class="panel-body" id="groups"></div>
       </div>
       <div class="panel">
@@ -347,15 +352,51 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
 
   // ---------- 조합기 재료 ----------
   const GROUPS = [
-    { key: "genre", name: "장르", hint: "1~2개", items: [["jazz hip hop", "재즈힙합"], ["lofi hip hop", "로파이 힙합"], ["chillhop", "칠합"], ["nu disco", "누디스코"], ["boogie funk", "부기 펑크"], ["deep house", "딥하우스"], ["lofi house", "로파이 하우스"], ["ambient", "앰비언트"], ["ambient synthwave", "앰비언트 신스웨이브"], ["sleep music", "수면 음악"], ["focus music", "작업용 음악"], ["bossa nova", "보사노바"], ["smooth jazz", "스무스 재즈"], ["city pop", "시티팝"]] },
+    { key: "genre", name: "메인 장르", hint: "고르면 어울리는 재료를 미리 골라줘요", single: true, items: [["jazz hip hop", "재즈힙합"], ["lofi hip hop", "로파이 힙합"], ["chillhop", "칠합"], ["nu disco", "누디스코"], ["boogie funk", "부기 펑크"], ["deep house", "딥하우스"], ["lofi house", "로파이 하우스"], ["ambient", "앰비언트"], ["ambient synthwave", "앰비언트 신스웨이브"], ["sleep music", "수면 음악"], ["focus music", "작업용 음악"], ["bossa nova", "보사노바"], ["smooth jazz", "스무스 재즈"], ["city pop", "시티팝"]] },
     { key: "mood", name: "분위기", hint: "2~3개", items: [["mellow", "부드러운"], ["cozy", "아늑한"], ["nostalgic", "아련한"], ["melancholic", "쓸쓸한"], ["dreamy", "몽환적인"], ["uplifting", "기분 좋은"], ["groovy", "그루비한"], ["calm", "차분한"], ["peaceful", "평화로운"], ["smoky", "스모키한"], ["romantic", "로맨틱한"], ["cinematic", "영화 같은"], ["late night", "새벽"], ["rainy night", "비 오는 밤"], ["sunny", "햇살 가득"], ["city night drive", "밤 드라이브"]] },
-    { key: "inst", name: "악기", hint: "3~4개", items: [["Rhodes piano", "로즈 피아노"], ["soft felt piano", "펠트 피아노"], ["jazz piano chords", "재즈 피아노"], ["warm upright bass", "업라이트 베이스"], ["slap bass", "슬랩 베이스"], ["synth bass", "신스 베이스"], ["muted trumpet", "뮤트 트럼펫"], ["saxophone melody", "색소폰"], ["flute melody", "플루트"], ["jazz guitar", "재즈 기타"], ["nylon guitar", "나일론 기타"], ["clean funk guitar", "펑크 기타"], ["lush strings", "스트링"], ["analog synth pads", "아날로그 패드"], ["soft arpeggio", "아르페지오"], ["soft bells", "종소리"], ["vibraphone", "비브라폰"]] },
-    { key: "drum", name: "드럼", hint: "1개만", single: true, items: [["dusty boom bap drums", "먼지 낀 붐뱁"], ["lazy laid-back drums", "느긋한 드럼"], ["brushed drums", "브러시 드럼"], ["four-on-the-floor kick", "포온더플로어 킥"], ["soft steady beat", "잔잔한 일정한 비트"], ["vintage drum machine", "빈티지 드럼머신"], ["no drums", "드럼 없음"]] },
+    { key: "inst", name: "악기", hint: "3~4개", items: [["Rhodes piano", "로즈 피아노"], ["soft felt piano", "펠트 피아노"], ["jazz piano chords", "재즈 피아노"], ["warm upright bass", "업라이트 베이스"], ["slap bass", "슬랩 베이스"], ["synth bass", "신스 베이스"], ["rolling deep bassline", "딥 베이스라인"], ["warm chord stabs", "하우스 코드 스탭"],["muted trumpet", "뮤트 트럼펫"], ["saxophone melody", "색소폰"], ["flute melody", "플루트"], ["jazz guitar", "재즈 기타"], ["nylon guitar", "나일론 기타"], ["clean funk guitar", "펑크 기타"], ["lush strings", "스트링"], ["analog synth pads", "아날로그 패드"], ["soft arpeggio", "아르페지오"], ["soft bells", "종소리"], ["vibraphone", "비브라폰"]] },
+    { key: "drum", name: "드럼", hint: "1개만", single: true, items: [["dusty boom bap drums", "먼지 낀 붐뱁"], ["lazy laid-back drums", "느긋한 드럼"], ["brushed drums", "브러시 드럼"], ["four-on-the-floor kick", "포온더플로어 킥"], ["four-on-the-floor kick, shuffled hi-hats", "하우스 그루브 (킥 + 셔플 하이햇)"],["soft steady beat", "잔잔한 일정한 비트"], ["vintage drum machine", "빈티지 드럼머신"], ["no drums", "드럼 없음"]] },
     { key: "tex", name: "질감 · 믹스", hint: "1~3개", items: [["vinyl crackle", "LP 잡음"], ["tape saturation", "테이프 질감"], ["tape wobble", "테이프 흔들림"], ["warm analog", "따뜻한 아날로그"], ["rain sounds", "빗소리"], ["reverb-soaked", "잔향 가득"], ["wide stereo", "넓은 스테레오"], ["sidechain pump", "사이드체인 펌핑"], ["crisp clean mix", "깔끔한 믹스"]] },
     { key: "excl", name: "빼고 싶은 것 (제외 칸)", hint: "여러 개", neg: true, items: [["vocals", "보컬"], ["rap", "랩"], ["choir", "합창"], ["heavy 808", "강한 808"], ["EDM drop", "EDM 드롭"], ["distorted guitar", "디스토션 기타"], ["bright synth lead", "날카로운 신스"], ["drums", "드럼 전체"], ["sudden changes", "갑작스러운 변화"]] },
   ];
-  const DEFAULT_BUILD = { genre: ["jazz hip hop"], mood: ["mellow", "rainy night"], inst: ["Rhodes piano", "warm upright bass", "muted trumpet"], drum: ["dusty boom bap drums"], tex: ["vinyl crackle", "tape saturation"], excl: ["vocals", "rap"], bpm: 85, useBpm: true, instrumental: true, struct: "basic" };
+  // 메인 장르 밑에 '섞을 장르'를 둔다. 추천 조합은 메인 장르 기준
+  GROUPS.splice(1, 0, { key: "mix", name: "섞을 장르 (선택)", hint: "여러 개 · 추천 조합은 바뀌지 않아요", items: GROUPS[0].items });
+
+  // 장르별 추천 조합: 메인 장르를 고르면 이대로 미리 골라 둔다 (bpm: null 이면 BPM을 넣지 않음)
+  const PRESETS = {
+    "jazz hip hop": { mood: ["mellow", "nostalgic"], inst: ["Rhodes piano", "warm upright bass", "muted trumpet"], drum: ["dusty boom bap drums"], tex: ["vinyl crackle", "tape saturation"], bpm: 85, excl: ["vocals", "rap", "heavy 808"], struct: "basic" },
+    "lofi hip hop": { mood: ["mellow", "cozy", "nostalgic"], inst: ["jazz piano chords", "warm upright bass", "soft bells"], drum: ["lazy laid-back drums"], tex: ["vinyl crackle", "tape wobble"], bpm: 75, excl: ["vocals", "rap", "heavy 808"], struct: "basic" },
+    "chillhop": { mood: ["uplifting", "cozy"], inst: ["jazz guitar", "Rhodes piano", "flute melody", "warm upright bass"], drum: ["dusty boom bap drums"], tex: ["warm analog", "vinyl crackle"], bpm: 90, excl: ["vocals", "rap"], struct: "basic" },
+    "nu disco": { mood: ["groovy", "city night drive"], inst: ["slap bass", "clean funk guitar", "lush strings", "analog synth pads"], drum: ["four-on-the-floor kick"], tex: ["sidechain pump", "crisp clean mix"], bpm: 118, excl: ["vocals", "rap", "distorted guitar"], struct: "groove" },
+    "boogie funk": { mood: ["groovy", "uplifting"], inst: ["synth bass", "clean funk guitar", "Rhodes piano"], drum: ["vintage drum machine"], tex: ["warm analog"], bpm: 112, excl: ["vocals", "rap", "EDM drop"], struct: "groove" },
+    "deep house": { mood: ["late night", "dreamy"], inst: ["warm chord stabs", "rolling deep bassline", "analog synth pads"], drum: ["four-on-the-floor kick, shuffled hi-hats"], tex: ["sidechain pump", "wide stereo", "warm analog"], bpm: 120, excl: ["vocals", "EDM drop", "bright synth lead"], struct: "groove" },
+    "lofi house": { mood: ["nostalgic", "dreamy"], inst: ["warm chord stabs", "rolling deep bassline", "Rhodes piano"], drum: ["four-on-the-floor kick, shuffled hi-hats"], tex: ["tape saturation", "vinyl crackle"], bpm: 122, excl: ["vocals", "EDM drop"], struct: "groove" },
+    "ambient": { mood: ["calm", "cinematic", "late night"], inst: ["analog synth pads", "soft felt piano"], drum: ["no drums"], tex: ["reverb-soaked", "wide stereo"], bpm: null, excl: ["vocals", "drums", "sudden changes"], struct: "sleep" },
+    "ambient synthwave": { mood: ["dreamy", "nostalgic", "city night drive"], inst: ["analog synth pads", "soft arpeggio", "synth bass"], drum: ["soft steady beat"], tex: ["warm analog", "wide stereo"], bpm: 70, excl: ["vocals", "distorted guitar", "EDM drop"], struct: "loop" },
+    "sleep music": { mood: ["peaceful", "calm"], inst: ["soft felt piano", "analog synth pads"], drum: ["no drums"], tex: ["reverb-soaked", "warm analog"], bpm: 50, excl: ["vocals", "drums", "sudden changes", "bright synth lead"], struct: "sleep" },
+    "focus music": { mood: ["calm"], inst: ["soft arpeggio", "analog synth pads", "synth bass"], drum: ["soft steady beat"], tex: ["crisp clean mix"], bpm: 100, excl: ["vocals", "EDM drop", "sudden changes"], struct: "loop" },
+    "bossa nova": { mood: ["cozy", "romantic", "sunny"], inst: ["nylon guitar", "warm upright bass", "jazz piano chords", "flute melody"], drum: ["brushed drums"], tex: ["warm analog"], bpm: null, excl: ["vocals", "distorted guitar", "heavy 808"], struct: "jazz" },
+    "smooth jazz": { mood: ["smoky", "romantic", "late night"], inst: ["saxophone melody", "jazz piano chords", "warm upright bass"], drum: ["brushed drums"], tex: ["warm analog", "reverb-soaked"], bpm: null, excl: ["vocals", "rap", "distorted guitar"], struct: "jazz" },
+    "city pop": { mood: ["sunny", "city night drive", "nostalgic"], inst: ["slap bass", "Rhodes piano", "clean funk guitar", "lush strings"], drum: ["vintage drum machine"], tex: ["crisp clean mix", "warm analog"], bpm: 105, excl: ["vocals", "rap"], struct: "groove" },
+  };
+  const koOf = (en) => (GROUPS[0].items.find((x) => x[0] === en) || [en, en])[1];
+
+  const DEFAULT_BUILD = { genre: ["jazz hip hop"], mix: [], mood: ["mellow", "rainy night"], inst: ["Rhodes piano", "warm upright bass", "muted trumpet"], drum: ["dusty boom bap drums"], tex: ["vinyl crackle", "tape saturation"], excl: ["vocals", "rap"], bpm: 85, useBpm: true, instrumental: true, struct: "basic" };
   let B = Object.assign(JSON.parse(JSON.stringify(DEFAULT_BUILD)), store.get("spd.build", {}));
+  // 예전 버전은 장르를 2개까지 골랐다: 첫 번째만 메인으로, 나머지는 섞을 장르로
+  if (!Array.isArray(B.mix)) B.mix = [];
+  if (B.genre.length > 1) { B.mix = [...new Set([...B.mix, ...B.genre.slice(1)])]; B.genre = B.genre.slice(0, 1); }
+
+  function applyPreset(genre) {
+    const p = PRESETS[genre]; if (!p) return;
+    B.mood = [...p.mood]; B.inst = [...p.inst]; B.drum = [...p.drum]; B.tex = [...p.tex]; B.excl = [...p.excl]; B.struct = p.struct;
+    if (p.bpm) { B.bpm = p.bpm; B.useBpm = true; } else { B.useBpm = false; }
+    B.mix = B.mix.filter((x) => x !== genre);
+    saveBuild(); renderGroups(); buildOut();
+    const note = $("#presetNote");
+    note.textContent = `${koOf(genre)}에 어울리는 분위기, 악기, 드럼, 질감${p.bpm ? `, ${p.bpm} BPM` : ""}을 골라뒀어요. 바꾸고 싶은 것만 다시 누르세요.`;
+    note.hidden = false;
+  }
 
   let favs = store.get("spd.favs", []);
   let mine = store.get("spd.mine", []);
@@ -448,20 +489,29 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
   // ---------- 조합기 화면 ----------
   function renderGroups() {
     const box = $("#groups"); box.textContent = "";
+    const rec = PRESETS[B.genre[0]] || null;
+    $("#reapplyBtn").hidden = !rec;
     GROUPS.forEach((g) => {
       const wrap = el("div", "group");
       const h = el("div", "group-head"); h.append(el("b", null, g.name), el("small", null, g.hint));
       const chips = el("div", "ichips");
       g.items.forEach(([en, ko]) => {
-        const b = el("button", "ichip" + (g.neg ? " neg" : "")); b.type = "button";
+        if (g.key === "mix" && B.genre[0] === en) return; // 메인 장르는 섞을 장르에 다시 보이지 않게
+        const isRec = !!(rec && rec[g.key] && rec[g.key].includes(en));
+        const b = el("button", "ichip" + (g.neg ? " neg" : "") + (isRec ? " rec" : "")); b.type = "button";
         b.append(el("span", null, ko), el("small", null, en));
+        if (isRec) b.title = `${koOf(B.genre[0])} 추천`;
         b.setAttribute("aria-pressed", String(B[g.key].includes(en)));
         b.dataset.val = en;
         b.addEventListener("click", () => {
           const on = B[g.key].includes(en);
-          // 드럼은 하나만 고른다 (붐뱁과 '드럼 없음'이 같이 들어가지 않게)
+          // 드럼·메인 장르는 하나만 고른다
           if (g.single) B[g.key] = on ? [] : [en];
           else B[g.key] = on ? B[g.key].filter((x) => x !== en) : [...B[g.key], en];
+          if (g.key === "genre") {
+            if (!on) { applyPreset(en); return; }
+            $("#presetNote").hidden = true; saveBuild(); renderGroups(); buildOut(); return;
+          }
           chips.querySelectorAll(".ichip").forEach((c) => c.setAttribute("aria-pressed", String(B[g.key].includes(c.dataset.val))));
           saveBuild(); buildOut();
         });
@@ -474,7 +524,9 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
   }
   function bpmGroup() {
     const wrap = el("div", "group");
-    const h = el("div", "group-head"); h.append(el("b", null, "빠르기 (BPM)"), el("small", null, "수면 50 · 재즈힙합 80~90 · 디스코 112~122"));
+    const rec = PRESETS[B.genre[0]];
+    const hint = rec ? `${koOf(B.genre[0])} 추천: ${rec.bpm ? rec.bpm + " BPM" : "BPM 넣지 않기"}` : "수면 50 · 재즈힙합 80~90 · 디스코 112~122";
+    const h = el("div", "group-head"); h.append(el("b", null, "빠르기 (BPM)"), el("small", null, hint));
     const row = el("div", "bpm-row");
     const r = document.createElement("input"); r.type = "range"; r.min = 45; r.max = 140; r.step = 1; r.value = B.bpm; r.id = "bpmRange"; r.setAttribute("aria-label", "BPM");
     const v = el("span", "bpm-val", `${B.bpm} BPM`);
@@ -488,7 +540,7 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
     return wrap;
   }
   function styleText() {
-    const parts = [...B.genre, ...B.mood, ...B.inst, ...B.drum, ...B.tex];
+    const parts = [...B.genre, ...B.mix.filter((x) => !B.genre.includes(x)), ...B.mood, ...B.inst, ...B.drum, ...B.tex];
     if (B.useBpm) parts.push(`${B.bpm} BPM`);
     if (B.instrumental) parts.push("instrumental");
     return parts.join(", ");
@@ -510,7 +562,8 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
   $("#copyExcl").addEventListener("click", () => copy($("#exclOut").value, "제외 스타일을 복사했어요."));
   $("#copyStruct").addEventListener("click", () => copy($("#structOut").value, "곡 구조 태그를 복사했어요."));
   $("#styleOut").addEventListener("input", () => { const n = $("#styleOut").value.length; $("#styleCount").textContent = `${n}자`; $("#styleCount").classList.toggle("over", n > 200); });
-  $("#resetBuild").addEventListener("click", () => { B = JSON.parse(JSON.stringify(DEFAULT_BUILD)); saveBuild(); renderGroups(); buildOut(); });
+  $("#resetBuild").addEventListener("click", () => { B = JSON.parse(JSON.stringify(DEFAULT_BUILD)); $("#presetNote").hidden = true; saveBuild(); renderGroups(); buildOut(); });
+  $("#reapplyBtn").addEventListener("click", () => { if (B.genre[0]) applyPreset(B.genre[0]); });
   $("#saveBtn").addEventListener("click", () => {
     const name = $("#saveName").value.trim() || `내 프롬프트 ${mine.length + 1}`;
     mine.unshift({ id: "m" + Date.now(), title: name, style: $("#styleOut").value.trim(), excl: $("#exclOut").value.trim(), structText: $("#structOut").value.trim(), bpm: B.useBpm ? B.bpm : null });
