@@ -12,6 +12,7 @@ import { allReports } from "@/lib/reports";
 import { allLibrary } from "@/lib/library";
 import { FIELDS, fmtDate } from "@/lib/fields";
 import { BASE_PATH, SITE } from "@/lib/site";
+import { market, marketCount } from "@/lib/market";
 
 /** 빌드 시각(한국 시간). 사이트는 하루 여러 번 다시 만들어진다 */
 function kstNow() {
@@ -52,7 +53,7 @@ export default function Home() {
       <AdSlot slot="top_banner" />
       <h1 className="sr-only">{SITE.name} · {SITE.tagline}</h1>
 
-      {/* 윗부분: 사고속보 + 새 자료 */}
+      {/* 윗부분: 소식 + 사고속보 (메뉴 순서) */}
       <section className="bg-ink text-white">
         <div className="mx-auto flex max-w-[1240px] flex-col gap-5 px-4 pt-7 pb-10 sm:px-5 sm:pt-9">
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
@@ -68,7 +69,36 @@ export default function Home() {
             </nav>
           </div>
 
-          <div className="grid items-start gap-5 lg:grid-cols-[1.25fr_1fr]">
+          <div className="grid items-start gap-5 lg:grid-cols-2">
+            {/* 소식 */}
+            <div className="flex min-w-0 flex-col overflow-hidden rounded-md bg-white text-ink">
+              <div className="flex items-center justify-between gap-2 bg-accent px-5 py-3 text-white">
+                <h2 className="m-0 text-[18px] font-extrabold">소식</h2>
+                <Link href="/news/" className="text-[14px] font-bold text-white/90 hover:text-white">전체 보기 →</Link>
+              </div>
+              <ul className="m-0 flex list-none flex-col p-0">
+                {news.slice(0, 5).map((x) => (
+                  <li key={x.id} className="border-t border-line-soft first:border-t-0">
+                    <Link href={`/news/${slugOf(x.id)}/`} className="flex flex-col gap-1 px-5 py-3.5 text-ink hover:bg-accent-soft hover:no-underline [&:hover_.t]:underline">
+                      <span className="t text-[16px] leading-[1.45] font-semibold">{x.title}</span>
+                      <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
+                        <FieldChip field={x.field} />
+                        {x.kind} {fmtDate(x.date).slice(5)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="m-0 flex flex-wrap gap-x-3 gap-y-1 border-t border-line-soft px-5 py-3 text-[14px]">
+                <span className="font-bold text-muted">분야</span>
+                {FIELDS.filter((f) => (fieldCount[f.key] ?? 0) > 0).map((f) => (
+                  <Link key={f.key} href={`/news/?field=${f.key}`}>
+                    {f.name} {fieldCount[f.key]}
+                  </Link>
+                ))}
+              </p>
+            </div>
+
             {/* 사고속보 */}
             <div className="flex min-w-0 flex-col overflow-hidden rounded-md bg-white text-ink">
               <div className="flex items-center justify-between gap-2 bg-[#b42318] px-5 py-3 text-white">
@@ -97,33 +127,47 @@ export default function Home() {
                 })}
               </ul>
             </div>
-
-            {/* 새 자료 */}
-            {feat && (
-              <Link href={`/library/${feat.id}/`} className="group flex min-w-0 flex-col overflow-hidden rounded-md border border-white/15 bg-white/[0.04] text-white hover:border-[#f5c518] hover:text-white hover:no-underline">
-                <span className="flex items-center justify-between gap-2 px-5 py-3">
-                  <span className="text-[14px] font-extrabold text-[#f5c518]">새 자료</span>
-                  <span className="text-[13px] text-[#9fb0b8]">{fmtDate(feat.updated)}</span>
-                </span>
-                {featThumb && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={featThumb} alt="" className="block aspect-[16/9] w-full object-cover object-top" />
-                )}
-                <span className="flex flex-col gap-1.5 px-5 pt-4 pb-5">
-                  <span className="text-[20px] leading-snug font-extrabold group-hover:underline">{feat.title}</span>
-                  <span className="text-[15px] leading-relaxed text-[#c3cfd4]">{feat.desc}</span>
-                  <span className="mt-2 inline-flex min-h-[40px] items-center self-start rounded-md bg-[#f5c518] px-4 text-[15px] font-extrabold text-ink">{feat.format} 내려받기</span>
-                </span>
-              </Link>
-            )}
           </div>
         </div>
       </section>
 
       <div className="mx-auto flex max-w-[1240px] flex-col gap-12 px-4 pt-10 pb-6 sm:px-5">
-        {/* 자료실 */}
+        {/* 이슈리포트 */}
+        <section className="flex flex-col gap-3">
+          <SectionHead title="이슈리포트" href="/reports/" more="전체 리포트" />
+          <ul className="m-0 grid list-none gap-x-10 p-0 md:grid-cols-2">
+            {reports.map((r) => (
+              <li key={r.slug} className="border-b border-line-soft">
+                <Link href={`/reports/${r.slug}/`} className="flex flex-col gap-0.5 py-3 text-ink hover:no-underline [&:hover_.t]:underline">
+                  {r.series && <span className="text-[12px] font-bold text-accent">{r.series}</span>}
+                  <span className="t text-[16px] leading-snug font-semibold">{r.title}</span>
+                  <span className="line-clamp-1 text-[14px] text-muted">{r.summary}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* 자료실: 새 자료 + 고른 자료 */}
         <section className="flex flex-col gap-4">
           <SectionHead title="자료실" href="/library/" more={`자료 ${files.length}개 전체`} />
+          {feat && (
+            <Link href={`/library/${feat.id}/`} className="card lift group grid overflow-hidden text-ink hover:text-ink hover:no-underline md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+              {featThumb && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={featThumb} alt="" className="block aspect-[16/9] w-full border-b border-line-soft object-cover object-top md:border-r md:border-b-0" />
+              )}
+              <span className="flex flex-col justify-center gap-1.5 p-5 sm:p-6">
+                <span className="flex items-center gap-3 text-[14px]">
+                  <span className="font-extrabold text-accent">새 자료</span>
+                  <span className="text-muted">{fmtDate(feat.updated)}</span>
+                </span>
+                <span className="text-[20px] leading-snug font-extrabold group-hover:underline">{feat.title}</span>
+                <span className="text-[15px] leading-relaxed text-muted">{feat.desc}</span>
+                <span className="mt-2 inline-flex min-h-[40px] items-center self-start rounded-md bg-[#f5c518] px-4 text-[15px] font-extrabold text-ink">{feat.format} 내려받기</span>
+              </span>
+            </Link>
+          )}
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(270px, 100%), 1fr))" }}>
             {picks.map((x) => {
               const th = thumbOf(x.id);
@@ -146,50 +190,23 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 최신 소식 + 이슈리포트 */}
-        <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[1.2fr_1fr]">
-          <section className="flex min-w-0 flex-col gap-3">
-            <SectionHead title="최신 소식" href="/news/" more="전체 소식" />
-            <ul className="m-0 flex list-none flex-col p-0">
-              {news.slice(0, 6).map((x) => (
-                <li key={x.id} className="border-b border-line-soft">
-                  <Link href={`/news/${slugOf(x.id)}/`} className="flex flex-col gap-1 py-3 text-ink hover:no-underline [&:hover_.t]:underline">
-                    <span className="t text-[16px] leading-[1.45] font-semibold">{x.title}</span>
-                    <span className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
-                      <FieldChip field={x.field} />
-                      {x.kind} {fmtDate(x.date)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p className="m-0 flex flex-wrap gap-x-3 gap-y-1 text-[14px]">
-              <span className="font-bold text-muted">분야</span>
-              {FIELDS.filter((f) => (fieldCount[f.key] ?? 0) > 0).map((f) => (
-                <Link key={f.key} href={`/news/?field=${f.key}`}>
-                  {f.name} {fieldCount[f.key]}
-                </Link>
-              ))}
-            </p>
-          </section>
+        {/* 안전장터 */}
+        <section className="flex flex-col gap-4">
+          <SectionHead title="안전장터" href="/market/" more={`보호구·장비 ${marketCount()}종 전체`} />
+          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))" }}>
+            {market().groups.map((g) => (
+              <Link key={g.key} href={`/market/#${g.key}`} className="card lift flex flex-col gap-1 p-4 text-ink hover:text-ink hover:no-underline">
+                <span className="flex items-baseline justify-between gap-2">
+                  <span className="text-[17px] font-extrabold">{g.name}</span>
+                  <span className="text-[14px] text-muted">{g.items.length}종</span>
+                </span>
+                <span className="line-clamp-2 text-[14px] leading-relaxed text-muted">{g.items.map((it) => it.name).join(", ")}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-          <section className="flex min-w-0 flex-col gap-3">
-            <SectionHead title="이슈리포트" href="/reports/" more="전체 리포트" />
-            <ul className="m-0 flex list-none flex-col p-0">
-              {reports.map((r) => (
-                <li key={r.slug} className="border-b border-line-soft">
-                  <Link href={`/reports/${r.slug}/`} className="flex flex-col gap-0.5 py-3 text-ink hover:no-underline [&:hover_.t]:underline">
-                    {r.series && <span className="text-[12px] font-bold text-accent">{r.series}</span>}
-                    <span className="t text-[16px] leading-snug font-semibold">{r.title}</span>
-                    <span className="line-clamp-1 text-[14px] text-muted">{r.summary}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-
-        {/* 도구 + 자격증 */}
+        {/* 도구 */}
         <section className="flex flex-col gap-4">
           <SectionHead title="도구" href="/tools/" more="전체 도구" />
           <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(180px, 100%), 1fr))" }}>
@@ -199,11 +216,16 @@ export default function Home() {
                 <span className="text-[14px] leading-relaxed text-muted">{t.desc}</span>
               </Link>
             ))}
-            <Link href="/cert/industrial-safety-engineer/" className="card lift flex flex-col gap-1 border-accent p-4 text-ink hover:text-ink hover:no-underline">
-              <span className="text-[17px] font-extrabold">산업안전기사</span>
-              <span className="text-[14px] leading-relaxed text-muted">2027년부터 5과목, 과목별 출제 유형</span>
-            </Link>
           </div>
+        </section>
+
+        {/* 자격증 */}
+        <section className="flex flex-col gap-4">
+          <SectionHead title="자격증" href="/cert/industrial-safety-engineer/" more="산업안전기사" />
+          <Link href="/cert/industrial-safety-engineer/" className="card lift flex flex-col gap-1 p-5 text-ink hover:text-ink hover:no-underline sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+            <span className="text-[18px] font-extrabold">산업안전기사</span>
+            <span className="text-[15px] leading-relaxed text-muted">2027년부터 5과목, 과목별 출제 유형</span>
+          </Link>
         </section>
       </div>
 
