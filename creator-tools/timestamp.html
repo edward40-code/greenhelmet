@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>트랙리스트 타임스탬프</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,9 +168,23 @@ textarea { width: 100%; border: 1px solid var(--line); border-radius: 7px; backg
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* 사이트 공통 메뉴 (플레이리스트 작업실) */
+.sitebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); min-width: 0; }
+.sb-home { font-weight: 700; color: var(--ink); text-decoration: none; font-size: 15px; }
+.sb-home::before { content: "← "; color: var(--muted); }
+.sb-home:hover { color: var(--accent-ink); }
+.sitebar nav { display: flex; gap: 4px; overflow-x: auto; max-width: 100%; }
+.sitebar nav a { padding: 6px 10px; border-radius: 6px; font-size: 13px; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.sitebar nav a:hover { color: var(--ink); background: var(--surface-2); }
+.sitebar nav a[aria-current="page"] { color: var(--ink); font-weight: 700; background: var(--surface-2); }
 </style>
+</head>
+<body>
 
 <div class="wrap">
+  <header class="sitebar"><a class="sb-home" href="index.html">플레이리스트 작업실</a><nav aria-label="도구"><a href="suno-prompts.html">Suno 프롬프트</a><a href="higgsfield-prompts.html">커버·루프 영상</a><a href="timestamp.html" aria-current="page">타임스탬프</a><a href="upload-copy.html">업로드 문구</a></nav></header>
+
   <header class="top">
     <div>
       <p class="eyebrow">음악 재생 영상용</p>
@@ -541,6 +561,8 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
     const c = compute();
     const text = buildText(c);
     lastText = text;
+    // 같은 사이트의 업로드 문구 생성기가 가져갈 수 있게 마지막 트랙리스트를 남긴다 (예시 곡은 제외)
+    try { if (!isSample && text) localStorage.setItem("site.tracklist", JSON.stringify({ text, at: Date.now(), count: c.entries.length })); } catch (e) {}
     $("#out").value = text || "곡을 추가하면 여기에 트랙리스트가 만들어져요.";
     $("#charCount").textContent = text ? `${text.split("\n").length}줄 · ${text.length.toLocaleString()}자` : "";
 
@@ -725,3 +747,5 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
   afterChange();
 })();
 </script>
+</body>
+</html>

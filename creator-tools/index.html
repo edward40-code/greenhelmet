@@ -1,0 +1,136 @@
+<title>플레이리스트 작업실</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 레이아웃: 위에 사이트 이름과 한 줄 소개, 아래에 음악 재생 영상 한 편을 만드는 순서대로 도구 4개(SIDE A 트랙리스트처럼 번호와 시간 자리) */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --ink: #161a21;
+  --muted: #5b6473;
+  --line: #dce1e9;
+  --accent: #e09a17;
+  --accent-ink: #8a5600;
+  --focus: #2f6fdd;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3; --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --focus: #7aa7ff; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3; --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --focus: #7aa7ff; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 56px;
+}
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+
+header.top { display: flex; flex-direction: column; gap: 8px; }
+.side { margin: 0; font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: .12em; color: var(--accent-ink); }
+h1 { margin: 0; font-size: clamp(30px, 5vw, 44px); line-height: 1.15; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); font-size: 16px; max-width: 58ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.facts span { font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
+
+/* 트랙리스트 */
+.tracklist { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.tracklist li + li { border-top: 1px solid var(--line); }
+.track { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 6px 18px; align-items: center; padding: 20px 22px; color: var(--ink); text-decoration: none; transition: background .15s; }
+.track:hover { background: var(--surface-2); }
+.track:hover .go { color: var(--accent-ink); transform: translateX(3px); }
+.no { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; align-self: start; line-height: 1.2; }
+.body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.stage { font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.track h2 { margin: 0; font-size: 19px; line-height: 1.3; font-weight: 700; }
+.track p { margin: 0; font-size: 14px; color: var(--muted); max-width: 62ch; }
+.does { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.does span { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
+.track:hover .does span { background: var(--surface); }
+.go { font-size: 22px; color: var(--muted); transition: transform .15s, color .15s; }
+@media (max-width: 560px) {
+  .track { grid-template-columns: 40px minmax(0, 1fr); padding: 18px 16px; }
+  .no { font-size: 20px; }
+  .go { display: none; }
+}
+
+.notes { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: 14px; color: var(--muted); }
+.note b { color: var(--ink); display: block; margin-bottom: 2px; }
+footer { color: var(--muted); font-size: 13px; text-align: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="side">SIDE A · 4 TRACKS</p>
+    <h1>플레이리스트 작업실</h1>
+    <p class="lede">음악 재생 영상 한 편을 올릴 때마다 반복하는 귀찮은 일을 대신 해주는 도구 모음이에요. 곡 만들기부터 업로드 문구까지 순서대로 놓았어요.</p>
+    <div class="facts"><span>회원가입 없음</span><span>곡 파일은 브라우저 밖으로 나가지 않음</span><span>설정은 이 브라우저에 저장</span></div>
+  </header>
+
+  <ol class="tracklist" aria-label="도구">
+    <li>
+      <a class="track" href="suno-prompts.html">
+        <span class="no">01</span>
+        <span class="body">
+          <span class="stage">곡 만들기 · Suno</span>
+          <h2>Suno 프롬프트 사전</h2>
+          <p>장르를 고르면 어울리는 악기, 드럼, BPM이 미리 골라져요. 보컬곡이면 가사까지 써줘요.</p>
+          <span class="does"><span>장르별 프롬프트 24개</span><span>조합기</span><span>가사 만들기</span></span>
+        </span>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    </li>
+    <li>
+      <a class="track" href="higgsfield-prompts.html">
+        <span class="no">02</span>
+        <span class="body">
+          <span class="stage">커버와 배경 영상 · Higgsfield</span>
+          <h2>커버·루프 영상 프롬프트</h2>
+          <p>커버 이미지 프롬프트와, 그 이미지를 잔잔하게 반복해서 움직이는 영상 프롬프트를 짝지어 줘요.</p>
+          <span class="does"><span>장면 22개</span><span>16:9 · 9:16 · 1:1</span><span>끊김 없는 루프</span></span>
+        </span>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    </li>
+    <li>
+      <a class="track" href="timestamp.html">
+        <span class="no">03</span>
+        <span class="body">
+          <span class="stage">영상 설명란 · YouTube</span>
+          <h2>트랙리스트 타임스탬프</h2>
+          <p>곡 파일을 올리면 길이를 읽어 00:00 곡 제목 목록을 만들어요. 1시간, 8시간에 맞춰 반복도 채워줘요.</p>
+          <span class="does"><span>파일 끌어다 놓기</span><span>목표 길이 채우기</span><span>챕터 점검</span></span>
+        </span>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    </li>
+    <li>
+      <a class="track" href="upload-copy.html">
+        <span class="no">04</span>
+        <span class="body">
+          <span class="stage">올리기 · YouTube · TikTok · Instagram</span>
+          <h2>업로드 문구 생성기</h2>
+          <p>제목 후보, 설명, 태그, 틱톡과 인스타 캡션을 한 번에 만들어요. 03에서 만든 트랙리스트를 버튼 하나로 가져와요.</p>
+          <span class="does"><span>제목 후보 4개</span><span>태그 500자 맞춤</span><span>3채널 캡션</span></span>
+        </span>
+        <span class="go" aria-hidden="true">→</span>
+      </a>
+    </li>
+  </ol>
+
+  <section class="notes" aria-label="알아둘 점">
+    <div class="note"><b>순서대로 쓰면 가장 편해요</b>01에서 곡을 만들고, 02로 커버와 배경 영상을 만든 뒤, 03과 04로 설명란과 캡션을 채우면 업로드 준비가 끝나요.</div>
+    <div class="note"><b>가사 자동 생성</b>01의 가사 만들기는 Claude에게 가사를 부탁하는 기능이라 처음 한 번 사용 허락을 물어요. Claude 밖에서 열면 직접 적는 칸으로만 보여요.</div>
+  </section>
+
+  <footer>각 도구 위쪽 메뉴로 언제든 다른 도구로 넘어갈 수 있어요.</footer>
+</div>

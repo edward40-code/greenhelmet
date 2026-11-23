@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>업로드 문구 생성기</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -125,9 +131,23 @@ details.more[open] summary { border-bottom: 1px solid var(--line); }
 .status { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
+
+/* 사이트 공통 메뉴 (플레이리스트 작업실) */
+.sitebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); min-width: 0; }
+.sb-home { font-weight: 700; color: var(--ink); text-decoration: none; font-size: 15px; }
+.sb-home::before { content: "← "; color: var(--muted); }
+.sb-home:hover { color: var(--accent-ink); }
+.sitebar nav { display: flex; gap: 4px; overflow-x: auto; max-width: 100%; }
+.sitebar nav a { padding: 6px 10px; border-radius: 6px; font-size: 13px; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.sitebar nav a:hover { color: var(--ink); background: var(--surface-2); }
+.sitebar nav a[aria-current="page"] { color: var(--ink); font-weight: 700; background: var(--surface-2); }
 </style>
+</head>
+<body>
 
 <div class="wrap">
+  <header class="sitebar"><a class="sb-home" href="index.html">플레이리스트 작업실</a><nav aria-label="도구"><a href="suno-prompts.html">Suno 프롬프트</a><a href="higgsfield-prompts.html">커버·루프 영상</a><a href="timestamp.html">타임스탬프</a><a href="upload-copy.html" aria-current="page">업로드 문구</a></nav></header>
+
   <header class="top">
     <div>
       <p class="eyebrow">음악 재생 영상용</p>
@@ -179,7 +199,8 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
         <div class="field">
           <label for="tracklist">트랙리스트 (선택)</label>
           <textarea id="tracklist" rows="5" class="mono" placeholder="00:00 Midnight Coffee&#10;03:24 Slow Rain on Glass&#10;06:22 Neon Bus Stop"></textarea>
-          <p class="hint">타임스탬프 생성기에서 복사한 목록을 붙여넣으면 설명란에 들어가요. <a href="https://claude.ai/artifact/TvHju6QvduuRo5Hmtop5zK" target="_blank" rel="noopener">타임스탬프 생성기 열기</a></p>
+          <p class="hint">타임스탬프 생성기에서 만든 목록을 붙여넣으면 설명란에 들어가요. <a href="timestamp.html">타임스탬프 생성기 열기</a></p>
+          <div id="importBox" hidden><button class="btn small" type="button" id="importTl"></button></div>
         </div>
 
         <details class="more" id="moreBox">
@@ -501,7 +522,23 @@ footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
   document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copy(OUT[b.dataset.copy], `${LABEL[b.dataset.copy]} 복사했어요.`)));
   $("#reroll").addEventListener("click", () => { S.variant++; save(); render(); });
 
+  // 타임스탬프 생성기에서 마지막으로 만든 트랙리스트 가져오기
+  (() => {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem("site.tracklist") || "null"); } catch (e) {}
+    if (!saved || !saved.text) return;
+    const mins = Math.max(1, Math.round((Date.now() - (saved.at || 0)) / 60000));
+    const when = mins < 60 ? `${mins}분 전` : mins < 1440 ? `${Math.round(mins / 60)}시간 전` : `${Math.round(mins / 1440)}일 전`;
+    $("#importTl").textContent = `타임스탬프 생성기에서 가져오기 (${saved.count || ""}곡 · ${when})`;
+    $("#importBox").hidden = false;
+    $("#importTl").addEventListener("click", () => {
+      $("#tracklist").value = saved.text; S.tracklist = saved.text; save(); render();
+      toast("트랙리스트를 가져왔어요. 설명란에 들어갔어요.");
+    });
+  })();
   syncCustom();
   render();
 })();
 </script>
+</body>
+</html>
