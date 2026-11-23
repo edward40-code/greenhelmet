@@ -1,0 +1,546 @@
+<title>Suno 프롬프트 사전</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 레이아웃: 위는 탭(사전 · 조합기 · 내 프롬프트), 사전은 카드 격자, 조합기는 왼쪽 재료 칩 + 오른쪽 완성 프롬프트. 크리에이터 도구 공통 색·글꼴 */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --ink: #161a21;
+  --muted: #5b6473;
+  --line: #dce1e9;
+  --accent: #e09a17;
+  --accent-ink: #8a5600;
+  --on-accent: #1b1300;
+  --ok: #1d7a4b;
+  --warn: #9a5a00;
+  --focus: #2f6fdd;
+  --c-jazz: #8a5a2b; --c-disco: #b0307a; --c-amb: #3d5fb0; --c-sleep: #5b4bb0; --c-focus: #1f7a6a; --c-lofi: #7a6a1f; --c-cafe: #9a4b2b; --c-house: #2b7a9a;
+  --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3;
+    --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --on-accent: #1b1300;
+    --ok: #4cc38a; --warn: #f0a73a; --focus: #7aa7ff;
+    --c-jazz: #e0a96b; --c-disco: #f07dbb; --c-amb: #8fb0ff; --c-sleep: #b3a6ff; --c-focus: #5fd0bc; --c-lofi: #d9c96a; --c-cafe: #f0a07a; --c-house: #6fc7ea; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #e9edf3; --muted: #9ba5b3;
+  --line: #2a313c; --accent: #f2b33d; --accent-ink: #f5c46a; --on-accent: #1b1300;
+  --ok: #4cc38a; --warn: #f0a73a; --focus: #7aa7ff;
+  --c-jazz: #e0a96b; --c-disco: #f07dbb; --c-amb: #8fb0ff; --c-sleep: #b3a6ff; --c-focus: #5fd0bc; --c-lofi: #d9c96a; --c-cafe: #f0a07a; --c-house: #6fc7ea; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header.top { display: flex; flex-direction: column; gap: 4px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--accent-ink); }
+h1 { margin: 2px 0 2px; font-size: clamp(26px, 4vw, 34px); line-height: 1.2; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 64ch; }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs a { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; color: var(--muted); text-decoration: none; font-weight: 500; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); font-weight: 700; border-bottom-color: var(--accent); }
+.tabs .n { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 11px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn.star { width: 32px; padding: 0; font-size: 16px; color: var(--muted); }
+.btn.star[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+
+/* 사전 필터 */
+.filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.search { flex: 1 1 240px; min-width: 0; height: 38px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.fchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fchip { min-height: 32px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; }
+.fchip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 700; }
+.result-n { font-size: 13px; color: var(--muted); }
+
+/* 카드 */
+.cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.card-top { padding: 14px 14px 10px; display: flex; flex-direction: column; gap: 6px; border-top: 4px solid var(--cat, var(--accent)); }
+.card-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.cat { font-size: 12px; font-weight: 700; color: var(--cat); letter-spacing: .02em; }
+.card h3 { margin: 0; font-size: 17px; line-height: 1.3; font-weight: 700; }
+.card .desc { margin: 0; font-size: 14px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.meta span { font-size: 12px; padding: 2px 8px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); }
+.meta .bpm { font-family: var(--mono); font-weight: 600; }
+.slot { border-top: 1px solid var(--line); padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.slot-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.slot-head b { font-size: 12px; color: var(--muted); letter-spacing: .03em; }
+.slot-head .cnt { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 6px; font-weight: 400; }
+.prompt { margin: 0; font-family: var(--mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; background: var(--surface-2); border-radius: 6px; padding: 9px 10px; }
+.prompt.excl { background: transparent; padding: 0; color: var(--muted); }
+.empty { padding: 40px 10px; text-align: center; color: var(--muted); }
+
+/* 조합기 */
+.builder { display: grid; gap: 20px; align-items: start; }
+@media (min-width: 960px) { .builder { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.panel-body { padding: 16px; display: flex; flex-direction: column; gap: 18px; }
+.group { display: flex; flex-direction: column; gap: 8px; }
+.group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.group-head b { font-size: 13px; color: var(--muted); }
+.group-head small { font-size: 12px; color: var(--muted); }
+.ichips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ichip { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0; padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; text-align: left; line-height: 1.25; }
+.ichip:hover { border-color: var(--muted); }
+.ichip span { font-size: 14px; }
+.ichip small { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+.ichip[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 18%, var(--surface)); border-color: var(--accent); }
+.ichip[aria-pressed="true"] span { font-weight: 700; }
+.ichip.neg[aria-pressed="true"] { background: color-mix(in srgb, var(--warn) 14%, var(--surface)); border-color: var(--warn); }
+.bpm-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.bpm-row input[type="range"] { flex: 1 1 200px; accent-color: var(--accent); }
+.bpm-val { font-family: var(--mono); font-weight: 600; min-width: 64px; }
+.chk { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.chk input { width: 16px; height: 16px; accent-color: var(--accent); }
+.out-box { width: 100%; font-family: var(--mono); font-size: 13px; line-height: 1.6; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-2); padding: 10px 12px; resize: vertical; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 13px; font-weight: 500; color: var(--muted); }
+.field select, .field input[type="text"] { height: 36px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); width: 100%; min-width: 0; }
+.save-row { display: flex; gap: 8px; }
+.save-row input { flex: 1; min-width: 0; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); }
+.note { font-size: 12px; color: var(--muted); margin: 0; }
+.count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.count.over { color: var(--warn); font-weight: 600; }
+
+details.tips { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+details.tips summary { cursor: pointer; padding: 12px 16px; font-weight: 700; font-size: 14px; }
+details.tips ul { margin: 0; padding: 0 16px 14px 34px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; max-width: 80ch; }
+
+.status { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); }
+footer.foot { color: var(--muted); font-size: 13px; text-align: center; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Suno 음악 만들기용</p>
+    <h1>Suno 프롬프트 사전</h1>
+    <p class="lede">재즈힙합, 누디스코, 앰비언트, 수면, 작업용 음악을 바로 만들 수 있는 스타일 프롬프트 모음이에요. 그대로 복사해서 쓰거나, 조합기에서 재료를 골라 내 프롬프트를 만들 수 있어요.</p>
+  </header>
+
+  <nav class="tabs" aria-label="보기">
+    <a href="#dict" id="tab-dict">프롬프트 사전 <span class="n" id="nDict"></span></a>
+    <a href="#build" id="tab-build">조합기</a>
+    <a href="#mine" id="tab-mine">내 프롬프트 <span class="n" id="nMine"></span></a>
+  </nav>
+
+  <!-- 사전 -->
+  <section id="view-dict" aria-label="프롬프트 사전">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="filters">
+        <label for="q" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">검색</label>
+        <input class="search" type="search" id="q" placeholder="검색: rain, 피아노, 수면, 118 BPM…">
+        <span class="result-n" id="resultN"></span>
+      </div>
+      <div class="fchips" id="catChips" role="group" aria-label="장르"></div>
+      <div class="fchips" id="useChips" role="group" aria-label="용도"></div>
+      <div class="cards" id="cards"></div>
+      <p class="empty" id="noResult" hidden>찾는 프롬프트가 없어요. 다른 단어로 찾거나 조합기에서 직접 만들어 보세요.</p>
+    </div>
+  </section>
+
+  <!-- 조합기 -->
+  <section id="view-build" aria-label="조합기" hidden>
+    <div class="builder">
+      <div class="panel">
+        <div class="panel-head"><h2>재료 고르기</h2><button class="btn" type="button" id="resetBuild">처음부터</button></div>
+        <div class="panel-body" id="groups"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>완성된 프롬프트</h2></div>
+        <div class="panel-body">
+          <div class="group">
+            <div class="group-head"><b>Style of Music 칸</b><span class="count" id="styleCount"></span></div>
+            <textarea class="out-box" id="styleOut" rows="5" spellcheck="false" aria-label="스타일 프롬프트"></textarea>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="button" id="copyStyle">스타일 복사</button></div>
+            <p class="note">고른 순서와 상관없이 장르 → 분위기 → 악기 → 드럼 → 질감 → BPM 순서로 정리돼요. 직접 고쳐도 돼요.</p>
+          </div>
+          <div class="group">
+            <div class="group-head"><b>Exclude Styles 칸 (제외할 것)</b></div>
+            <textarea class="out-box" id="exclOut" rows="2" spellcheck="false" aria-label="제외할 스타일"></textarea>
+            <div><button class="btn" type="button" id="copyExcl">제외 복사</button></div>
+          </div>
+          <div class="group">
+            <div class="field">
+              <label for="structSel">Lyrics 칸 (곡 구조 태그)</label>
+              <select id="structSel"></select>
+            </div>
+            <textarea class="out-box" id="structOut" rows="6" spellcheck="false" aria-label="곡 구조 태그"></textarea>
+            <div><button class="btn" type="button" id="copyStruct">구조 복사</button></div>
+            <p class="note">Instrumental을 켜고 Lyrics 칸에 넣으면 곡 흐름을 잡는 데 도움이 돼요. Suno가 항상 그대로 따르지는 않아요.</p>
+          </div>
+          <div class="group">
+            <div class="group-head"><b>내 프롬프트로 저장</b></div>
+            <div class="save-row">
+              <input type="text" id="saveName" placeholder="이름 (예: 비 오는 밤 재즈힙합 v2)" aria-label="저장할 이름">
+              <button class="btn primary" type="button" id="saveBtn">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 내 프롬프트 -->
+  <section id="view-mine" aria-label="내 프롬프트" hidden>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <p class="note" style="font-size:14px">사전에서 ☆를 누른 카드와 조합기에서 저장한 프롬프트가 여기에 모여요. 이 브라우저에만 저장돼요.</p>
+      <div class="cards" id="mineCards"></div>
+      <p class="empty" id="mineEmpty" hidden>아직 없어요. 사전에서 ☆를 누르거나 조합기에서 저장해 보세요.</p>
+    </div>
+  </section>
+
+  <details class="tips">
+    <summary>Suno 프롬프트 잘 쓰는 법</summary>
+    <ul>
+      <li>가장 중요한 장르를 맨 앞에 두세요. 앞에 있는 단어일수록 결과에 크게 반영돼요.</li>
+      <li>아티스트 이름은 막혀 있어요. 이름 대신 소리를 묘사하세요. 예: “스모키한 색소폰, 느긋한 드럼”.</li>
+      <li>악기는 3~4개면 충분해요. 너무 많으면 섞여서 흐려져요.</li>
+      <li>BPM을 넣으면 곡마다 빠르기가 고르게 나와서 플레이리스트로 이어 붙이기 좋아요.</li>
+      <li>보컬이 끼어들면 Instrumental을 켜고, 제외 칸에 vocals, choir를 넣으세요.</li>
+      <li>같은 프롬프트로 여러 번 만들고 마음에 드는 것만 고르세요. 한 플레이리스트는 프롬프트 1~2개로 만들면 분위기가 통일돼요.</li>
+    </ul>
+  </details>
+
+  <footer class="foot">프롬프트는 시작점이에요. 결과는 Suno 버전과 설정에 따라 달라요.</footer>
+</div>
+<div class="status" id="status" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  // ---------- 곡 구조 태그 ----------
+  const STRUCTS = {
+    basic: { name: "기본 흐름", text: "[Intro]\n[Instrumental]\n[Break]\n[Instrumental]\n[Outro]\n[End]" },
+    loop: { name: "루프형 (변화 적게, 작업용)", text: "[Intro]\n[Instrumental - steady loop]\n[Instrumental - steady loop]\n[Outro - fade out]\n[End]" },
+    sleep: { name: "수면용 (서서히 사라짐)", text: "[Intro - soft]\n[Instrumental - calm, no drums]\n[Instrumental - calmer, sparse]\n[Outro - slow fade out]\n[End]" },
+    groove: { name: "그루브 (누디스코, 하우스)", text: "[Intro]\n[Groove]\n[Build]\n[Main Groove]\n[Break]\n[Main Groove]\n[Outro]\n[End]" },
+    jazz: { name: "재즈 솔로 (색소폰, 피아노)", text: "[Intro]\n[Main Theme]\n[Sax Solo]\n[Main Theme]\n[Piano Solo]\n[Outro]\n[End]" },
+  };
+
+  // ---------- 카테고리 ----------
+  const CATS = {
+    jazz: { name: "재즈힙합", color: "var(--c-jazz)" },
+    disco: { name: "누디스코", color: "var(--c-disco)" },
+    amb: { name: "앰비언트", color: "var(--c-amb)" },
+    sleep: { name: "수면", color: "var(--c-sleep)" },
+    focus: { name: "작업용", color: "var(--c-focus)" },
+    lofi: { name: "로파이", color: "var(--c-lofi)" },
+    cafe: { name: "카페 재즈", color: "var(--c-cafe)" },
+    house: { name: "딥하우스", color: "var(--c-house)" },
+  };
+  const USES = ["공부", "작업", "휴식", "수면", "드라이브", "카페"];
+
+  // ---------- 사전 ----------
+  const P = [
+    { id: "jz-rain", cat: "jazz", title: "비 오는 밤 재즈힙합", desc: "먼지 낀 드럼과 뮤트 트럼펫. 비 오는 밤 공부용 플레이리스트의 기본.", bpm: 85, uses: ["공부", "휴식"],
+      style: "jazz hip hop, lofi, mellow, rainy night, dusty boom bap drums, warm upright bass, muted trumpet, soft Rhodes chords, vinyl crackle, tape saturation, relaxed swing, 85 BPM, instrumental",
+      excl: "vocals, rap, heavy 808, EDM, bright synth lead", struct: "basic" },
+    { id: "jz-cafe", cat: "jazz", title: "카페 재즈힙합", desc: "워킹 베이스와 재즈 기타. 밝고 포근한 낮 카페 분위기.", bpm: 90, uses: ["카페", "작업"],
+      style: "jazzy hip hop, chillhop, cozy cafe, swing-tinged drums, walking upright bass, brushed snare, jazz guitar comping, Rhodes piano, light vinyl texture, warm and bright, 90 BPM, instrumental",
+      excl: "vocals, rap, distorted guitar, heavy bass", struct: "basic" },
+    { id: "jz-sax", cat: "jazz", title: "새벽 색소폰 재즈힙합", desc: "스모키한 색소폰 멜로디와 느긋한 드럼. 도시의 밤.", bpm: 80, uses: ["휴식", "드라이브"],
+      style: "late night jazz hip hop, smoky, saxophone melody, lazy laid-back drums, deep warm bass, Rhodes piano, city at night, reverb-soaked, analog warmth, 80 BPM, instrumental",
+      excl: "vocals, rap, trap hi-hats, EDM", struct: "jazz" },
+    { id: "jz-morning", cat: "jazz", title: "아침 커피 재즈힙합", desc: "플루트와 경쾌한 붐뱁. 기분 좋게 하루를 시작할 때.", bpm: 92, uses: ["작업", "공부"],
+      style: "uplifting jazz hip hop, morning coffee, crisp boom bap drums, flute melody, jazz piano chords, bouncy bass, sunny, positive, 92 BPM, instrumental",
+      excl: "vocals, rap, dark, heavy 808", struct: "basic" },
+
+    { id: "nd-city", cat: "disco", title: "도시의 밤 누디스코", desc: "슬랩 베이스와 스트링 스탭. 밤 드라이브용 정석.", bpm: 118, uses: ["드라이브", "작업"],
+      style: "nu disco, funky, city night drive, four-on-the-floor kick, slap bass groove, rhythm guitar chops, lush string stabs, analog synth pads, glossy production, 118 BPM, instrumental",
+      excl: "vocals, rap, dubstep, distorted guitar", struct: "groove" },
+    { id: "nd-sunset", cat: "disco", title: "선셋 누디스코", desc: "필터 걸린 디스코 루프와 박수 소리. 여름 해 질 녘.", bpm: 120, uses: ["드라이브", "휴식"],
+      style: "nu disco, summer sunset, feel-good, filtered disco loops, funky bassline, clean funk guitar, warm analog pads, handclaps, sidechain pump, 120 BPM, instrumental",
+      excl: "vocals, rap, heavy drop, metal", struct: "groove" },
+    { id: "nd-boogie", cat: "disco", title: "80년대 부기 펑크", desc: "빈티지 드럼머신과 신스 베이스. 레트로한 그루브.", bpm: 112, uses: ["작업", "드라이브"],
+      style: "boogie funk, nu disco, 80s retro, vintage drum machine, synth bass, electric piano, bright brass stabs, groovy, 112 BPM, instrumental",
+      excl: "vocals, rap, modern trap, dubstep", struct: "groove" },
+    { id: "nd-deep", cat: "disco", title: "딥 디스코 그루브", desc: "최소한의 구성으로 계속 굴러가는 베이스라인. 작업할 때 방해가 적어요.", bpm: 115, uses: ["작업", "공부"],
+      style: "deep nu disco, hypnotic, late night, rolling bassline, soft percussion, filtered chords, minimal, smooth, 115 BPM, instrumental",
+      excl: "vocals, rap, big drop, bright lead", struct: "loop" },
+
+    { id: "am-night", cat: "amb", title: "새벽 앰비언트", desc: "천천히 변하는 패드와 띄엄띄엄 피아노. 드럼 없음.", bpm: 60, uses: ["휴식", "수면"],
+      style: "late night ambient, atmospheric, slow evolving pads, soft piano notes, distant reverb, gentle tape hiss, calm, spacious, no drums, 60 BPM, instrumental",
+      excl: "drums, vocals, percussion, bass drop", struct: "sleep" },
+    { id: "am-rain", cat: "amb", title: "빗소리 도시 앰비언트", desc: "창밖 빗소리와 따뜻한 드론. 영화 같은 쓸쓸함.", bpm: null, uses: ["휴식", "공부"],
+      style: "ambient, rainy city window, rain field recording, warm synth drones, muted electric piano, melancholic, cinematic, slow, no beat, instrumental",
+      excl: "drums, vocals, upbeat, bright synth", struct: "sleep" },
+    { id: "am-neon", cat: "amb", title: "네온 앰비언트", desc: "꿈꾸는 듯한 아날로그 패드와 부드러운 아르페지오.", bpm: 70, uses: ["드라이브", "휴식"],
+      style: "ambient synthwave, neon night, dreamy analog pads, soft arpeggio, slow pulse, nostalgic, wide stereo, 70 BPM, instrumental",
+      excl: "vocals, heavy drums, distorted guitar", struct: "loop" },
+
+    { id: "sl-piano", cat: "sleep", title: "깊은 잠 피아노", desc: "펠트 피아노를 아주 천천히. 갑작스러운 변화 없이.", bpm: 50, uses: ["수면"],
+      style: "sleep music, soft felt piano, slow and sparse, warm reverb, gentle pads, peaceful, very calm, lullaby feel, no drums, 50 BPM, instrumental",
+      excl: "drums, percussion, vocals, sudden changes, bright tones", struct: "sleep" },
+    { id: "sl-drone", cat: "sleep", title: "떠다니는 수면 드론", desc: "멜로디 없이 낮고 따뜻한 소리가 천천히 부풀었다 가라앉아요.", bpm: null, uses: ["수면"],
+      style: "sleep ambient, deep drones, slow swells, soft white noise, warm low frequencies, meditative, minimal, no melody, no drums, instrumental",
+      excl: "drums, vocals, melody, percussion, bright tones", struct: "sleep" },
+    { id: "sl-rain", cat: "sleep", title: "빗소리 수면 음악", desc: "잔잔한 빗소리 위에 부드러운 피아노와 패드.", bpm: 55, uses: ["수면", "휴식"],
+      style: "sleep music, gentle rain sounds, soft piano, warm pad, slow, soothing, cozy, no drums, 55 BPM, instrumental",
+      excl: "drums, thunder, vocals, sudden changes", struct: "sleep" },
+
+    { id: "fo-deep", cat: "focus", title: "딥 포커스", desc: "반복적이고 튀지 않는 일렉트로닉. 오래 틀어두기 좋아요.", bpm: 100, uses: ["작업", "공부"],
+      style: "focus music, minimal electronic, steady soft beat, warm synth arpeggios, subtle bass, clean, unobtrusive, repetitive, 100 BPM, instrumental",
+      excl: "vocals, drop, distorted, sudden changes", struct: "loop" },
+    { id: "fo-piano", cat: "focus", title: "공부용 피아노 비트", desc: "로파이 피아노와 일정한 드럼. 집중을 깨지 않는 잔잔함.", bpm: 78, uses: ["공부"],
+      style: "study beats, lofi piano, soft steady drums, warm bass, calm and concentrated, light vinyl crackle, 78 BPM, instrumental",
+      excl: "vocals, rap, heavy 808, bright lead", struct: "loop" },
+    { id: "fo-morning", cat: "focus", title: "생산적인 아침", desc: "밝은 플럭 신스와 일정한 그루브. 기운은 나지만 시끄럽지 않게.", bpm: 105, uses: ["작업"],
+      style: "upbeat focus music, chill electronic, bright plucks, steady groove, light percussion, motivating but calm, 105 BPM, instrumental",
+      excl: "vocals, drop, aggressive, distorted", struct: "loop" },
+
+    { id: "lf-classic", cat: "lofi", title: "클래식 로파이", desc: "먼지 낀 드럼, 재지한 코드, 테이프 흔들림. 가장 무난한 로파이.", bpm: 75, uses: ["공부", "휴식"],
+      style: "lofi hip hop, chill, dusty drums, mellow jazzy chords, warm bass, vinyl crackle, tape wobble, nostalgic, 75 BPM, instrumental",
+      excl: "vocals, rap, heavy 808, EDM", struct: "basic" },
+    { id: "lf-guitar", cat: "lofi", title: "로파이 기타", desc: "손가락으로 뜯는 일렉 기타 루프. 아늑한 방 분위기.", bpm: 80, uses: ["휴식", "공부"],
+      style: "lofi, chill guitar loop, soft fingerpicked electric guitar, lazy drums, warm bass, cozy bedroom, 80 BPM, instrumental",
+      excl: "vocals, rap, distorted guitar, heavy drums", struct: "basic" },
+    { id: "lf-winter", cat: "lofi", title: "겨울 로파이", desc: "작은 종소리와 먹먹한 드럼. 눈 오는 날 창가.", bpm: 72, uses: ["휴식", "공부"],
+      style: "winter lofi, cozy, soft bells, warm piano, muffled drums, snowy evening, gentle, 72 BPM, instrumental",
+      excl: "vocals, rap, bright synth, heavy bass", struct: "basic" },
+
+    { id: "cf-bossa", cat: "cafe", title: "보사노바 카페", desc: "나일론 기타와 브러시 드럼. 따뜻한 오후 카페.", bpm: null, uses: ["카페", "휴식"],
+      style: "bossa nova, cafe jazz, nylon guitar, soft brushed drums, upright bass, light piano, relaxed, warm afternoon, medium tempo, instrumental",
+      excl: "vocals, electric guitar, synth, heavy drums", struct: "jazz" },
+    { id: "cf-trio", cat: "cafe", title: "피아노 트리오 카페 재즈", desc: "피아노, 베이스, 브러시 드럼의 우아한 트리오.", bpm: null, uses: ["카페", "작업"],
+      style: "smooth cafe jazz, piano trio, brushed drums, upright bass, soft saxophone accents, elegant, relaxed, instrumental",
+      excl: "vocals, synth, electronic drums, distorted", struct: "jazz" },
+
+    { id: "hs-chill", cat: "house", title: "칠 딥하우스", desc: "따뜻한 코드와 부드러운 킥. 여름 저녁 루프톱.", bpm: 120, uses: ["드라이브", "작업"],
+      style: "chill deep house, smooth, warm chords, soft four-on-the-floor kick, deep bassline, airy pads, summer evening, 120 BPM, instrumental",
+      excl: "vocals, big room drop, dubstep, distorted", struct: "groove" },
+    { id: "hs-lofi", cat: "house", title: "로파이 하우스", desc: "먼지 낀 필터 코드와 셔플 하이햇. 아련한 그루브.", bpm: 122, uses: ["작업", "드라이브"],
+      style: "lofi house, dusty, filtered chords, warm kick, shuffled hi-hats, nostalgic, tape saturation, 122 BPM, instrumental",
+      excl: "vocals, big drop, bright lead, trap", struct: "groove" },
+  ];
+
+  // ---------- 조합기 재료 ----------
+  const GROUPS = [
+    { key: "genre", name: "장르", hint: "1~2개", items: [["jazz hip hop", "재즈힙합"], ["lofi hip hop", "로파이 힙합"], ["chillhop", "칠합"], ["nu disco", "누디스코"], ["boogie funk", "부기 펑크"], ["deep house", "딥하우스"], ["lofi house", "로파이 하우스"], ["ambient", "앰비언트"], ["ambient synthwave", "앰비언트 신스웨이브"], ["sleep music", "수면 음악"], ["focus music", "작업용 음악"], ["bossa nova", "보사노바"], ["smooth jazz", "스무스 재즈"], ["city pop", "시티팝"]] },
+    { key: "mood", name: "분위기", hint: "2~3개", items: [["mellow", "부드러운"], ["cozy", "아늑한"], ["nostalgic", "아련한"], ["melancholic", "쓸쓸한"], ["dreamy", "몽환적인"], ["uplifting", "기분 좋은"], ["groovy", "그루비한"], ["calm", "차분한"], ["peaceful", "평화로운"], ["smoky", "스모키한"], ["romantic", "로맨틱한"], ["cinematic", "영화 같은"], ["late night", "새벽"], ["rainy night", "비 오는 밤"], ["sunny", "햇살 가득"], ["city night drive", "밤 드라이브"]] },
+    { key: "inst", name: "악기", hint: "3~4개", items: [["Rhodes piano", "로즈 피아노"], ["soft felt piano", "펠트 피아노"], ["jazz piano chords", "재즈 피아노"], ["warm upright bass", "업라이트 베이스"], ["slap bass", "슬랩 베이스"], ["synth bass", "신스 베이스"], ["muted trumpet", "뮤트 트럼펫"], ["saxophone melody", "색소폰"], ["flute melody", "플루트"], ["jazz guitar", "재즈 기타"], ["nylon guitar", "나일론 기타"], ["clean funk guitar", "펑크 기타"], ["lush strings", "스트링"], ["analog synth pads", "아날로그 패드"], ["soft arpeggio", "아르페지오"], ["soft bells", "종소리"], ["vibraphone", "비브라폰"]] },
+    { key: "drum", name: "드럼", hint: "1개만", single: true, items: [["dusty boom bap drums", "먼지 낀 붐뱁"], ["lazy laid-back drums", "느긋한 드럼"], ["brushed drums", "브러시 드럼"], ["four-on-the-floor kick", "포온더플로어 킥"], ["soft steady beat", "잔잔한 일정한 비트"], ["vintage drum machine", "빈티지 드럼머신"], ["no drums", "드럼 없음"]] },
+    { key: "tex", name: "질감 · 믹스", hint: "1~3개", items: [["vinyl crackle", "LP 잡음"], ["tape saturation", "테이프 질감"], ["tape wobble", "테이프 흔들림"], ["warm analog", "따뜻한 아날로그"], ["rain sounds", "빗소리"], ["reverb-soaked", "잔향 가득"], ["wide stereo", "넓은 스테레오"], ["sidechain pump", "사이드체인 펌핑"], ["crisp clean mix", "깔끔한 믹스"]] },
+    { key: "excl", name: "빼고 싶은 것 (제외 칸)", hint: "여러 개", neg: true, items: [["vocals", "보컬"], ["rap", "랩"], ["choir", "합창"], ["heavy 808", "강한 808"], ["EDM drop", "EDM 드롭"], ["distorted guitar", "디스토션 기타"], ["bright synth lead", "날카로운 신스"], ["drums", "드럼 전체"], ["sudden changes", "갑작스러운 변화"]] },
+  ];
+  const DEFAULT_BUILD = { genre: ["jazz hip hop"], mood: ["mellow", "rainy night"], inst: ["Rhodes piano", "warm upright bass", "muted trumpet"], drum: ["dusty boom bap drums"], tex: ["vinyl crackle", "tape saturation"], excl: ["vocals", "rap"], bpm: 85, useBpm: true, instrumental: true, struct: "basic" };
+  let B = Object.assign(JSON.parse(JSON.stringify(DEFAULT_BUILD)), store.get("spd.build", {}));
+
+  let favs = store.get("spd.favs", []);
+  let mine = store.get("spd.mine", []);
+
+  // ---------- 공통 ----------
+  let tmr;
+  function toast(msg) { const s = $("#status"); s.textContent = msg; s.hidden = false; clearTimeout(tmr); tmr = setTimeout(() => { s.hidden = true; }, 2000); }
+  function copy(text, msg) {
+    const fallback = () => {
+      const ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove(); toast(ok ? msg : "복사가 막혀 있어요. 글자를 길게 눌러 직접 복사해 주세요.");
+    };
+    try { navigator.clipboard.writeText(text).then(() => toast(msg), fallback); } catch (e) { fallback(); }
+  }
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const btn = (txt, cls, fn, label) => { const b = el("button", "btn" + (cls ? " " + cls : ""), txt); b.type = "button"; if (label) b.setAttribute("aria-label", label); b.addEventListener("click", fn); return b; };
+
+  function slot(title, text, copyMsg, cls, count) {
+    const s = el("div", "slot");
+    const h = el("div", "slot-head");
+    const b = el("b", null, title);
+    if (count) b.appendChild(el("span", "cnt", `${text.length}자`));
+    h.append(b, btn("복사", "", () => copy(text, copyMsg), `${title} 복사`));
+    s.append(h, el("pre", "prompt" + (cls ? " " + cls : ""), text));
+    return s;
+  }
+
+  function card(p, opts = {}) {
+    const c = el("article", "card");
+    const cat = CATS[p.cat] || { name: "내 프롬프트", color: "var(--accent)" };
+    c.style.setProperty("--cat", cat.color);
+    const top = el("div", "card-top");
+    const row = el("div", "card-row");
+    const left = el("div"); left.style.minWidth = "0";
+    left.append(el("div", "cat", cat.name), el("h3", null, p.title));
+    row.appendChild(left);
+    if (opts.del) row.appendChild(btn("삭제", "", opts.del, `${p.title} 삭제`));
+    else {
+      const on = favs.includes(p.id);
+      const st = btn(on ? "★" : "☆", "star", () => { toggleFav(p.id); }, `${p.title} 내 프롬프트에 담기`);
+      st.setAttribute("aria-pressed", String(on));
+      row.appendChild(st);
+    }
+    top.appendChild(row);
+    if (p.desc) top.appendChild(el("p", "desc", p.desc));
+    const meta = el("div", "meta");
+    if (p.bpm) meta.appendChild(el("span", "bpm", `${p.bpm} BPM`));
+    (p.uses || []).forEach((u) => meta.appendChild(el("span", null, u)));
+    if (meta.childNodes.length) top.appendChild(meta);
+    c.appendChild(top);
+    c.appendChild(slot("STYLE", p.style, "스타일 프롬프트를 복사했어요.", "", true));
+    if (p.excl) c.appendChild(slot("EXCLUDE", p.excl, "제외 스타일을 복사했어요.", "excl"));
+    if (p.struct && STRUCTS[p.struct]) c.appendChild(slot(`LYRICS · ${STRUCTS[p.struct].name}`, STRUCTS[p.struct].text, "곡 구조 태그를 복사했어요.", "excl"));
+    return c;
+  }
+
+  // ---------- 사전 화면 ----------
+  let fCat = "all", fUse = "all";
+  function filterChips() {
+    const cc = $("#catChips"); cc.textContent = "";
+    [["all", "전체"], ...Object.entries(CATS).map(([k, v]) => [k, v.name])].forEach(([k, n]) => {
+      const b = el("button", "fchip", k === "all" ? n : `${n} ${P.filter((p) => p.cat === k).length}`); b.type = "button";
+      b.setAttribute("aria-pressed", String(fCat === k)); b.addEventListener("click", () => { fCat = k; filterChips(); renderDict(); }); cc.appendChild(b);
+    });
+    const uc = $("#useChips"); uc.textContent = "";
+    [["all", "모든 용도"], ...USES.map((u) => [u, u])].forEach(([k, n]) => {
+      const b = el("button", "fchip", n); b.type = "button";
+      b.setAttribute("aria-pressed", String(fUse === k)); b.addEventListener("click", () => { fUse = k; filterChips(); renderDict(); }); uc.appendChild(b);
+    });
+  }
+  function renderDict() {
+    const q = $("#q").value.trim().toLowerCase();
+    const list = P.filter((p) => (fCat === "all" || p.cat === fCat) && (fUse === "all" || p.uses.includes(fUse)) &&
+      (!q || [p.title, p.desc, p.style, CATS[p.cat].name, p.uses.join(" "), p.bpm ? p.bpm + " bpm" : ""].join(" ").toLowerCase().includes(q)));
+    const box = $("#cards"); box.textContent = "";
+    list.forEach((p) => box.appendChild(card(p)));
+    $("#noResult").hidden = list.length > 0;
+    $("#resultN").textContent = `${list.length}개`;
+  }
+  $("#q").addEventListener("input", renderDict);
+
+  function toggleFav(id) {
+    favs = favs.includes(id) ? favs.filter((x) => x !== id) : [...favs, id];
+    store.set("spd.favs", favs);
+    toast(favs.includes(id) ? "내 프롬프트에 담았어요." : "내 프롬프트에서 뺐어요.");
+    renderDict(); renderMine();
+  }
+
+  // ---------- 조합기 화면 ----------
+  function renderGroups() {
+    const box = $("#groups"); box.textContent = "";
+    GROUPS.forEach((g) => {
+      const wrap = el("div", "group");
+      const h = el("div", "group-head"); h.append(el("b", null, g.name), el("small", null, g.hint));
+      const chips = el("div", "ichips");
+      g.items.forEach(([en, ko]) => {
+        const b = el("button", "ichip" + (g.neg ? " neg" : "")); b.type = "button";
+        b.append(el("span", null, ko), el("small", null, en));
+        b.setAttribute("aria-pressed", String(B[g.key].includes(en)));
+        b.dataset.val = en;
+        b.addEventListener("click", () => {
+          const on = B[g.key].includes(en);
+          // 드럼은 하나만 고른다 (붐뱁과 '드럼 없음'이 같이 들어가지 않게)
+          if (g.single) B[g.key] = on ? [] : [en];
+          else B[g.key] = on ? B[g.key].filter((x) => x !== en) : [...B[g.key], en];
+          chips.querySelectorAll(".ichip").forEach((c) => c.setAttribute("aria-pressed", String(B[g.key].includes(c.dataset.val))));
+          saveBuild(); buildOut();
+        });
+        chips.appendChild(b);
+      });
+      wrap.append(h, chips);
+      box.appendChild(wrap);
+      if (g.key === "tex") box.appendChild(bpmGroup());
+    });
+  }
+  function bpmGroup() {
+    const wrap = el("div", "group");
+    const h = el("div", "group-head"); h.append(el("b", null, "빠르기 (BPM)"), el("small", null, "수면 50 · 재즈힙합 80~90 · 디스코 112~122"));
+    const row = el("div", "bpm-row");
+    const r = document.createElement("input"); r.type = "range"; r.min = 45; r.max = 140; r.step = 1; r.value = B.bpm; r.id = "bpmRange"; r.setAttribute("aria-label", "BPM");
+    const v = el("span", "bpm-val", `${B.bpm} BPM`);
+    const ck = el("label", "chk"); const ci = document.createElement("input"); ci.type = "checkbox"; ci.id = "useBpm"; ci.checked = B.useBpm; ck.append(ci, document.createTextNode("프롬프트에 넣기"));
+    const ik = el("label", "chk"); const ii = document.createElement("input"); ii.type = "checkbox"; ii.id = "instr"; ii.checked = B.instrumental; ik.append(ii, document.createTextNode("instrumental 붙이기"));
+    r.addEventListener("input", () => { B.bpm = +r.value; v.textContent = `${B.bpm} BPM`; saveBuild(); buildOut(); });
+    ci.addEventListener("change", () => { B.useBpm = ci.checked; saveBuild(); buildOut(); });
+    ii.addEventListener("change", () => { B.instrumental = ii.checked; saveBuild(); buildOut(); });
+    row.append(r, v, ck, ik);
+    wrap.append(h, row);
+    return wrap;
+  }
+  function styleText() {
+    const parts = [...B.genre, ...B.mood, ...B.inst, ...B.drum, ...B.tex];
+    if (B.useBpm) parts.push(`${B.bpm} BPM`);
+    if (B.instrumental) parts.push("instrumental");
+    return parts.join(", ");
+  }
+  function buildOut() {
+    const s = styleText();
+    $("#styleOut").value = s;
+    const cnt = $("#styleCount"); cnt.textContent = `${s.length}자`; cnt.classList.toggle("over", s.length > 200);
+    cnt.title = "버전에 따라 스타일 칸 한도가 달라요. 200자를 넘으면 오래된 버전에서는 잘려요.";
+    $("#exclOut").value = B.excl.join(", ");
+    $("#structSel").value = B.struct;
+    $("#structOut").value = STRUCTS[B.struct].text;
+  }
+  function saveBuild() { store.set("spd.build", B); }
+  const sel = $("#structSel");
+  Object.entries(STRUCTS).forEach(([k, v]) => { const o = document.createElement("option"); o.value = k; o.textContent = v.name; sel.appendChild(o); });
+  sel.addEventListener("change", () => { B.struct = sel.value; saveBuild(); buildOut(); });
+  $("#copyStyle").addEventListener("click", () => copy($("#styleOut").value, "스타일 프롬프트를 복사했어요."));
+  $("#copyExcl").addEventListener("click", () => copy($("#exclOut").value, "제외 스타일을 복사했어요."));
+  $("#copyStruct").addEventListener("click", () => copy($("#structOut").value, "곡 구조 태그를 복사했어요."));
+  $("#styleOut").addEventListener("input", () => { const n = $("#styleOut").value.length; $("#styleCount").textContent = `${n}자`; $("#styleCount").classList.toggle("over", n > 200); });
+  $("#resetBuild").addEventListener("click", () => { B = JSON.parse(JSON.stringify(DEFAULT_BUILD)); saveBuild(); renderGroups(); buildOut(); });
+  $("#saveBtn").addEventListener("click", () => {
+    const name = $("#saveName").value.trim() || `내 프롬프트 ${mine.length + 1}`;
+    mine.unshift({ id: "m" + Date.now(), title: name, style: $("#styleOut").value.trim(), excl: $("#exclOut").value.trim(), structText: $("#structOut").value.trim(), bpm: B.useBpm ? B.bpm : null });
+    store.set("spd.mine", mine); $("#saveName").value = "";
+    renderMine(); toast("내 프롬프트에 저장했어요.");
+  });
+
+  // ---------- 내 프롬프트 ----------
+  function renderMine() {
+    const box = $("#mineCards"); box.textContent = "";
+    mine.forEach((m) => {
+      const c = card({ id: m.id, cat: "mine", title: m.title, style: m.style, excl: m.excl, bpm: m.bpm, uses: [] }, { del: () => { mine = mine.filter((x) => x.id !== m.id); store.set("spd.mine", mine); renderMine(); } });
+      if (m.structText) c.appendChild(slot("LYRICS", m.structText, "곡 구조 태그를 복사했어요.", "excl"));
+      box.appendChild(c);
+    });
+    P.filter((p) => favs.includes(p.id)).forEach((p) => box.appendChild(card(p)));
+    const n = mine.length + favs.filter((id) => P.some((p) => p.id === id)).length;
+    $("#mineEmpty").hidden = n > 0;
+    $("#nMine").textContent = n ? String(n) : "";
+  }
+
+  // ---------- 탭 (주소의 #으로) ----------
+  const VIEWS = ["dict", "build", "mine"];
+  function route() {
+    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "dict";
+    VIEWS.forEach((k) => { $("#view-" + k).hidden = k !== v; const t = $("#tab-" + k); if (k === v) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  }
+  window.addEventListener("hashchange", route);
+
+  $("#nDict").textContent = String(P.length);
+  filterChips(); renderDict(); renderGroups(); buildOut(); renderMine(); route();
+})();
+</script>
