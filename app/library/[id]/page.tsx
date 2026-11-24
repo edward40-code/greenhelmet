@@ -10,7 +10,8 @@ import { allLibrary, getLib } from "@/lib/library";
 import { inventoryOfLibrary } from "@/lib/inventory";
 import { marketOfLibrary } from "@/lib/market";
 import { fmtDate } from "@/lib/fields";
-import { BASE_PATH } from "@/lib/site";
+import { BASE_PATH, SITE } from "@/lib/site";
+import AuthorBox from "@/components/AuthorBox";
 import { downloadsText, viewsText } from "@/lib/views";
 import { FormatBadge } from "../LibraryList";
 import { FieldChip, FormatTile } from "@/components/visual";
@@ -116,6 +117,7 @@ export default async function Page({ params }: P) {
             <Link href={`/reports/${x.report}/`} className="text-[15px] font-bold">관련 이슈리포트 읽기 →</Link>
           )}
           {x.type !== "file" && <p className="m-0 text-[13px] text-muted">저작권 {x.source}</p>}
+          {x.source.startsWith(SITE.name) && <AuthorBox label="제작·검수" />}
         </article>
 
         <AdSlot slot="edu_inline" />

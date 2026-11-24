@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import DocShell from "@/components/DocShell";
 import { SITE } from "@/lib/site";
+import { AUTHOR } from "@/lib/author";
 
 export const metadata: Metadata = {
   title: "소개",
@@ -36,6 +37,15 @@ export default function Page() {
         <li>시험문제 원문, 복원 문제, 자체 제작 문제를 싣지 않습니다.</li>
         <li>구인·구직, 업체 홍보, 견적 중개를 하지 않고, 장비를 직접 팔지 않습니다.</li>
       </ul>
+
+      <h2 id="operator">운영자</h2>
+      <p>
+        <strong>{AUTHOR.name}</strong> · {AUTHOR.role}
+      </p>
+      <ul>{AUTHOR.career.map((c) => <li key={c}>{c}</li>)}</ul>
+      <p>
+        이슈리포트와 자료실 양식은 운영자가 직접 쓰거나 검수합니다. 회사 소개: <a href={AUTHOR.company} target="_blank" rel="noopener">dime-works.com</a>
+      </p>
 
       <h2>정보의 정확성</h2>
       <p>

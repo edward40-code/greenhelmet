@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { OG_IMAGES, SITE } from "@/lib/site";
+import { OG_IMAGES, SITE, SITE_URL } from "@/lib/site";
+import { AUTHOR } from "@/lib/author";
+import AuthorBox from "@/components/AuthorBox";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -24,6 +26,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
     title: r.title,
     description: r.summary,
     alternates: { canonical: `/reports/${r.slug}/` },
+    authors: [{ name: AUTHOR.name, url: `${SITE_URL}/about/#operator` }],
     openGraph: { type: "article", title: r.title, description: r.summary, publishedTime: r.date, siteName: SITE.name, locale: "ko_KR", images: OG_IMAGES },
   };
 }
@@ -76,6 +79,25 @@ export default async function Page({ params }: P) {
               <ul className="m-0 mt-1 list-disc pl-5">{r.sources.map((s) => <li key={s}>{s}</li>)}</ul>
             </div>
           )}
+          <div className="mt-4">
+            <AuthorBox label={r.reviewed ? "글·검수" : "글"} />
+          </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: r.title,
+                description: r.summary,
+                datePublished: r.date,
+                inLanguage: "ko",
+                mainEntityOfPage: `${SITE_URL}/reports/${r.slug}/`,
+                author: { "@type": "Person", name: AUTHOR.name, jobTitle: "EHS 컨설턴트", url: `${SITE_URL}/about/#operator`, sameAs: [AUTHOR.company] },
+                publisher: { "@type": "Organization", name: SITE.name, url: `${SITE_URL}/` },
+              }),
+            }}
+          />
         </article>
 
         {related.length > 0 && (
