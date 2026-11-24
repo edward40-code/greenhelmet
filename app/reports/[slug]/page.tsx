@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { OG_IMAGES, SITE, SITE_URL } from "@/lib/site";
 import { AUTHOR } from "@/lib/author";
 import AuthorBox from "@/components/AuthorBox";
+import AlertBox from "@/components/AlertBox";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -113,6 +114,8 @@ export default async function Page({ params }: P) {
             </div>
           </section>
         )}
+
+        <AlertBox />
 
         <AdSlot slot="post_bottom" />
 

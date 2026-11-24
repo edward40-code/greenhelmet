@@ -4,6 +4,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { AdSlot } from "@/components/ui";
+import AlertBox from "@/components/AlertBox";
 import { FieldChip, FormatTile, SectionHead } from "@/components/visual";
 import catalog from "@/content/catalog.json";
 import { allNews, slugOf } from "@/lib/news";
@@ -147,6 +148,8 @@ export default function Home() {
             ))}
           </ul>
         </section>
+
+        <AlertBox />
 
         {/* 자료실: 새 자료 + 고른 자료 */}
         <section className="flex flex-col gap-4">

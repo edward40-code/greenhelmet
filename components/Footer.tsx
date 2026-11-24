@@ -17,6 +17,7 @@ export default function Footer() {
           <span className="flex items-center gap-2 text-[20px] font-extrabold text-white"><HelmetLogo size={26} />{SITE.name}</span>
           <p className="m-0 max-w-[360px] text-[14px] leading-relaxed">{SITE.tagline}</p>
           {SITE.contactEmail && <a href={`mailto:${SITE.contactEmail}`} className="text-[14px] text-[#6fd08c]">문의하기</a>}
+          {SITE.kakaoChannel && <a href={`${SITE.kakaoChannel}/friend`} target="_blank" rel="noopener" className="text-[14px] text-[#6fd08c]">법 개정 알림 받기 (카카오톡)</a>}
         </div>
         {COLS.map((c) => (
           <div key={c.h} className="flex flex-col gap-2 text-[14px]">

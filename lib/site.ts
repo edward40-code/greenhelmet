@@ -6,6 +6,8 @@ export const SITE = site as {
   description: string;
   operator: string | null;
   contactEmail: string | null;
+  /** 카카오톡 채널 홈 주소(예: https://pf.kakao.com/_xxxx). 비어 있으면 알림 받기 상자를 숨긴다 */
+  kakaoChannel: string | null;
   policyEffectiveDate: string;
   verification: { google: string | null; naver: string | null };
   /** gaId: GA4 측정 ID(G-...), gaProperty: 숫자 속성 ID(조회수 수집용), since: 집계 시작일 */

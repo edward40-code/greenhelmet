@@ -4,6 +4,7 @@
   "description": "산업안전·보건·환경 실무자를 위한 소식, 사고속보, 이슈리포트와 무료 점검표·교육자료·현장 도구를 한곳에 모았습니다.",
   "operator": "그린헬멧기사 운영팀",
   "contactEmail": "greenhelmet.korea@gmail.com",
+  "kakaoChannel": null,
   "policyEffectiveDate": "2026-11-20",
   "verification": { "google": "IIEG5q6ADP7ktVm5CyUkBvGYvpvyLLazJ1pZnkutLXE", "naver": "27c6bbed37d9dfd71fe97b70f5a465fb6a35e0a7" },
   "analytics": { "gaId": "G-F5631X1N7L", "gaProperty": "565348095", "since": "2026-11-22" }
