@@ -29,7 +29,8 @@
       "risk-assessment-form",
       "annual-safety-plan",
       "sapa-half-year-set"
-    ]
+    ],
+    "report": "2026-11-25-risk-assessment-fine-2027"
   },
   {
     "id": "annual-safety-plan",
@@ -918,7 +919,8 @@
     ],
     "related": [
       "risk-assessment-set"
-    ]
+    ],
+    "report": "2026-11-25-risk-assessment-fine-2027"
   },
   {
     "id": "moel-cold-illness-2026",
