@@ -37,7 +37,18 @@ export default async function Page({ params }: P) {
   const inv = inventoryOfLibrary(x.id);
   const mk = marketOfLibrary(x.id);
   const thumb = existsSync(path.join(process.cwd(), "public", "library", "thumbs", `${x.id}.png`)) ? `${BASE_PATH}/library/thumbs/${x.id}.png` : null;
-  const related = allLibrary().filter((o) => o.id !== x.id && (o.field === x.field || o.category === x.category)).slice(0, 4);
+  const GENERIC = new Set(["checklist", "edu", "set", "log", "record", "form", "daily", "safety", "work", "all", "start", "moel", "kosha"]);
+  const topics = (id: string) => id.split("-").filter((t) => !GENERIC.has(t));
+  const mine = new Set(topics(x.id));
+  const score = (o: typeof x) =>
+    topics(o.id).filter((t) => mine.has(t)).length * 10 + (o.field === x.field ? 2 : 0) + (o.category === x.category ? 1 : 0);
+  const related = allLibrary()
+    .filter((o) => o.id !== x.id)
+    .map((o) => ({ o, s: score(o) }))
+    .filter((r) => r.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, 4)
+    .map((r) => r.o);
   const stat = [viewsText(`/library/${x.id}/`), x.type === "file" ? downloadsText(x.id) : null].filter(Boolean).join(" · ");
   const btn = "inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md bg-accent px-6 text-[17px] font-bold text-white hover:text-white hover:no-underline";
 
