@@ -41,6 +41,7 @@ export default async function Page({ params }: P) {
   const topics = (id: string) => id.split("-").filter((t) => !GENERIC.has(t));
   const mine = new Set(topics(x.id));
   const score = (o: typeof x) =>
+    (x.related?.includes(o.id) || o.related?.includes(x.id) ? 100 : 0) +
     topics(o.id).filter((t) => mine.has(t)).length * 10 + (o.field === x.field ? 2 : 0) + (o.category === x.category ? 1 : 0);
   const related = allLibrary()
     .filter((o) => o.id !== x.id)
