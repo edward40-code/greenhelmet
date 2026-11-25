@@ -1,16 +1,23 @@
 {
-  "updated": "2026-11-24T20:16:33.728Z",
+  "updated": "2026-11-25T00:32:42.344Z",
   "pages": {
-    "/": 21,
+    "/": 26,
+    "/library/annual-safety-plan/": 2,
     "/reports/2026-11-22-loto-why-now/": 2,
     "/reports/2026-11-23-stop-work-right/": 2,
+    "/reports/2026-11-25-annual-safety-plan/": 2,
+    "/reports/2026-11-25-january-ehs-checklist/": 2,
     "/tools/": 2,
+    "/about/": 1,
     "/library/": 1,
-    "/library/annual-safety-plan/": 1,
     "/library/checklist-loto/": 1,
+    "/library/checklist-thaw/": 1,
+    "/library/committee-set/": 1,
     "/library/edu-confined-space/": 1,
     "/library/edu-waste-handling/": 1,
-    "/reports/2026-11-22-fall-protection/": 1
+    "/library/risk-assessment-set/": 1,
+    "/reports/2026-11-22-fall-protection/": 1,
+    "/reports/2026-11-25-risk-assessment-fine-2027/": 1
   },
   "downloads": {
     "edu-waste-handling": 1
