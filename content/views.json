@@ -1,8 +1,9 @@
 {
-  "updated": "2026-11-25T13:11:01.549Z",
+  "updated": "2026-11-25T19:29:15.476Z",
   "pages": {
-    "/": 34,
+    "/": 37,
     "/library/": 11,
+    "/tools/risk/": 9,
     "/reports/": 3,
     "/library/annual-safety-plan/": 2,
     "/library/contractor-safety-set/": 2,
@@ -15,6 +16,7 @@
     "/reports/2026-11-25-january-ehs-checklist/": 2,
     "/tools/": 2,
     "/about/": 1,
+    "/accidents/": 1,
     "/accidents/week/": 1,
     "/library/checklist-fire-extinguisher/": 1,
     "/library/checklist-loto/": 1,
