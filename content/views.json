@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T04:21:16.936Z",
+  "updated": "2026-11-25T07:35:51.519Z",
   "pages": {
     "/": 28,
     "/library/annual-safety-plan/": 2,
@@ -9,7 +9,9 @@
     "/reports/2026-11-25-january-ehs-checklist/": 2,
     "/tools/": 2,
     "/about/": 1,
+    "/accidents/week/": 1,
     "/library/": 1,
+    "/library/checklist-fire-extinguisher/": 1,
     "/library/checklist-loto/": 1,
     "/library/checklist-thaw/": 1,
     "/library/committee-set/": 1,
@@ -22,6 +24,7 @@
     "/reports/2026-11-25-risk-assessment-fine-2027/": 1
   },
   "downloads": {
+    "checklist-fire-extinguisher": 1,
     "edu-waste-handling": 1
   }
 }
