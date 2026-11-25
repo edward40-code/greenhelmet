@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import data from "@/content/risk-templates.json";
 import { buildXlsx, downloadBlob, XS, type XRow } from "@/lib/xlsx";
+import type { RiskCase } from "@/lib/riskCases";
 
 type MT = "e" | "g" | "a" | "p";
 type Work = { id: string; name: string; hazards: { h: string; k: string; s: number; m: [MT, string, string][] }[] };
@@ -123,7 +124,7 @@ function Grade({ method, p, s, l, setP, setS, setL }: { method: Info["method"]; 
   );
 }
 
-export default function Risk() {
+export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
   const [d, setD] = useState<Saved>(EMPTY);
   const [ready, setReady] = useState(false);
   const [wipe, setWipe] = useState(false);
@@ -328,6 +329,18 @@ export default function Risk() {
           g.id === "etc" && g.rows.length === 0 ? null : (
             <div key={g.id} className="flex flex-col gap-2">
               <h3 className="m-0 border-b border-line pb-1.5 text-[15px] font-extrabold">{g.name}</h3>
+              {(cases[g.id]?.length ?? 0) > 0 && (
+                <div className="flex flex-col gap-1 rounded-md bg-[#f4f7f5] px-3.5 py-2.5">
+                  <span className="text-[13px] font-bold text-muted">최근 보도된 사고</span>
+                  {cases[g.id].map((c) => (
+                    <Link key={c.slug} href={`/accidents/${c.slug}/`} target="_blank" className="flex gap-2 text-[14px] leading-snug text-ink hover:text-accent hover:no-underline">
+                      <span className="shrink-0 tabular-nums text-muted">{c.date.slice(5).replace("-", ".")}</span>
+                      {c.kind && <span className="shrink-0 font-bold">{c.kind}</span>}
+                      <span className="min-w-0">{c.text}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
               {g.rows.map((r) => (
                 <div key={r.id} className={`flex flex-col gap-2.5 rounded-md border border-line-soft px-3.5 py-3 ${r.on ? "" : "opacity-50"}`}>
                   <div className="flex flex-wrap items-start gap-2.5">

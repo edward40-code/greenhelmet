@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ToolShell from "@/components/ToolShell";
 import Risk from "./Risk";
+import { riskCases } from "@/lib/riskCases";
 
 export const metadata: Metadata = {
   title: "위험성평가 작성 도구 (위험성평가표 엑셀 내려받기)",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <ToolShell title="위험성평가 작성" desc="작업 선택 → 위험성 결정 → 개선대책 → 엑셀·인쇄 · 입력값은 이 브라우저 탭 안에만 보관">
-      <Risk />
+      <Risk cases={riskCases()} />
     </ToolShell>
   );
 }
