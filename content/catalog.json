@@ -39,6 +39,12 @@
       "name": "만들기와 계산",
       "tools": [
         {
+          "href": "/tools/risk/",
+          "name": "위험성평가 작성",
+          "desc": "작업을 고르면 위험요인과 개선대책이 채워집니다",
+          "open": true
+        },
+        {
           "href": "/tools/tbm/",
           "name": "TBM 생성기",
           "desc": "작업 종류를 고르면 회의 자료가 나옵니다",

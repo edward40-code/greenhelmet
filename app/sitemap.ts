@@ -27,6 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/calc/",
     "/tools/career/",
     "/tools/tbm/",
+    "/tools/risk/",
     "/tools/test/",
     ...Object.values(TYPES).map((t) => `/tools/test/result/${t.slug}/`),
     "/about/",
