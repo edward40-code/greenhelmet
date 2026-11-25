@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import data from "@/content/risk-templates.json";
 import { buildXlsx, downloadBlob, XS, type XRow } from "@/lib/xlsx";
 import type { RiskCase } from "@/lib/riskCases";
+import { COMPARE, COMPARE_HEAD, GUIDE_NOTE, GUIDE_STEPS, SCALE } from "@/lib/riskGuide";
 
 type MT = "e" | "g" | "a" | "p";
 type Work = { id: string; name: string; hazards: { h: string; k: string; s: number; m: [MT, string, string][] }[] };
@@ -254,9 +255,32 @@ export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
     });
     const pm = [`A1:H1`, `A${pn + 2}:H${pn + 2}`, `D${pn + 3}:H${pn + 3}`, `A${pn + 5}:H${pn + 5}`];
 
+    const g: XRow[] = [
+      { cells: [{ v: "위험성평가 작성 방법", s: XS.title }], h: 26 },
+      { cells: [] },
+      { cells: [{ v: "판단 방법 비교", s: XS.title }], h: 22 },
+      { cells: COMPARE_HEAD, s: XS.head, h: 22 },
+      ...COMPARE.map((r) => ({ cells: [{ v: r[0], s: XS.head }, r[1], r[2]], s: XS.box, h: 44 })),
+      { cells: [{ v: GUIDE_NOTE, s: XS.note }], h: 28 },
+      { cells: [] },
+      { cells: [{ v: "판단 기준 예시 (현장 권장)", s: XS.title }], h: 22 },
+      ...SCALE.map(([k, v]) => ({ cells: [{ v: k, s: XS.head }, v, null], s: XS.box, h: 36 })),
+      { cells: [] },
+      { cells: [{ v: "작성 순서", s: XS.title }], h: 22 },
+      ...GUIDE_STEPS.map((st, i) => ({
+        cells: [{ v: `${i + 1}. ${st.title}`, s: XS.head }, st.items.map((t) => `· ${t}`).join("\n"), null],
+        s: XS.box,
+        h: Math.max(30, st.items.reduce((a, t) => a + Math.ceil(t.length / 62), 0) * 14 + 8),
+      })),
+    ];
+    const gm: string[] = ["A1:C1", "A3:C3", `A${5 + COMPARE.length}:C${5 + COMPARE.length}`, `A${7 + COMPARE.length}:C${7 + COMPARE.length}`, `A${8 + COMPARE.length + SCALE.length + 1}:C${8 + COMPARE.length + SCALE.length + 1}`];
+    SCALE.forEach((_, i) => gm.push(`B${8 + COMPARE.length + i}:C${8 + COMPARE.length + i}`));
+    GUIDE_STEPS.forEach((_, i) => gm.push(`B${10 + COMPARE.length + SCALE.length + i}:C${10 + COMPARE.length + SCALE.length + i}`));
+
     const blob = buildXlsx([
       { name: "위험성평가표", cols: [5, 12, 24, 9, 7, 7, 9, 38, 22, 9, 11, 7, 7, 9, 7], rows, merges, landscape: true },
       { name: "참여·공유", cols: [6, 14, 14, 11, 11, 11, 11, 14], rows: p, merges: pm },
+      { name: "작성 방법", cols: [22, 52, 52], rows: g, merges: gm },
     ]);
     downloadBlob(blob, `위험성평가표_${info.date || new Date().toISOString().slice(0, 10)}.xlsx`);
   }
@@ -265,9 +289,12 @@ export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
 
   return (
     <>
-      <style>{"@media print{@page{size:A4 landscape;margin:10mm}}"}</style>
+      <style>{"@media print{@page{size:A4 landscape;margin:18mm 12mm 14mm}}"}</style>
       <section aria-label="기본 정보" className="card no-print flex flex-col gap-3.5 px-5 py-[18px]">
-        <h2 className="m-0 text-[16px] font-extrabold">1. 기본 정보</h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="m-0 text-[16px] font-extrabold">1. 기본 정보</h2>
+          <a href="#guide" className="text-[14px] font-bold">작성 설명서</a>
+        </div>
         <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))" }}>
           <label className="flex flex-col gap-1.5 text-[14px] font-bold">사업장<input className="field font-normal" value={info.site} onChange={(e) => setInfo({ site: e.target.value })} /></label>
           <label className="flex flex-col gap-1.5 text-[14px] font-bold">공정·작업<input className="field font-normal" placeholder="예: 2공장 출하" value={info.proc} onChange={(e) => setInfo({ proc: e.target.value })} /></label>
@@ -446,7 +473,7 @@ export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
       </section>
 
       <article aria-label="위험성평가표 인쇄본" className="print-only text-[11px] leading-snug">
-        <h2 className="m-0 mb-2 text-[18px] font-extrabold">위험성평가표</h2>
+        <h2 className="m-0 mb-2 pt-1 text-[18px] font-extrabold">위험성평가표</h2>
         <p className="m-0 mb-2">
           사업장 {info.site || "　　"} · 공정·작업 {info.proc || "　　"} · 평가일 {info.date || "　　"} · 구분 {info.kind} · 방법 {fs ? "빈도·강도법 3×3" : "3단계 판단법"} · 총괄 책임자 {info.lead || "　　"}
         </p>
