@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import data from "@/content/risk-templates.json";
 import { buildXlsx, downloadBlob, XS, type XRow } from "@/lib/xlsx";
 import type { RiskCase } from "@/lib/riskCases";
 import { COMPARE, COMPARE_HEAD, GUIDE_NOTE, GUIDE_STEPS, SCALE } from "@/lib/riskGuide";
+import { TBM_FROM_RISK, type TbmFromRisk } from "@/lib/riskToTbm";
 
 type MT = "e" | "g" | "a" | "p";
 type Work = { id: string; name: string; hazards: { h: string; k: string; s: number; m: [MT, string, string][] }[] };
@@ -36,6 +38,7 @@ type Saved = { info: Info; works: string[]; rows: Row[]; people: Person[]; share
 const WORKS = (data as unknown as { works: Work[] }).works;
 const TYPES = (data as { types: Record<MT, string> }).types;
 const KEY = "gh-risk-v1";
+const NL = String.fromCharCode(10);
 const KINDS = ["최초", "정기", "수시", "상시"];
 const ROLES = ["근로자", "근로자대표", "관리감독자", "안전·보건관리자", "기타"];
 const STAGES = ["요인 파악", "위험성 결정", "대책 수립", "개선 후 확인"];
@@ -129,6 +132,7 @@ export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
   const [d, setD] = useState<Saved>(EMPTY);
   const [ready, setReady] = useState(false);
   const [wipe, setWipe] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -172,6 +176,21 @@ export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
     [...r.ms.filter((m) => m.on).map((m) => `[${TYPES[m.t]}] ${m.x}`), ...(r.extra.trim() ? r.extra.trim().split("\n").filter(Boolean) : [])].join("\n");
   const basisText = (r: Row) => Array.from(new Set(r.ms.filter((m) => m.on).map((m) => m.b))).join("\n");
   const workName = (r: Row) => (r.work === "etc" ? r.k === "아차사고" ? "아차사고" : "기타" : WORKS.find((w) => w.id === r.work)?.name ?? "");
+
+  function sendTbm() {
+    const hazards = used
+      .map((r) => {
+        const lv = level(info.method, r.p, r.s, r.l);
+        const ms = [...r.ms.filter((m) => m.on).map((m) => m.x), ...r.extra.split(NL).map((x) => x.trim()).filter(Boolean)];
+        return { h: r.h.trim(), k: r.k, lv: lv?.label ?? "", rank: lv?.rank ?? 0, ms };
+      })
+      .sort((a, b) => b.rank - a.rank);
+    const v: TbmFromRisk = { site: info.site, proc: info.proc, date: info.date, hazards };
+    try {
+      sessionStorage.setItem(TBM_FROM_RISK, JSON.stringify(v));
+    } catch {}
+    router.push("/tools/tbm/");
+  }
 
   function exportXlsx() {
     const fs = info.method === "fs";
@@ -458,7 +477,7 @@ export default function Risk({ cases }: { cases: Record<string, RiskCase[]> }) {
       <section aria-label="내려받기" className="card no-print flex flex-wrap items-center gap-2 px-5 py-[18px]">
         <button type="button" disabled={used.length === 0} onClick={exportXlsx} className="min-h-[46px] cursor-pointer rounded-md bg-accent px-5 text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">엑셀 내려받기</button>
         <button type="button" disabled={used.length === 0} onClick={() => window.print()} className="min-h-[46px] cursor-pointer rounded-md bg-ink px-5 text-[15px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">인쇄·PDF</button>
-        <Link href="/tools/tbm/" className="inline-flex min-h-[46px] items-center rounded-md border border-line bg-white px-4 text-[15px] text-ink hover:border-ink hover:no-underline">TBM 생성기</Link>
+        <button type="button" disabled={used.length === 0} onClick={sendTbm} className="min-h-[46px] cursor-pointer rounded-md border border-ink bg-white px-5 text-[15px] font-bold text-ink disabled:cursor-not-allowed disabled:opacity-40">TBM으로 보내기</button>
         <span className="ml-auto flex items-center gap-2">
           {wipe ? (
             <>
