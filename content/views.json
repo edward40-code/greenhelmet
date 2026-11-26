@@ -1,14 +1,14 @@
 {
-  "updated": "2026-11-26T03:39:36.160Z",
+  "updated": "2026-11-26T10:32:36.611Z",
   "pages": {
     "/": 38,
     "/library/": 11,
     "/tools/risk/": 10,
-    "/library/edu-sapa/": 3,
+    "/library/edu-sapa/": 6,
+    "/library/edu-law-2027/": 3,
     "/reports/": 3,
     "/library/annual-safety-plan/": 2,
     "/library/contractor-safety-set/": 2,
-    "/library/edu-law-2027/": 2,
     "/market/": 2,
     "/reports/2026-11-22-loto-why-now/": 2,
     "/reports/2026-11-23-stop-work-right/": 2,
@@ -36,10 +36,10 @@
     "/tools/tbm/": 1
   },
   "downloads": {
+    "edu-law-2027": 2,
     "edu-sapa": 2,
     "checklist-fire-extinguisher": 1,
     "confined-space-program": 1,
-    "edu-law-2027": 1,
     "edu-waste-handling": 1
   }
 }
