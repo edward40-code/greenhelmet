@@ -18,6 +18,10 @@ export type LibItem = {
   items?: string[]; // 점검 항목 미리보기 (법령 원문)
   itemsTitle?: string; // items 제목. 없으면 '들어 있는 점검 항목'
   related?: string[]; // '함께 보는 자료'에 먼저 보일 자료 id
+  seoTitle?: string; // 검색 결과 제목. 없으면 title + 무료 다운로드
+  groups?: { title: string; items: string[] }[]; // 점검 항목을 묶음별로 보일 때 (items 대신)
+  guide?: { q: string; a: string[] }[]; // 점검 방법 안내 (법령 근거 또는 '현장 권장' 표시)
+  guideTitle?: string;
 };
 
 export const allLibrary = () =>

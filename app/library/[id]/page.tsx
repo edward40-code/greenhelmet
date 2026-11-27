@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   if (!x) return {};
   const free = x.type === "file" ? " 무료 다운로드" : "";
   return {
-    title: `${x.title}${free}`,
+    title: x.seoTitle ?? `${x.title}${free}`,
     description: x.desc,
     alternates: { canonical: `/library/${x.id}/` },
   };
@@ -95,10 +95,32 @@ export default async function Page({ params }: P) {
           {x.basis && (
             <p className="m-0 rounded-md border border-line px-4 py-3 text-[14px] leading-relaxed"><strong>법적 근거</strong> · {x.basis}</p>
           )}
-          {x.items && x.items.length > 0 && (
+          {x.groups && x.groups.length > 0 && (
+            <section className="flex flex-col gap-3">
+              <h2 className="m-0 text-[16px] font-extrabold">{x.itemsTitle ?? `들어 있는 점검 항목 (${x.groups.reduce((n, g) => n + g.items.length, 0)}개)`}</h2>
+              {x.groups.map((g) => (
+                <div key={g.title}>
+                  <h3 className="m-0 mb-1 text-[15px] font-bold">{g.title}</h3>
+                  <ol className="m-0 pl-5 text-[15px] leading-[1.8]">{g.items.map((h) => <li key={h}>{h}</li>)}</ol>
+                </div>
+              ))}
+            </section>
+          )}
+          {!x.groups && x.items && x.items.length > 0 && (
             <section>
               <h2 className="m-0 mb-1.5 text-[16px] font-extrabold">{x.itemsTitle ?? `들어 있는 점검 항목 (${x.items.length}개)`}</h2>
               <ol className="m-0 pl-5 text-[15px] leading-[1.8]">{x.items.map((h) => <li key={h}>{h}</li>)}</ol>
+            </section>
+          )}
+          {x.guide && x.guide.length > 0 && (
+            <section className="flex flex-col gap-3">
+              <h2 className="m-0 text-[18px] font-extrabold">{x.guideTitle ?? "점검 방법"}</h2>
+              {x.guide.map((g) => (
+                <div key={g.q} className="border-t border-line-soft pt-3 first:border-t-0 first:pt-0">
+                  <h3 className="m-0 mb-1 text-[16px] font-bold">{g.q}</h3>
+                  <ul className="m-0 list-disc pl-5 text-[15px] leading-[1.8]">{g.a.map((t) => <li key={t}>{t}</li>)}</ul>
+                </div>
+              ))}
             </section>
           )}
           {x.howto && x.howto.length > 0 && (
